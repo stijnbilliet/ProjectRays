@@ -6,11 +6,9 @@ class BaseGamemode;
 class Game final : public SingleInstance<Game>
 {
 public:
-	Game();
-	~Game();
+	Game(BaseGamemode* pGamemode, Renderer* pRenderer);
+	virtual ~Game();
 
-
-	void SetGameMode(BaseGamemode* gm);
 	void Run();
 
 private:

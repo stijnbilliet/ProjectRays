@@ -1,6 +1,7 @@
 #include "FrameworkPCH.h"
 #include "FPSCounter.h"
 #include "Components/MeshComponent.h"
+#include "Components/SceneComponent.h"
 #include "Data/MeshData.h"
 #include "Data/TextureData.h"
 #include "Scenegraph/Scene.h"
@@ -26,7 +27,7 @@ void FPSCounter::OnInit()
 {
 	Super::OnInit();
 
-	GetRootComponent()->Translate(glm::vec2(m_ptSize*2.0f, m_ptSize));
+	GetTransform()->Translate(glm::vec3(m_ptSize*2.0f, m_ptSize, 0.0f));
 }
 
 void FPSCounter::OnUpdate(float deltaTime)

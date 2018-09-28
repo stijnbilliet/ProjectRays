@@ -1,7 +1,7 @@
 #include "FrameworkPCH.h"
 #include "Renderer.h"
 
-const WindowSettings Renderer::_WindowSettings = {1024, 768};
+const WindowSettings Renderer::_WindowSettings = {1920, 1080};
 
 Renderer::Renderer()
 	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false)
@@ -31,36 +31,28 @@ void Renderer::Present()
 void Renderer::OnInit()
 {
 	//Init SDL
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
-	{
+	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
 
 	//Use openGL 2.1
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
 	//Create window
 	m_pWindow = SDL_CreateWindow(
-		"SwiftByte2D",
+		"ProjectRays",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		_WindowSettings.Width,
 		_WindowSettings.Height,
 		SDL_WINDOW_OPENGL
 	);
-
-	if (m_pWindow == nullptr)
-	{
-		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
-	}
+	if (m_pWindow == nullptr) throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 
 	//Create openGL context
 	m_Context = SDL_GL_CreateContext(m_pWindow);
-	if (m_Context == nullptr)
-	{
-		throw std::runtime_error(std::string("SDL_GL_CreateContext Error: ") + SDL_GetError());
-	}
+	if (m_Context == nullptr) throw std::runtime_error(std::string("SDL_GL_CreateContext Error: ") + SDL_GetError());
 
 	// synchronize it with the vertical retrace
 	if (m_Vsync)
@@ -79,25 +71,6 @@ void Renderer::OnInit()
 			return;
 		}
 	}
-
-	// Set the Projection matrix to the identity matrix
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	// Set up a two-dimensional orthographic viewing region.
-	gluOrtho2D(0, _WindowSettings.Width, 0, _WindowSettings.Height); // y from bottom to top
-
-	// Set the viewport to the client window area
-	// The viewport is the rectangular region of the window where the image is drawn.
-	glViewport(0, 0, _WindowSettings.Width, _WindowSettings.Height);
-
-	// Set the Modelview matrix to the identity matrix
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	// Enable color blending and use alpha blending
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Initialize PNG loading
 	int imgFlags = IMG_INIT_PNG;

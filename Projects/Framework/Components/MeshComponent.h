@@ -1,10 +1,10 @@
 #pragma once
-#include "Components\SceneComponent.h"
+#include "Components\BaseComponent.h"
 
 class MeshData;
 class TextureData;
 class Renderer;
-class MeshComponent : public SceneComponent
+class MeshComponent final : public BaseComponent
 {
 public:
 	MeshComponent(std::shared_ptr<MeshData> pMeshData, std::shared_ptr<TextureData> pTextureData = nullptr);

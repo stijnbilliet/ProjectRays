@@ -40,7 +40,7 @@ void Scene::OnUpdate(float deltaTime)
 void Scene::OnDraw(Renderer* pContext) const
 {
 	glPushMatrix();
-		glTranslatef(-m_pCamera->GetRootComponent()->GetLocalPosition().x, -m_pCamera->GetRootComponent()->GetLocalPosition().y, 0);
+		glTranslatef(-m_pCamera->GetTransform()->GetLocalPosition().x, -m_pCamera->GetTransform()->GetLocalPosition().y, 0);
 		for (const auto gameObject : m_pObjects)
 		{
 			gameObject->Draw(pContext);

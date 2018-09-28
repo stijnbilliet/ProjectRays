@@ -30,8 +30,3 @@ void GMSandbox::PostInit()
 	Super::PostInit();
 
 }
-
-void GMSandbox::InitInput(unsigned int playerIndex)
-{
-
-}

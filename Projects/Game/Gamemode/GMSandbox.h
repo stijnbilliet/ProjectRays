@@ -17,7 +17,5 @@ public:
 	void PreInit() override;
 	void PostInit() override;
 private:
-	void InitInput(unsigned int playerIndex);
-
 	Scene* m_pCornelScene;
 };

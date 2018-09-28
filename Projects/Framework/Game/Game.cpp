@@ -6,21 +6,15 @@
 #include "Game/BaseGamemode.h"
 #include "Characters/Player/BasePlayerController.h"
 
-Game::Game()
-	:m_Accumulator(0.0f), m_StepRate(1/60.0f), m_pGameMode(nullptr)
+Game::Game(BaseGamemode* pGamemode, Renderer* pRenderer)
+	:m_Accumulator(0.0f), m_StepRate(1/60.0f), m_pGameMode(pGamemode), m_pRenderer(pRenderer)
 {
-	m_pRenderer = new Renderer();
 }
 
 Game::~Game()
 {
 	safe_delete(m_pGameMode);
 	safe_delete(m_pRenderer);
-}
-
-void Game::SetGameMode(BaseGamemode* gm)
-{
-	m_pGameMode = gm;
 }
 
 void Game::Run()

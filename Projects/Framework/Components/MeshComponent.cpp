@@ -6,10 +6,10 @@
 #include "Data/TextureData.h"
 #include "Scenegraph/Scene.h"
 
-using Super = SceneComponent;
+using Super = BaseComponent;
 
 MeshComponent::MeshComponent(std::shared_ptr<MeshData> pMeshData, std::shared_ptr<TextureData> pTextureData)
-	:SceneComponent(), m_Color(1.0f, 0.0f, 1.0f, 1.0f), m_pMeshData(pMeshData), m_pTextureData(pTextureData)
+	:BaseComponent(), m_Color(1.0f, 0.0f, 1.0f, 1.0f), m_pMeshData(pMeshData), m_pTextureData(pTextureData)
 {
 }
 
@@ -20,6 +20,7 @@ MeshComponent::~MeshComponent()
 void MeshComponent::OnDraw(Renderer* pContext) const
 {
 	Super::OnDraw(pContext);
+	//TODO CALL SHADER ETC.
 }
 
 void MeshComponent::SetMeshData(std::shared_ptr<MeshData> pNewData)

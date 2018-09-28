@@ -13,7 +13,7 @@ struct WindowSettings
 	const unsigned int Height;
 };
 
-class Texture2D;
+class Window;
 class Renderer : public SingleInstance<Renderer>
 {
 public:
@@ -28,6 +28,7 @@ public:
 	const static WindowSettings _WindowSettings;
 private:
 	SDL_GLContext m_Context;
+
 	SDL_Window* m_pWindow;
 	bool m_Vsync;
 };
