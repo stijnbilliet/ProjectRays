@@ -1,17 +1,16 @@
 #pragma once
 #include "Components\BaseComponent.h"
-#include "Patterns/ParentObject.h"
 
-class SceneComponent final : public BaseComponent
+class TransformComponent : public BaseComponent
 {
 public:
-	SceneComponent();
-	virtual ~SceneComponent();
+	TransformComponent();
+	virtual ~TransformComponent();
 
-	SceneComponent(const SceneComponent& other) = delete;
-	SceneComponent(SceneComponent&& other) = delete;
-	SceneComponent& operator=(const SceneComponent& other) = delete;
-	SceneComponent& operator=(SceneComponent&& other) = delete;
+	TransformComponent(const TransformComponent& other) = delete;
+	TransformComponent(TransformComponent&& other) = delete;
+	TransformComponent& operator=(const TransformComponent& other) = delete;
+	TransformComponent& operator=(TransformComponent&& other) = delete;
 
 	//BaseObject implementation
 	virtual void OnUpdate(float elapsedSec) override;

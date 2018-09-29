@@ -1,10 +1,10 @@
 #include "FrameworkPCH.h"
-#include "SceneComponent.h"
+#include "TransformComponent.h"
 #include "Scenegraph/GameObject.h"
 
 using Super = BaseComponent;
 
-SceneComponent::SceneComponent()
+TransformComponent::TransformComponent()
 	:BaseComponent(),
 	m_Position(0.0f, 0.0f, 0.0f), m_Rotation(0.0f, 0.0f, 0.0f, 1.0f), m_Scale(1.0f, 1.0f, 1.0f),
 	m_WorldPosition(0.0f, 0.0f, 0.0f), m_WorldRotation(0.0f, 0.0f, 0.0f, 1.0f), m_WorldScale(1.0f, 1.0f, 1.0f),
@@ -12,11 +12,11 @@ SceneComponent::SceneComponent()
 {
 }
 
-SceneComponent::~SceneComponent()
+TransformComponent::~TransformComponent()
 {
 }
 
-void SceneComponent::Translate(const glm::vec3& pos)
+void TransformComponent::Translate(const glm::vec3& pos)
 {
 	m_Position.x = pos.x;
 	m_Position.y = pos.y;
@@ -25,19 +25,19 @@ void SceneComponent::Translate(const glm::vec3& pos)
 	m_bIsDirty = true;
 }
 
-void SceneComponent::Translate(const float x, const float y, const float z)
+void TransformComponent::Translate(const float x, const float y, const float z)
 {
 	auto transVec = glm::vec3(x, y, z);
 	Translate(transVec);
 }
 
-void SceneComponent::Rotate(const glm::quat& rotQuat)
+void TransformComponent::Rotate(const glm::quat& rotQuat)
 {
 	m_Rotation = rotQuat;
 	m_bIsDirty = true;
 }
 
-void SceneComponent::Rotate(const glm::vec3& rotVec, bool bEuler)
+void TransformComponent::Rotate(const glm::vec3& rotVec, bool bEuler)
 {
 	glm::quat rotQuat;
 
@@ -59,13 +59,13 @@ void SceneComponent::Rotate(const glm::vec3& rotVec, bool bEuler)
 	Rotate(rotQuat);
 }
 
-void SceneComponent::Rotate(const float x, const float y, const float z, bool bEuler)
+void TransformComponent::Rotate(const float x, const float y, const float z, bool bEuler)
 {
 	auto rotVec = glm::vec3(x, y, z);
 	Rotate(rotVec, bEuler);
 }
 
-void SceneComponent::Scale(const glm::vec3& scale)
+void TransformComponent::Scale(const glm::vec3& scale)
 {
 	m_Scale.x = scale.x;
 	m_Scale.y = scale.y;
@@ -74,53 +74,53 @@ void SceneComponent::Scale(const glm::vec3& scale)
 	m_bIsDirty = true;
 }
 
-void SceneComponent::Scale(const float x, const float y, const float z)
+void TransformComponent::Scale(const float x, const float y, const float z)
 {
 	auto scaleVec = glm::vec3(x, y, z);
 	Scale(scaleVec);
 }
 
-const glm::mat4x4 & SceneComponent::GetWorldMatrix() const
+const glm::mat4x4 & TransformComponent::GetWorldMatrix() const
 {
 	return m_World;
 }
 
-const glm::vec3& SceneComponent::GetLocalPosition() const
+const glm::vec3& TransformComponent::GetLocalPosition() const
 {
 	return m_Position;
 }
 
-const glm::vec3 & SceneComponent::GetWorldPosition() const
+const glm::vec3 & TransformComponent::GetWorldPosition() const
 {
 	return m_WorldPosition;
 }
 
-const glm::quat& SceneComponent::GetLocalRotation() const
+const glm::quat& TransformComponent::GetLocalRotation() const
 {
 	return m_Rotation;
 }
 
-const glm::quat& SceneComponent::GetWorldRotation() const
+const glm::quat& TransformComponent::GetWorldRotation() const
 {
 	return m_WorldRotation;
 }
 
-const glm::vec3& SceneComponent::GetLocalScale() const
+const glm::vec3& TransformComponent::GetLocalScale() const
 {
 	return m_Scale;
 }
 
-const glm::vec3& SceneComponent::GetWorldScale() const
+const glm::vec3& TransformComponent::GetWorldScale() const
 {
 	return m_WorldScale;
 }
 
-bool SceneComponent::WasTranslated() const
+bool TransformComponent::WasTranslated() const
 {
 	return m_bWasTranslated;
 }
 
-void SceneComponent::OnUpdate(float elapsedSec)
+void TransformComponent::OnUpdate(float elapsedSec)
 {
 	UNREFERENCED_PARAMETER(elapsedSec);
 
@@ -135,7 +135,7 @@ void SceneComponent::OnUpdate(float elapsedSec)
 	}
 }
 
-void SceneComponent::RebuildWorldMatrix()
+void TransformComponent::RebuildWorldMatrix()
 {
 	//Build our own world matrix
 	//Note on rotation matrix: glm expects euler, from euler to quat and then from quat to rotation matrix

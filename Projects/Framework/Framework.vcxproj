@@ -210,14 +210,11 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
     <ClInclude Include="Characters\Player\BasePlayerController.h" />
     <ClInclude Include="Components\Components.h" />
     <ClInclude Include="Components\MeshComponent.h" />
-    <ClInclude Include="Components\SceneComponent.h" />
+    <ClInclude Include="Components\TransformComponent.h" />
     <ClInclude Include="Data\Data.h" />
     <ClInclude Include="Data\MeshData.h" />
     <ClInclude Include="Data\TextureData.h" />
     <ClInclude Include="Game\BaseGameState.h" />
-    <ClInclude Include="Graphics\Renderer\OpenGL\GLRenderer.h" />
-    <ClInclude Include="Graphics\RenderTarget\OpenGL\GLRenderTarget.h" />
-    <ClInclude Include="Graphics\Window\OpenGL\GLWindow.h" />
     <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="GUI\Text\FPSCounter.h" />
     <ClInclude Include="GUI\Canvas.h" />
@@ -243,7 +240,6 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
     <ClInclude Include="Patterns\Singleton.h" />
     <ClInclude Include="Graphics\Renderer\Renderer.h" />
     <ClInclude Include="Patterns\Subject.h" />
-    <ClInclude Include="Graphics\RenderTarget\RenderTarget.h" />
     <ClInclude Include="Scenegraph\BasePanel.h" />
     <ClInclude Include="Scenegraph\BasePanelManager.h" />
     <ClInclude Include="Scenegraph\GameObject.h" />
@@ -251,7 +247,6 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
     <ClInclude Include="Scenegraph\SceneManager.h" />
     <ClInclude Include="GUI\UserInterface.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Graphics\Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Characters\Player\BasePlayerState.cpp" />
@@ -259,13 +254,10 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
     <ClCompile Include="Characters\BasePawn.cpp" />
     <ClCompile Include="Characters\BaseControllerState.cpp" />
     <ClCompile Include="Components\MeshComponent.cpp" />
-    <ClCompile Include="Components\SceneComponent.cpp" />
+    <ClCompile Include="Components\TransformComponent.cpp" />
     <ClCompile Include="Data\MeshData.cpp" />
     <ClCompile Include="Data\TextureData.cpp" />
     <ClCompile Include="Game\BaseGameState.cpp" />
-    <ClCompile Include="Graphics\Renderer\OpenGL\GLRenderer.cpp" />
-    <ClCompile Include="Graphics\RenderTarget\OpenGL\GLRenderTarget.cpp" />
-    <ClCompile Include="Graphics\Window\OpenGL\GLWindow.cpp" />
     <ClCompile Include="GUI\Text\FPSCounter.cpp" />
     <ClCompile Include="GUI\Canvas.cpp" />
     <ClCompile Include="GUI\Text\TextLabel.cpp" />
@@ -289,14 +281,12 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
     <ClCompile Include="Patterns\Command.cpp" />
     <ClCompile Include="Patterns\Observer.cpp" />
     <ClCompile Include="Patterns\Subject.cpp" />
-    <ClCompile Include="Graphics\RenderTarget\RenderTarget.cpp" />
     <ClCompile Include="Scenegraph\BasePanel.cpp" />
     <ClCompile Include="Scenegraph\GameObject.cpp" />
     <ClCompile Include="Scenegraph\Scene.cpp" />
     <ClCompile Include="Scenegraph\SceneManager.cpp" />
     <ClCompile Include="GUI\UserInterface.cpp" />
     <ClCompile Include="Scenegraph\BasePanelManager.cpp" />
-    <ClCompile Include="Graphics\Window\Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,7 +3,7 @@
 
 class Renderer;
 class BaseComponent;
-class SceneComponent;
+class TransformComponent;
 class BasePanel;
 class Transform;
 class GameObject : public ParentObject<GameObject>
@@ -30,7 +30,7 @@ public:
 	void AddComponent(BaseComponent* pComp);
 	void RemoveComponent(BaseComponent* pComp);
 
-	SceneComponent* GetTransform() const;
+	TransformComponent* GetTransform() const;
 	std::list<BaseComponent*> GetAllComponents() const;
 
 	/*Ensures all components are traversed in order to find the wanted component*/
@@ -40,7 +40,7 @@ private:
 	virtual void OnChildAdd(GameObject * pChild) override;
 
 	std::list<BaseComponent*> m_pComponents;
-	SceneComponent* m_pRootComponent;
+	TransformComponent* m_pRootComponent;
 	BasePanel* m_pScene;
 };
 

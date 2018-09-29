@@ -5,7 +5,7 @@
 #include "Data/MeshData.h"
 #include "Data/TextureData.h"
 #include "Scenegraph/Scene.h"
-#include "Graphics/Renderer.h"
+#include "Graphics\Renderer\Renderer.h"
 
 using Super = TextLabel;
 

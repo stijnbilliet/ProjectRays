@@ -1,7 +1,7 @@
 #include "FrameworkPCH.h"
 #include "Renderer.h"
 
-const WindowSettings Renderer::_WindowSettings = {1920, 1080};
+const WindowSettings Renderer::_WindowSettings = {854, 480};
 
 Renderer::Renderer()
 	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false)
@@ -19,7 +19,7 @@ Renderer::~Renderer()
 
 void Renderer::Clear()
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -70,20 +70,5 @@ void Renderer::OnInit()
 			std::cerr << "Renderer::Initialize( ), error when calling SDL_GL_SetSwapInterval: " << SDL_GetError() << std::endl;
 			return;
 		}
-	}
-
-	// Initialize PNG loading
-	int imgFlags = IMG_INIT_PNG;
-	if (!(IMG_Init(imgFlags) & imgFlags))
-	{
-		std::cerr << "Renderer::Initialize( ), error when calling IMG_Init: " << IMG_GetError() << std::endl;
-		return;
-	}
-
-	// Initialize SDL_ttf
-	if (TTF_Init() == -1)
-	{
-		std::cerr << "Renderer::Initialize( ), error when calling TTF_Init: " << TTF_GetError() << std::endl;
-		return;
 	}
 }

@@ -1,6 +1,6 @@
 #include "FrameworkPCH.h"
 #include "GameObject.h"
-#include "Components/SceneComponent.h"
+#include "Components/TransformComponent.h"
 #include "Scenegraph/BasePanel.h"
 #include "Data/Data.h"
 
@@ -9,7 +9,7 @@ using Super = ParentObject<GameObject>;
 GameObject::GameObject()
 	:ParentObject<GameObject>()
 {
-	auto pTransformComp = new SceneComponent();
+	auto pTransformComp = new TransformComponent();
 	AddComponent(pTransformComp);
 }
 
@@ -106,7 +106,7 @@ void GameObject::RemoveComponent(BaseComponent * pComp)
 	}
 }
 
-SceneComponent* GameObject::GetTransform() const
+TransformComponent* GameObject::GetTransform() const
 {
 	return m_pRootComponent;
 }

@@ -1,7 +1,7 @@
 #include "FrameworkPCH.h"
 #include "Game.h"
 #include <chrono>
-#include "Graphics/Renderer.h"
+#include "Graphics\Renderer\Renderer.h"
 #include "Scenegraph/SceneManager.h"
 #include "Game/BaseGamemode.h"
 #include "Characters/Player/BasePlayerController.h"
@@ -31,10 +31,6 @@ void Game::Run()
 
 		//Input
 		doContinue = HandleInput();
-
-		//Physics loop
-		//Disabled since we don't need physics (is 2d physics anyway)
-		//std::async(std::launch::async, &Game::Integrate, this, deltaTime);
 
 		//Game Logic
 		std::async(std::launch::async, &Game::UpdateGame, this, deltaTime);

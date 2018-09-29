@@ -13,12 +13,13 @@ struct WindowSettings
 	const unsigned int Height;
 };
 
-class Window;
 class Renderer : public SingleInstance<Renderer>
 {
 public:
 	Renderer();
-	~Renderer();
+	virtual ~Renderer();
+
+	//TODO: Renderer should draw instead of game
 
 	void Clear();
 	void Present();
@@ -28,7 +29,6 @@ public:
 	const static WindowSettings _WindowSettings;
 private:
 	SDL_GLContext m_Context;
-
 	SDL_Window* m_pWindow;
 	bool m_Vsync;
 };
