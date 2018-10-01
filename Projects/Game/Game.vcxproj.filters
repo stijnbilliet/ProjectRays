@@ -21,30 +21,6 @@
     <ClInclude Include="GamePCH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Level\Pill\Pill.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Level\MazeScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Characters\Pacman\MrPacman.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Actions.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Characters\Ghosts\GhostPawn.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Characters\Ghosts\GhostController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Characters\Pacman\MrPacmanState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GMSandbox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Gamemode\GMSandbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -54,27 +30,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GamePCH.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Level\Pill\Pill.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Level\MazeScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Characters\Pacman\MrPacman.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Characters\Ghosts\GhostPawn.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Characters\Ghosts\GhostController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Characters\Pacman\MrPacmanState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GMSandbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gamemode\GMSandbox.cpp">

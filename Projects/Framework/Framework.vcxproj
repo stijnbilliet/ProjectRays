@@ -98,7 +98,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>FrameworkPCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\FMOD\include;$(SolutionDir)3rdParty\SDL2_ttf\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\glad\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4201;4505;4221;4099;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
@@ -107,13 +107,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\FMOD\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2_ttf\lib\x86;$(SolutionDir)3rdParty\SDL2_image\lib\x86;$(SolutionDir)3rdParty\FMOD\lib;$(SolutionDir)3rdParty\SDL2\lib\x86;$(SolutionDir)3rdParty\Box2D\lib\x86\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\SDL\lib\$(PLATFORM)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>sdl2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)3rdParty\SDL2\lib\$(Platform)\*.dll $(OutputPath) /Y
-xcopy $(SolutionDir)3rdParty\SDL2_image\lib\$(Platform)\*.dll $(OutputPath) /Y
-xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Command>
+      <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -124,7 +122,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>FrameworkPCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\FMOD\include;$(SolutionDir)3rdParty\SDL2_ttf\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\glad\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4201;4505;4221;4099;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
@@ -133,13 +131,11 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\FMOD\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2_ttf\lib\x64;$(SolutionDir)3rdParty\SDL2_image\lib\x64;$(SolutionDir)3rdParty\SDL2\lib\x64;$(SolutionDir)3rdParty\Box2D\lib\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\SDL\lib\$(PLATFORM)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>sdl2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)3rdParty\SDL2\lib\$(Platform)\*.dll $(OutputPath) /Y
-xcopy $(SolutionDir)3rdParty\SDL2_image\lib\$(Platform)\*.dll $(OutputPath) /Y
-xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Command>
+      <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -151,7 +147,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\FMOD\include;$(SolutionDir)3rdParty\SDL2_ttf\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\glad\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>FrameworkPCH.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4201;4505;4221;4099;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -164,12 +160,10 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
     </Link>
     <Lib>
       <AdditionalDependencies>sdl2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\FMOD\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2_ttf\lib\x86;$(SolutionDir)3rdParty\SDL2_image\lib\x86;$(SolutionDir)3rdParty\FMOD\lib;$(SolutionDir)3rdParty\SDL2\lib\x86;$(SolutionDir)3rdParty\Box2D\lib\x86\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\SDL\lib\$(PLATFORM)\</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)3rdParty\SDL2\lib\$(Platform)\*.dll $(OutputPath) /Y
-xcopy $(SolutionDir)3rdParty\SDL2_image\lib\$(Platform)\*.dll $(OutputPath) /Y
-xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Command>
+      <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -181,7 +175,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\FMOD\include;$(SolutionDir)3rdParty\SDL2_ttf\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\glad\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>FrameworkPCH.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4201;4505;4221;4099;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -193,13 +187,11 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\FMOD\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2_ttf\lib\x64;$(SolutionDir)3rdParty\SDL2_image\lib\x64;$(SolutionDir)3rdParty\SDL2\lib\x64;$(SolutionDir)3rdParty\Box2D\lib\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\SDL\lib\$(PLATFORM)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>sdl2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)3rdParty\SDL2\lib\$(Platform)\*.dll $(OutputPath) /Y
-xcopy $(SolutionDir)3rdParty\SDL2_image\lib\$(Platform)\*.dll $(OutputPath) /Y
-xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Command>
+      <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -211,15 +203,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
     <ClInclude Include="Components\Components.h" />
     <ClInclude Include="Components\MeshComponent.h" />
     <ClInclude Include="Components\TransformComponent.h" />
-    <ClInclude Include="Data\Data.h" />
-    <ClInclude Include="Data\MeshData.h" />
-    <ClInclude Include="Data\TextureData.h" />
     <ClInclude Include="Game\BaseGameState.h" />
-    <ClInclude Include="GUI\GUI.h" />
-    <ClInclude Include="GUI\Text\FPSCounter.h" />
-    <ClInclude Include="GUI\Canvas.h" />
-    <ClInclude Include="GUI\Text\TextLabel.h" />
-    <ClInclude Include="GUI\UIElement.h" />
     <ClInclude Include="Helpers\Safedelete.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Patterns\BaseObject.h" />
@@ -230,9 +214,9 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
     <ClInclude Include="FrameworkPCH.h" />
     <ClInclude Include="Components\BaseComponent.h" />
     <ClInclude Include="Game\Game.h" />
-    <ClInclude Include="Data\Parsers\Binary\BinaryIO.hpp" />
-    <ClInclude Include="Data\Parsers\XML\XmlParser.h" />
-    <ClInclude Include="Data\Parsers\XML\XmlTree.h" />
+    <ClInclude Include="Content\Parsers\Binary\BinaryIO.hpp" />
+    <ClInclude Include="Content\Parsers\XML\XmlParser.h" />
+    <ClInclude Include="Content\Parsers\XML\XmlTree.h" />
     <ClInclude Include="Helpers\Helpers.h" />
     <ClInclude Include="Patterns\Command.h" />
     <ClInclude Include="Patterns\Event.h" />
@@ -245,7 +229,6 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
     <ClInclude Include="Scenegraph\GameObject.h" />
     <ClInclude Include="Scenegraph\Scene.h" />
     <ClInclude Include="Scenegraph\SceneManager.h" />
-    <ClInclude Include="GUI\UserInterface.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -255,13 +238,11 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
     <ClCompile Include="Characters\BaseControllerState.cpp" />
     <ClCompile Include="Components\MeshComponent.cpp" />
     <ClCompile Include="Components\TransformComponent.cpp" />
-    <ClCompile Include="Data\MeshData.cpp" />
-    <ClCompile Include="Data\TextureData.cpp" />
     <ClCompile Include="Game\BaseGameState.cpp" />
-    <ClCompile Include="GUI\Text\FPSCounter.cpp" />
-    <ClCompile Include="GUI\Canvas.cpp" />
-    <ClCompile Include="GUI\Text\TextLabel.cpp" />
-    <ClCompile Include="GUI\UIElement.cpp" />
+    <ClCompile Include="glad.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Patterns\BaseObject.cpp" />
     <ClCompile Include="Characters\BaseController.cpp" />
@@ -275,8 +256,8 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
     </ClCompile>
     <ClCompile Include="Components\BaseComponent.cpp" />
     <ClCompile Include="Game\Game.cpp" />
-    <ClCompile Include="Data\Parsers\XML\XmlParser.cpp" />
-    <ClCompile Include="Data\Parsers\XML\XmlTree.cpp" />
+    <ClCompile Include="Content\Parsers\XML\XmlParser.cpp" />
+    <ClCompile Include="Content\Parsers\XML\XmlTree.cpp" />
     <ClCompile Include="Graphics\Renderer\Renderer.cpp" />
     <ClCompile Include="Patterns\Command.cpp" />
     <ClCompile Include="Patterns\Observer.cpp" />
@@ -285,7 +266,6 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(Platform)\*.dll $(OutputPath) /Y</Co
     <ClCompile Include="Scenegraph\GameObject.cpp" />
     <ClCompile Include="Scenegraph\Scene.cpp" />
     <ClCompile Include="Scenegraph\SceneManager.cpp" />
-    <ClCompile Include="GUI\UserInterface.cpp" />
     <ClCompile Include="Scenegraph\BasePanelManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

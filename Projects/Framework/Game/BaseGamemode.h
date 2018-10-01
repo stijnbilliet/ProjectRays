@@ -1,8 +1,8 @@
 #pragma once
 #include "Patterns/BaseObject.h"
 
-class SceneManager; class Renderer; class UserInterface; class InputManager;
-class BaseBotController; class BasePlayerController; class BasePawn;
+class SceneManager; class Renderer; class InputManager;
+class BasePlayerController; class BasePawn;
 class BaseGamemode : public BaseObject
 {
 public:
@@ -19,7 +19,6 @@ public:
 	//System accessors
 	InputManager* GetInputManager() const;
 	SceneManager* GetSceneManager() const;
-	UserInterface* GetUserInterface() const;
 
 	//Entity accessors
 	void AddPlayer(BasePlayerController* pPlyContr);
@@ -30,7 +29,6 @@ protected:
 	void AutoPosses(BasePawn* pPawn);
 
 	InputManager* m_pInputManager;
-	UserInterface* m_pUserInterface;
 	SceneManager* m_pSceneManager;
 
 	std::vector<BasePlayerController*> m_pPlayers;

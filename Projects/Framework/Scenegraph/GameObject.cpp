@@ -2,7 +2,6 @@
 #include "GameObject.h"
 #include "Components/TransformComponent.h"
 #include "Scenegraph/BasePanel.h"
-#include "Data/Data.h"
 
 using Super = ParentObject<GameObject>;
 

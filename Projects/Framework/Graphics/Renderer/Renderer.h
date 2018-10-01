@@ -21,8 +21,8 @@ public:
 
 	//TODO: Renderer should draw instead of game
 
-	void Clear();
-	void Present();
+	void Begin();
+	void End();
 
 	virtual void OnInit() override;
 

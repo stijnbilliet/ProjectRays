@@ -2,7 +2,6 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "Camera/BaseCamera.h"
-#include "Components/SceneComponent.h"
 
 Scene::Scene(const std::string& name)
 	:BasePanel(name), m_pCamera(nullptr)
@@ -39,11 +38,13 @@ void Scene::OnUpdate(float deltaTime)
 
 void Scene::OnDraw(Renderer* pContext) const
 {
-	glPushMatrix();
-		glTranslatef(-m_pCamera->GetTransform()->GetLocalPosition().x, -m_pCamera->GetTransform()->GetLocalPosition().y, 0);
-		for (const auto gameObject : m_pObjects)
-		{
-			gameObject->Draw(pContext);
-		}
-	glPopMatrix();
+	UNREFERENCED_PARAMETER(pContext);
+	//TODO: setup coordinate systems
+	//glPushMatrix();
+	//	//glTranslatef(-m_pCamera->GetTransform()->GetLocalPosition().x, -m_pCamera->GetTransform()->GetLocalPosition().y, 0);
+	//	for (const auto gameObject : m_pObjects)
+	//	{
+	//		gameObject->Draw(pContext);
+	//	}
+	//glPopMatrix();
 }

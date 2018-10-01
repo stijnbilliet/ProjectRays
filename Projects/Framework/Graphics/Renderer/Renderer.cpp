@@ -4,7 +4,7 @@
 const WindowSettings Renderer::_WindowSettings = {854, 480};
 
 Renderer::Renderer()
-	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false)
+	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(true)
 {
 }
 
@@ -12,18 +12,15 @@ Renderer::~Renderer()
 {
 	SDL_GL_DeleteContext(m_Context);
 	SDL_DestroyWindow(m_pWindow);
-
-	TTF_Quit();
-	IMG_Quit();
 }
 
-void Renderer::Clear()
+void Renderer::Begin()
 {
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Renderer::Present()
+void Renderer::End()
 {
 	SDL_GL_SwapWindow(m_pWindow);
 }
@@ -36,6 +33,7 @@ void Renderer::OnInit()
 	}
 
 	//Use openGL 2.1
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
@@ -71,4 +69,11 @@ void Renderer::OnInit()
 			return;
 		}
 	}
+
+	// Check OpenGL properties
+	printf("OpenGL loaded\n");
+	gladLoadGLLoader(SDL_GL_GetProcAddress);
+	printf("Vendor:   %s\n", glGetString(GL_VENDOR));
+	printf("Renderer: %s\n", glGetString(GL_RENDERER));
+	printf("Version:  %s\n", glGetString(GL_VERSION));
 }

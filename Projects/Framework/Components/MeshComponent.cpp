@@ -2,8 +2,6 @@
 #include "MeshComponent.h"
 #include "Scenegraph/GameObject.h"
 #include "Components/MeshComponent.h"
-#include "Data/MeshData.h"
-#include "Data/TextureData.h"
 #include "Scenegraph/Scene.h"
 
 using Super = BaseComponent;

@@ -1,7 +1,5 @@
 #include "FrameworkPCH.h"
 #include "BasePawn.h"
-#include "Data/MeshData.h"
-#include "Data/TextureData.h"
 #include "Components/MeshComponent.h"
 #include "Scenegraph/Scene.h"
 

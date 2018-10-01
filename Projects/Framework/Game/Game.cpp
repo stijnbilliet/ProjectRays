@@ -80,9 +80,9 @@ bool Game::HandleInput()
 
 void Game::Render()
 {
-	m_pRenderer->Clear();
+	m_pRenderer->Begin();
 		m_pGameMode->Draw(m_pRenderer);
-	m_pRenderer->Present();
+	m_pRenderer->End();
 }
 
 void Game::UpdateGame(float deltaTime)
