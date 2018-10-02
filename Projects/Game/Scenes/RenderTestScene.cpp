@@ -28,25 +28,20 @@ void RenderTestScene::OnInit()
 	std::vector<Vertex> vertices{};
 	auto vert = Vertex();
 
-	//VERT1
-	vert.Position = glm::vec3(0.5f, 0.5f, 0.0f);
-	vertices.push_back(vert);
-
-	//VERT2
-	vert.Position = glm::vec3(0.5f, -0.5f, 0.0f);
-	vertices.push_back(vert);
-
-	//VERT3
+	//VERT0
 	vert.Position = glm::vec3(-0.5f, -0.5f, 0.0f);
 	vertices.push_back(vert);
 
-	//VERT4
-	vert.Position = glm::vec3(-0.5f, 0.5f, 0.0f);
+	//VERT1
+	vert.Position = glm::vec3(0.5f, -0.5f, 0.0f);
+	vertices.push_back(vert);
+
+	//VERT2
+	vert.Position = glm::vec3(0.0f, 0.5f, 0.0f);
 	vertices.push_back(vert);
 
 	std::vector<unsigned int> indices{
-		0, 1, 3,
-		1, 2, 3
+		0, 1, 2,
 	};
 
 	auto pMesh = new Mesh(vertices, indices);
