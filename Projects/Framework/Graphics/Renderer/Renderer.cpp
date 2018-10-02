@@ -38,10 +38,11 @@ void Renderer::OnInit()
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
 
-	//Use openGL 2.1
+	//Use openGL 3.3
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
 	//Create window
 	m_pWindow = SDL_CreateWindow(
@@ -112,7 +113,7 @@ void Renderer::PostInit()
 	glGenBuffers(1, &VBO); //gen vertrex buffer
 	glGenBuffers(1, &EBO); //gen element buffer
 
-						   // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 	glBindVertexArray(VAO);
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);

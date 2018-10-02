@@ -10,7 +10,7 @@ public:
 	virtual ~Game();
 
 	void Run();
-
+	void ParseCmdLineArgs();
 private:
 	void OnInit() override;
 	void OnUpdate(float deltaTime) override;

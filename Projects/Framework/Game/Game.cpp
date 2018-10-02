@@ -10,12 +10,7 @@
 Game::Game(BaseGamemode* pGamemode, Renderer* pRenderer, const std::vector<std::string>& args)
 	:m_pGameMode(pGamemode), m_pRenderer(pRenderer), m_Args(args)
 {
-	std::string exePath = m_Args[0];
-	exePath = exePath.substr(0, exePath.find_last_of('\\')+1);
-	std::replace(exePath.begin(), exePath.end(), '\\', '/');
-	std::string assetPath = exePath +"../../../Assets";
-	PropertyManager::GetInstance().Add("assetpath", assetPath);
-	std::cout << assetPath << '\n';
+	ParseCmdLineArgs();
 }
 
 Game::~Game()
@@ -45,6 +40,19 @@ void Game::Run()
 		//Render
 		Render();
 	}
+}
+
+void Game::ParseCmdLineArgs()
+{
+	//Store asset path
+	std::string exePath = m_Args[0];
+	exePath = exePath.substr(0, exePath.find_last_of('\\') + 1);
+	std::replace(exePath.begin(), exePath.end(), '\\', '/');
+	std::string assetPath = exePath + "../../../Assets";
+	PropertyManager::GetInstance().Add("assetpath", assetPath);
+
+	//Parse rest
+	//...
 }
 
 void Game::OnInit()
