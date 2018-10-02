@@ -195,6 +195,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Components\CameraComponent.h" />
     <ClInclude Include="Characters\Player\BasePlayerState.h" />
     <ClInclude Include="Camera\BaseCamera.h" />
     <ClInclude Include="Characters\BasePawn.h" />
@@ -239,6 +240,7 @@
     <ClInclude Include="Content\Model\Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\CameraComponent.cpp" />
     <ClCompile Include="Characters\Player\BasePlayerState.cpp" />
     <ClCompile Include="Camera\BaseCamera.cpp" />
     <ClCompile Include="Characters\BasePawn.cpp" />

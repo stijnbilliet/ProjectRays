@@ -1,22 +1,17 @@
 #include "FrameworkPCH.h"
 #include "Scene.h"
 #include "GameObject.h"
-#include "Camera/BaseCamera.h"
+
+#include "Components/CameraComponent.h"
 
 Scene::Scene(const std::string& name)
-	:BasePanel(name), m_pCamera(nullptr)
+	:BasePanel(name)
 {
-	m_pCamera = new BaseCamera();
-	Add(m_pCamera);
 }
 
 Scene::~Scene()
 {
-}
-
-BaseCamera * Scene::GetCamera()
-{
-	return m_pCamera;
+	safe_delete(m_pActiveCamera);
 }
 
 void Scene::OnInit()
@@ -44,4 +39,15 @@ void Scene::OnDraw(Renderer* pContext) const
 	{
 		gameObject->Draw(pContext);
 	}
+}
+
+CameraComponent * Scene::GetActiveCamera() const
+{
+	return nullptr;
+}
+
+void Scene::SetActiveCamera(CameraComponent * pNewCamera)
+{
+	UNREFERENCED_PARAMETER(pNewCamera);
+	//TODO: create default camera either in scene or anywhere else
 }

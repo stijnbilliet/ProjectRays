@@ -32,6 +32,10 @@ public:
 	const glm::vec3& GetLocalScale() const;
 	const glm::vec3& GetWorldScale() const;
 
+	const glm::vec3& GetForward() const;
+	const glm::vec3& GetUp() const;
+	const glm::vec3& GetRight() const;
+
 	bool WasTranslated() const;
 private:
 	void RebuildWorldMatrix();
@@ -43,6 +47,10 @@ private:
 	glm::vec3 m_Scale;
 	glm::vec3 m_WorldScale;
 	glm::mat4x4 m_World;
+
+	glm::vec3 m_Forward;
+	glm::vec3 m_Up;
+	glm::vec3 m_Right;
 
 	bool m_bWasTranslated;
 	bool m_bIsDirty;

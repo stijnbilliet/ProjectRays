@@ -38,20 +38,26 @@ bool PropertyManager::GetBool(std::string propertyName, bool& propertyVal) const
 
 bool PropertyManager::GetInt(std::string propertyName, int & propertyVal) const
 {
-	UNREFERENCED_PARAMETER(propertyVal);
-	//auto result{ m_Properties.find(propertyName) };
-	//if ()
-	//{
-	//	return false;
-	//}
+	auto result{ m_Properties.find(propertyName) };
+	if (result == m_Properties.end())
+	{
+		return false;
+	}
 
-	return false;
+	propertyVal = std::stoi(result->second);
+	return true;
 }
 
-bool PropertyManager::GetChar(std::string propertyName, char & propertyVal) const
+bool PropertyManager::GetFloat(std::string propertyName, float & propertyVal) const
 {
-	UNREFERENCED_PARAMETER(propertyVal);
-	return false;
+	auto result{ m_Properties.find(propertyName) };
+	if (result == m_Properties.end())
+	{
+		return false;
+	}
+
+	propertyVal = std::stof(result->second);
+	return true;
 }
 
 bool PropertyManager::GetString(std::string propertyName, std::string & propertyVal) const

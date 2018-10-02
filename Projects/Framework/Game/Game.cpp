@@ -11,6 +11,7 @@ Game::Game(BaseGamemode* pGamemode, Renderer* pRenderer, const std::vector<std::
 	:m_pGameMode(pGamemode), m_pRenderer(pRenderer), m_Args(args)
 {
 	ParseCmdLineArgs();
+	FillPropertyManager();
 }
 
 Game::~Game()
@@ -53,6 +54,13 @@ void Game::ParseCmdLineArgs()
 
 	//Parse rest
 	//...
+}
+
+void Game::FillPropertyManager()
+{
+	PropertyManager::GetInstance().Add("renderer_viewwidth", "854");
+	PropertyManager::GetInstance().Add("renderer_viewheight", "480");
+	PropertyManager::GetInstance().Add("windowtitle", "ProjectRays(OpenGL+RadeonRays)");
 }
 
 void Game::OnInit()

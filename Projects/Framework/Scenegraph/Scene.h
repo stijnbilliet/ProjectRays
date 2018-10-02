@@ -3,7 +3,7 @@
 
 class Renderer;
 class GameObject;
-class BaseCamera;
+class CameraComponent;
 class Scene : public BasePanel
 {
 public:
@@ -19,7 +19,8 @@ public:
 	virtual void OnUpdate(float deltaTime) override;
 	virtual void OnDraw(Renderer* pContext) const override;
 
-	BaseCamera* GetCamera();
-protected:
-	BaseCamera* m_pCamera;
+	CameraComponent* GetActiveCamera() const;
+	void SetActiveCamera(CameraComponent* pNewCamera);
+private:
+	CameraComponent* m_pActiveCamera;
 };

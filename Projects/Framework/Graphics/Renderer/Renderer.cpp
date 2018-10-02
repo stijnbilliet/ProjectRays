@@ -1,7 +1,7 @@
 #include "FrameworkPCH.h"
 #include "Renderer.h"
 #include "Content/Shader/ShaderProgram.h"
-
+#include "PropertyManager.h"
 Renderer::Renderer()
 	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(true)
 {
@@ -41,13 +41,20 @@ void Renderer::OnInit()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
+	int width{};
+	int height{};
+	std::string windowTitle{};
+	PropertyManager::GetInstance().GetInt("renderer_viewwidth", width);
+	PropertyManager::GetInstance().GetInt("renderer_viewheight", height);
+	PropertyManager::GetInstance().GetString("windowtitle", windowTitle);
+	
 	//Create window
 	m_pWindow = SDL_CreateWindow(
-		"ProjectRays",
+		windowTitle.c_str(),
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		854,
-		480,
+		width,
+		height,
 		SDL_WINDOW_OPENGL
 	);
 	if (m_pWindow == nullptr) throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());

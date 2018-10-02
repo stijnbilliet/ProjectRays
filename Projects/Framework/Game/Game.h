@@ -10,13 +10,14 @@ public:
 	virtual ~Game();
 
 	void Run();
-	void ParseCmdLineArgs();
 private:
 	void OnInit() override;
 	void OnUpdate(float deltaTime) override;
 
 	void Render();
 	bool HandleInput();
+	void ParseCmdLineArgs();
+	void FillPropertyManager();
 
 	Renderer* m_pRenderer;
 	BaseGamemode* m_pGameMode;

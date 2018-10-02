@@ -115,6 +115,21 @@ const glm::vec3& TransformComponent::GetWorldScale() const
 	return m_WorldScale;
 }
 
+const glm::vec3 & TransformComponent::GetForward() const
+{
+	return m_Forward;
+}
+
+const glm::vec3 & TransformComponent::GetUp() const
+{
+	return m_Up;
+}
+
+const glm::vec3 & TransformComponent::GetRight() const
+{
+	return m_Right;
+}
+
 bool TransformComponent::WasTranslated() const
 {
 	return m_bWasTranslated;
@@ -157,4 +172,10 @@ void TransformComponent::RebuildWorldMatrix()
 
 	//decompose returns matrix conjugate
 	m_WorldRotation = glm::conjugate(m_WorldRotation);
+
+	//get forward, up and right from worldrotation
+	glm::mat4 rotMat = glm::toMat4(m_WorldRotation);
+	m_Forward = glm::vec4(0.0f, 0.0f, 1.0f, 0.0f) * rotMat;
+	m_Right = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f) * rotMat;
+	m_Up = glm::cross(m_Forward, m_Right);
 }
