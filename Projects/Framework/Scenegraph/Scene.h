@@ -16,7 +16,6 @@ public:
 	Scene& operator=(Scene&& other) = delete;
 
 	virtual void OnInit() override;
-	virtual void OnFixedUpdate(float stepRate) override;
 	virtual void OnUpdate(float deltaTime) override;
 	virtual void OnDraw(Renderer* pContext) const override;
 

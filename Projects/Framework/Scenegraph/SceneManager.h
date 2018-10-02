@@ -8,6 +8,4 @@ class SceneManager final : public BasePanelManager<Scene>
 public:
 	SceneManager();
 	virtual ~SceneManager();
-
-	void OnFixedUpdate(float stepRate) override;
 };

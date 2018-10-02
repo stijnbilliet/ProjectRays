@@ -35,7 +35,7 @@ void Game::Run()
 		doContinue = HandleInput();
 
 		//Game Logic
-		std::async(std::launch::async, &Game::Update, this, deltaTime);
+		Update(deltaTime);
 
 		//Render
 		Render();

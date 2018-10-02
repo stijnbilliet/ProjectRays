@@ -1,6 +1,6 @@
 #include "FrameworkPCH.h"
 #include "BasePawn.h"
-#include "Components/MeshComponent.h"
+#include "Components/MeshDrawComponent.h"
 #include "Scenegraph/Scene.h"
 
 BasePawn::BasePawn()

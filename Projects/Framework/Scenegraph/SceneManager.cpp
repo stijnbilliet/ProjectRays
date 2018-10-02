@@ -12,8 +12,3 @@ SceneManager::SceneManager()
 SceneManager::~SceneManager()
 {
 }
-
-void SceneManager::OnFixedUpdate(float stepRate)
-{
-	m_pCurPanel->FixedUpdate(stepRate);
-}

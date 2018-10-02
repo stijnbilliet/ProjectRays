@@ -1,10 +1,11 @@
 #include "GamePCH.h"
 #include "GMSandbox.h"
+#include "Scenes/RenderTestScene.h"
 
 using Super = BaseGamemode;
 
 GMSandbox::GMSandbox()
-	:BaseGamemode(), m_pCornelScene(nullptr)
+	:BaseGamemode()
 {
 }
 
@@ -21,12 +22,10 @@ void GMSandbox::OnUpdate(float deltaTime)
 
 void GMSandbox::PreInit()
 {
-	Super::PreInit();
+	Super::OnInit();
 
-}
-
-void GMSandbox::PostInit()
-{
-	Super::PostInit();
-
+	//Level
+	auto pLevel = new RenderTestScene();
+	m_pSceneManager->Add(pLevel);
+	m_pSceneManager->SetActive("RenderTestScene");
 }

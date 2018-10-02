@@ -95,16 +95,6 @@ void BaseGamemode::OnInit()
 	{
 		pPly->Init();
 	}
-
-	for (auto pBot : m_pPlayers)
-	{
-		pBot->Init();
-	}
-}
-
-void BaseGamemode::OnFixedUpdate(float stepRate)
-{
-	m_pSceneManager->FixedUpdate(stepRate);
 }
 
 void BaseGamemode::AutoPosses(BasePawn* pPawn)

@@ -39,12 +39,9 @@ void Scene::OnUpdate(float deltaTime)
 void Scene::OnDraw(Renderer* pContext) const
 {
 	UNREFERENCED_PARAMETER(pContext);
-	//TODO: setup coordinate systems
-	//glPushMatrix();
-	//	//glTranslatef(-m_pCamera->GetTransform()->GetLocalPosition().x, -m_pCamera->GetTransform()->GetLocalPosition().y, 0);
-	//	for (const auto gameObject : m_pObjects)
-	//	{
-	//		gameObject->Draw(pContext);
-	//	}
-	//glPopMatrix();
+
+	for (const auto gameObject : m_pObjects)
+	{
+		gameObject->Draw(pContext);
+	}
 }

@@ -12,7 +12,6 @@ public:
 	virtual ~BaseGamemode();
 
 	void OnInit() override;
-	void OnFixedUpdate(float stepRate) override;
 	void OnUpdate(float deltaTime) override;
 	void OnDraw(Renderer* pContext) const override;
 

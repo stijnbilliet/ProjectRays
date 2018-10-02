@@ -16,9 +16,7 @@ public:
 	virtual void OnInit() override;
 	virtual void PostInit() override;
 private:
-	//TEMP
 	ShaderProgram* m_pShaderProgram;
-	unsigned int VBO, VAO, EBO;
 
 	SDL_GLContext m_Context;
 	SDL_Window* m_pWindow;

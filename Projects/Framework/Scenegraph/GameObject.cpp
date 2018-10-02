@@ -55,8 +55,6 @@ void GameObject::OnDraw(Renderer* pContext) const
 {
 	Super::OnDraw(pContext);
 
-	//Tells openGL that we are going to draw at this objects location
-	//This results in drawing the gameobjects at their respective world positions
 	for (auto comp : m_pComponents)
 	{
 		comp->Draw(pContext);

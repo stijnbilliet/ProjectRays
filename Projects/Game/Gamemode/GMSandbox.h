@@ -15,7 +15,5 @@ public:
 
 	void OnUpdate(float deltaTime) override;
 	void PreInit() override;
-	void PostInit() override;
 private:
-	Scene* m_pCornelScene;
 };

@@ -19,11 +19,8 @@ void Renderer::Begin()
 {
 	//CLEAR COLOR
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_pShaderProgram->Use();
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void Renderer::End()
@@ -77,9 +74,10 @@ void Renderer::OnInit()
 		}
 	}
 
-	// Check OpenGL properties
-	printf("OpenGL loaded\n");
+	//Ask for function bindings
 	gladLoadGLLoader(SDL_GL_GetProcAddress);
+
+	// Check OpenGL properties
 	printf("Vendor:   %s\n", glGetString(GL_VENDOR));
 	printf("Renderer: %s\n", glGetString(GL_RENDERER));
 	printf("Version:  %s\n", glGetString(GL_VERSION));
@@ -87,6 +85,10 @@ void Renderer::OnInit()
 
 void Renderer::PostInit()
 {
+	//enable depth testing
+	glEnable(GL_DEPTH_TEST);
+	
+	//load shader from file
 	std::string assetPath{};
 	PropertyManager::GetInstance().GetString("assetpath", assetPath);
 	std::string vshPathStr{ assetPath + "/Shaders/BasicShading.vsh" };
@@ -95,37 +97,5 @@ void Renderer::PostInit()
 	const char* fshPath = fshPathStr.c_str();
 
 	m_pShaderProgram = new ShaderProgram(vshPath, fshPath);
-
-	//CREATE VERTICES/INDICES
-	float vertices[] = {
-		0.5f,  0.5f, 0.0f,  // top right
-		0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left 
-	};
-
-	unsigned int indices[] = {  // note that we start from 0!
-		0, 1, 3,  // first Triangle
-		1, 2, 3   // second Triangle
-	};
-
-	glGenVertexArrays(1, &VAO); //generate arrays to store attribute pointers
-	glGenBuffers(1, &VBO); //gen vertrex buffer
-	glGenBuffers(1, &EBO); //gen element buffer
-
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	glBindVertexArray(VAO);
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
-	glBindVertexArray(0);
+	m_pShaderProgram->Use();
 }
