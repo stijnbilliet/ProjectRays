@@ -6,28 +6,19 @@ class BaseGamemode;
 class Game final : public SingleInstance<Game>
 {
 public:
-	Game(BaseGamemode* pGamemode, Renderer* pRenderer);
+	Game(BaseGamemode* pGamemode, Renderer* pRenderer, const std::vector<std::string>& args);
 	virtual ~Game();
 
 	void Run();
 
 private:
 	void OnInit() override;
-	void OnFixedUpdate(float stepRate) override;
 	void OnUpdate(float deltaTime) override;
 
 	void Render();
-	void UpdateGame(float deltaTime);
-	void Integrate(float deltaTime);
-
-	void Clean();
 	bool HandleInput();
 
 	Renderer* m_pRenderer;
 	BaseGamemode* m_pGameMode;
-
-	float m_Accumulator;
-	float m_StepRate;
-
-	std::mutex m_PhysicsMutex;
+	std::vector<std::string> m_Args;
 };

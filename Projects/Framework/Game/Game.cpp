@@ -5,10 +5,17 @@
 #include "Scenegraph/SceneManager.h"
 #include "Game/BaseGamemode.h"
 #include "Characters/Player/BasePlayerController.h"
+#include "PropertyManager.h"
 
-Game::Game(BaseGamemode* pGamemode, Renderer* pRenderer)
-	:m_Accumulator(0.0f), m_StepRate(1/60.0f), m_pGameMode(pGamemode), m_pRenderer(pRenderer)
+Game::Game(BaseGamemode* pGamemode, Renderer* pRenderer, const std::vector<std::string>& args)
+	:m_pGameMode(pGamemode), m_pRenderer(pRenderer), m_Args(args)
 {
+	std::string exePath = m_Args[0];
+	exePath = exePath.substr(0, exePath.find_last_of('\\')+1);
+	std::replace(exePath.begin(), exePath.end(), '\\', '/');
+	std::string assetPath = exePath +"../../../Assets";
+	PropertyManager::GetInstance().Add("assetpath", assetPath);
+	std::cout << assetPath << '\n';
 }
 
 Game::~Game()
@@ -33,28 +40,17 @@ void Game::Run()
 		doContinue = HandleInput();
 
 		//Game Logic
-		std::async(std::launch::async, &Game::UpdateGame, this, deltaTime);
+		std::async(std::launch::async, &Game::Update, this, deltaTime);
 
 		//Render
 		Render();
 	}
-
-	Clean();
 }
 
 void Game::OnInit()
 {
 	m_pRenderer->Init();
 	m_pGameMode->Init();
-}
-
-void Game::OnFixedUpdate(float stepRate)
-{
-	m_pGameMode->FixedUpdate(stepRate);
-}
-
-void Game::Clean()
-{
 }
 
 bool Game::HandleInput()
@@ -83,25 +79,6 @@ void Game::Render()
 	m_pRenderer->Begin();
 		m_pGameMode->Draw(m_pRenderer);
 	m_pRenderer->End();
-}
-
-void Game::UpdateGame(float deltaTime)
-{
-	//Locks upon construction, unlocks when leaving scope
-	std::lock_guard<std::mutex> lock(m_PhysicsMutex);
-	Update(deltaTime);
-}
-
-void Game::Integrate(float deltaTime)
-{
-	m_Accumulator += deltaTime;
-	while (m_Accumulator >= m_StepRate)
-	{
-		//Locks upon construction, unlocks when leaving scope
-		std::lock_guard<std::mutex> lock(m_PhysicsMutex);
-		FixedUpdate(m_StepRate);
-		m_Accumulator -= m_StepRate;
-	}
 }
 
 void Game::OnUpdate(float deltaTime)

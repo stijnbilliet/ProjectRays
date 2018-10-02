@@ -1,7 +1,6 @@
 #include "FrameworkPCH.h"
 #include "Renderer.h"
-
-const WindowSettings Renderer::_WindowSettings = {854, 480};
+#include "Content/Shader/ShaderProgram.h"
 
 Renderer::Renderer()
 	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(true)
@@ -16,8 +15,29 @@ Renderer::~Renderer()
 
 void Renderer::Begin()
 {
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+
+	float vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		0.0f,  0.5f, 0.0f
+	};
+
+	unsigned int VBO;
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	std::string assetPath{};
+	PropertyManager::GetInstance().GetString("assetpath", assetPath);
+	std::string vshPathStr{ assetPath + "/Shaders/BasicShading.vsh" };
+	std::string fshPathStr{ assetPath + "/Shaders/BasicShading.fsh" };
+	const char* vshPath = vshPathStr.c_str();
+	const char* fshPath = fshPathStr.c_str();
+
+	ShaderProgram basicShading(vshPath, fshPath);
+	basicShading.Use();
 }
 
 void Renderer::End()
@@ -42,8 +62,8 @@ void Renderer::OnInit()
 		"ProjectRays",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		_WindowSettings.Width,
-		_WindowSettings.Height,
+		854,
+		480,
 		SDL_WINDOW_OPENGL
 	);
 	if (m_pWindow == nullptr) throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());

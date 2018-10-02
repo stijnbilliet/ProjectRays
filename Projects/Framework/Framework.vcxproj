@@ -224,11 +224,14 @@
     <ClInclude Include="Patterns\Singleton.h" />
     <ClInclude Include="Graphics\Renderer\Renderer.h" />
     <ClInclude Include="Patterns\Subject.h" />
+    <ClInclude Include="Content\Shader\ShaderProgram.h" />
+    <ClInclude Include="PropertyManager.h" />
     <ClInclude Include="Scenegraph\BasePanel.h" />
     <ClInclude Include="Scenegraph\BasePanelManager.h" />
     <ClInclude Include="Scenegraph\GameObject.h" />
     <ClInclude Include="Scenegraph\Scene.h" />
     <ClInclude Include="Scenegraph\SceneManager.h" />
+    <ClInclude Include="Content\Shader\Shader.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -264,11 +267,14 @@
     <ClCompile Include="Patterns\Command.cpp" />
     <ClCompile Include="Patterns\Observer.cpp" />
     <ClCompile Include="Patterns\Subject.cpp" />
+    <ClCompile Include="Content\Shader\ShaderProgram.cpp" />
+    <ClCompile Include="PropertyManager.cpp" />
     <ClCompile Include="Scenegraph\BasePanel.cpp" />
     <ClCompile Include="Scenegraph\GameObject.cpp" />
     <ClCompile Include="Scenegraph\Scene.cpp" />
     <ClCompile Include="Scenegraph\SceneManager.cpp" />
     <ClCompile Include="Scenegraph\BasePanelManager.cpp" />
+    <ClCompile Include="Content\Shader\Shader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
