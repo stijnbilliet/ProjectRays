@@ -1,7 +1,6 @@
 #pragma once
 #include "Patterns/SingleInstance.h"
 
-class ShaderProgram;
 class Renderer : public SingleInstance<Renderer>
 {
 public:
@@ -16,8 +15,6 @@ public:
 	virtual void OnInit() override;
 	virtual void PostInit() override;
 private:
-	ShaderProgram* m_pShaderProgram;
-
 	SDL_GLContext m_Context;
 	SDL_Window* m_pWindow;
 	bool m_Vsync;

@@ -33,3 +33,8 @@ void ShaderProgram::Use()
 {
 	glUseProgram(m_Id);
 }
+
+unsigned int ShaderProgram::GetId() const
+{
+	return m_Id;
+}

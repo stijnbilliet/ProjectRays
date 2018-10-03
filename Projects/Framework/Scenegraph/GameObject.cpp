@@ -8,8 +8,8 @@ using Super = ParentObject<GameObject>;
 GameObject::GameObject()
 	:ParentObject<GameObject>()
 {
-	auto pTransformComp = new TransformComponent();
-	AddComponent(pTransformComp);
+	m_pRootComponent = new TransformComponent();
+	AddComponent(m_pRootComponent);
 }
 
 GameObject::~GameObject()

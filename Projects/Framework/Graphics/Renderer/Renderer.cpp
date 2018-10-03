@@ -1,7 +1,7 @@
 #include "FrameworkPCH.h"
 #include "Renderer.h"
-#include "Content/Shader/ShaderProgram.h"
 #include "PropertyManager.h"
+
 Renderer::Renderer()
 	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(true)
 {
@@ -11,8 +11,6 @@ Renderer::~Renderer()
 {
 	SDL_GL_DeleteContext(m_Context);
 	SDL_DestroyWindow(m_pWindow);
-
-	delete m_pShaderProgram;
 }
 
 void Renderer::Begin()
@@ -20,7 +18,6 @@ void Renderer::Begin()
 	//CLEAR COLOR
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	m_pShaderProgram->Use();
 }
 
 void Renderer::End()
@@ -94,15 +91,4 @@ void Renderer::PostInit()
 {
 	//enable depth testing
 	glEnable(GL_DEPTH_TEST);
-	
-	//load shader from file
-	std::string assetPath{};
-	PropertyManager::GetInstance().GetString("assetpath", assetPath);
-	std::string vshPathStr{ assetPath + "/Shaders/BasicShading.vsh" };
-	std::string fshPathStr{ assetPath + "/Shaders/BasicShading.fsh" };
-	const char* vshPath = vshPathStr.c_str();
-	const char* fshPath = fshPathStr.c_str();
-
-	m_pShaderProgram = new ShaderProgram(vshPath, fshPath);
-	m_pShaderProgram->Use();
 }

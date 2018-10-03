@@ -7,11 +7,16 @@
 Scene::Scene(const std::string& name)
 	:BasePanel(name)
 {
+	//TODO: not ideal solution
+	auto pCamera = new GameObject();
+	m_pActiveCamera = new CameraComponent();
+
+	pCamera->AddComponent(m_pActiveCamera);
+	Add(pCamera);
 }
 
 Scene::~Scene()
 {
-	safe_delete(m_pActiveCamera);
 }
 
 void Scene::OnInit()
@@ -41,13 +46,12 @@ void Scene::OnDraw(Renderer* pContext) const
 	}
 }
 
-CameraComponent * Scene::GetActiveCamera() const
+CameraComponent* Scene::GetActiveCamera() const
 {
-	return nullptr;
+	return m_pActiveCamera;
 }
 
 void Scene::SetActiveCamera(CameraComponent * pNewCamera)
 {
-	UNREFERENCED_PARAMETER(pNewCamera);
-	//TODO: create default camera either in scene or anywhere else
+	m_pActiveCamera = pNewCamera;
 }
