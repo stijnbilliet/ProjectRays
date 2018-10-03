@@ -19,12 +19,12 @@ public:
 	void Translate(const glm::vec3& pos);
 	void Translate(const float x, const float y, const float z);
 	void Rotate(const glm::quat& rotQuat);
-	void Rotate(const glm::vec3& rotVec, bool bEuler);
-	void Rotate(const float x, const float y, const float z, bool bEuler);
+	void Rotate(const glm::vec3& rotVec, bool bRadians = false);
+	void Rotate(const float x, const float y, const float z, bool bRadians);
 	void Scale(const glm::vec3& scale);
 	void Scale(const float x, const float y, const float z);
 
-	const glm::mat4x4& GetWorldMatrix() const;
+	const glm::mat4& GetWorldMatrix() const;
 	const glm::vec3& GetLocalPosition() const;
 	const glm::vec3& GetWorldPosition() const;
 	const glm::quat& GetLocalRotation() const;
@@ -46,7 +46,7 @@ private:
 	glm::quat m_WorldRotation;
 	glm::vec3 m_Scale;
 	glm::vec3 m_WorldScale;
-	glm::mat4x4 m_World;
+	glm::mat4 m_World;
 
 	glm::vec3 m_Forward;
 	glm::vec3 m_Up;

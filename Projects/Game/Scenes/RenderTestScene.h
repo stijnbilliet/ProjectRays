@@ -10,5 +10,6 @@ public:
 	virtual void OnUpdate(float elapsedSec) override;
 	virtual void OnInit() override;
 private:
-
+	GameObject * m_pFirstQuad;
+	float m_TotalRotation;
 };

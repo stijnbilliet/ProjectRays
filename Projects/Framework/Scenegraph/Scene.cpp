@@ -3,6 +3,7 @@
 #include "GameObject.h"
 
 #include "Components/CameraComponent.h"
+#include "Components/TransformComponent.h"
 
 Scene::Scene(const std::string& name)
 	:BasePanel(name)
@@ -12,6 +13,7 @@ Scene::Scene(const std::string& name)
 	m_pActiveCamera = new CameraComponent();
 
 	pCamera->AddComponent(m_pActiveCamera);
+	pCamera->GetTransform()->Translate(0.0f, 0.0f, 3.0f);
 	Add(pCamera);
 }
 

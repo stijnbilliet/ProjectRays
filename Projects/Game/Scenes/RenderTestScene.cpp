@@ -2,11 +2,12 @@
 #include "RenderTestScene.h"
 #include "Content/Model/Mesh.h"
 #include "Content/Shader/ShaderProgram.h"
+#include "Components/TransformComponent.h"
 
 using Super = Scene;
 
 RenderTestScene::RenderTestScene()
-	:Scene("RenderTestScene")
+	:Scene("RenderTestScene"), m_TotalRotation(0.0f)
 {
 }
 
@@ -17,32 +18,31 @@ RenderTestScene::~RenderTestScene()
 void RenderTestScene::OnUpdate(float elapsedSec)
 {
 	Super::OnUpdate(elapsedSec);
+
+	m_TotalRotation += 60.0f*elapsedSec;
+	if (m_TotalRotation > 360.0f) m_TotalRotation = 0;
+
+	m_pFirstQuad->GetTransform()->Rotate(m_TotalRotation, m_TotalRotation, m_TotalRotation, false);
 }
 
 void RenderTestScene::OnInit()
 {
 	Super::OnInit();
 
-	auto pFirstQuad = new GameObject();
+	m_pFirstQuad = new GameObject();
+
+	std::vector<Vertex> verticesvector{};
 
 	//TODO: FOR THE TIME BEING MANUAL
-	std::vector<Vertex> vertices{};
-	auto vert = Vertex();
-
-	//VERT0
-	vert.Position = glm::vec3(-0.5f, -0.5f, 0.0f);
-	vertices.push_back(vert);
-
-	//VERT1
-	vert.Position = glm::vec3(0.5f, -0.5f, 0.0f);
-	vertices.push_back(vert);
-
-	//VERT2
-	vert.Position = glm::vec3(0.0f, 0.5f, 0.0f);
-	vertices.push_back(vert);
+	std::vector<Vertex> vertices{
+		Vertex(glm::vec3(0.5f, 0.5f, 0.0f)),
+		Vertex(glm::vec3(0.5f, -0.5f, 0.0f)),
+		Vertex(glm::vec3(-0.5f, -0.5f, 0.0f)),
+		Vertex(glm::vec3(-0.5f, 0.5f, 0.0f))
+	};
 
 	std::vector<unsigned int> indices{
-		0, 1, 2,
+		0, 1, 3, 1, 2, 3
 	};
 
 	auto pMesh = new Mesh(vertices, indices);
@@ -58,6 +58,8 @@ void RenderTestScene::OnInit()
 
 	//CREATE DRAW COMPONENT
 	auto pMeshDrawComp = new MeshDrawComponent(pMesh, pShaderProgram);
-	pFirstQuad->AddComponent(pMeshDrawComp);
-	Add(pFirstQuad);
+	m_pFirstQuad->AddComponent(pMeshDrawComp);
+
+	m_pFirstQuad->GetTransform()->Translate(0.0f, 0.0f, 0.0f);
+	Add(m_pFirstQuad);
 }

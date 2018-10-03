@@ -4,7 +4,7 @@
 #include "TransformComponent.h"
 
 CameraComponent::CameraComponent()
-	:m_NearPlane(0.1f), m_FarPlane(100.0f), m_FOV(60.0f)
+	:m_NearPlane(0.1f), m_FarPlane(100.0f), m_FOV(45.0f), m_UsePerspective(true)
 {
 }
 
@@ -35,14 +35,14 @@ void CameraComponent::OnUpdate(float elapsedSec)
 		m_Projection = glm::ortho(0.0f, (float)width, 0.0f, (float)height, m_NearPlane, m_FarPlane);
 	}
 
-	glm::vec3 worldPos = m_pAttachedTo->GetTransform()->GetWorldPosition();
-	glm::vec3 lookAt = m_pAttachedTo->GetTransform()->GetForward();
-	glm::vec3 upVec = m_pAttachedTo->GetTransform()->GetUp();
+	glm::vec3 camPos = m_pAttachedTo->GetTransform()->GetWorldPosition();
+	glm::vec3 camForward = m_pAttachedTo->GetTransform()->GetForward();
+	glm::vec3 camUp = m_pAttachedTo->GetTransform()->GetUp();
 
-	m_View = glm::lookAt(worldPos, worldPos+ lookAt, upVec);
-	m_ViewProjection = m_View * m_Projection;
+	m_View = glm::lookAt(camPos, camPos + camForward, camUp);
+	m_ViewProjection = m_Projection * m_View;
 	m_ViewInverse = glm::inverse(m_View);
-	m_ProjectionInverse = glm::inverse(m_View);
+	m_ProjectionInverse = glm::inverse(m_Projection);
 	m_ViewProjectionInverse = glm::inverse(m_ViewProjection);
 }
 

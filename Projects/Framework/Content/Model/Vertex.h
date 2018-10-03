@@ -1,6 +1,9 @@
 #pragma once
 struct Vertex
 {
+	Vertex(glm::vec3 pos)
+		:Position(pos) {};
+
 	glm::vec3 Position;
 };
 
