@@ -4,6 +4,9 @@ struct Vertex
 	Vertex(glm::vec3 pos)
 		:Position(pos) {};
 
+	Vertex(float x, float y, float z)
+		:Vertex(glm::vec3(x, y, z)) {};
+
 	glm::vec3 Position;
 };
 

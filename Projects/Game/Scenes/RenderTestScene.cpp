@@ -34,18 +34,60 @@ void RenderTestScene::OnInit()
 	std::vector<Vertex> verticesvector{};
 
 	//TODO: FOR THE TIME BEING MANUAL
-	std::vector<Vertex> vertices{
-		Vertex(glm::vec3(0.5f, 0.5f, 0.0f)),
-		Vertex(glm::vec3(0.5f, -0.5f, 0.0f)),
-		Vertex(glm::vec3(-0.5f, -0.5f, 0.0f)),
-		Vertex(glm::vec3(-0.5f, 0.5f, 0.0f))
+
+	std::vector<Vertex> verticesVect{};
+
+	float vertices[] = {
+		-0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+
+		-0.5f, -0.5f,  0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+
+		-0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f, -0.5f,
+
+		-0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
 	};
 
-	std::vector<unsigned int> indices{
-		0, 1, 3, 1, 2, 3
-	};
+	for (int i = 0; i < 108; i += 3)
+	{
+		auto newVert = Vertex(vertices[i], vertices[i + 1], vertices[i + 2]);
+		verticesVect.push_back(newVert);
+	}
 
-	auto pMesh = new Mesh(vertices, indices);
+	auto pMesh = new Mesh(verticesVect);
 
 	//LOAD SHADER
 	//load shader from file

@@ -4,7 +4,7 @@
 #include "TransformComponent.h"
 
 CameraComponent::CameraComponent()
-	:m_NearPlane(0.1f), m_FarPlane(100.0f), m_FOV(45.0f), m_UsePerspective(true)
+	:m_NearPlane(0.1f), m_FarPlane(100.0f), m_FOV(60.0f), m_UsePerspective(true), m_Orthosize(1.0f)
 {
 }
 

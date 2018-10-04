@@ -3,7 +3,7 @@
 #include "PropertyManager.h"
 
 Renderer::Renderer()
-	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(true)
+	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false)
 {
 }
 

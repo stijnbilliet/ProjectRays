@@ -48,7 +48,7 @@ void MeshDrawComponent::OnDraw(Renderer* pContext) const
 		}
 		else
 		{
-			glDrawArrays(GL_TRIANGLES, 0, m_pMeshData->GetVertices().size());
+			glDrawArrays(GL_TRIANGLES, 0, GLsizei(m_pMeshData->GetVertices().size()));
 		}
 	}
 	glBindVertexArray(0);
