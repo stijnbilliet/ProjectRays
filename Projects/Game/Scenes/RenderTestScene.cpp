@@ -35,11 +35,11 @@ void RenderTestScene::OnInit()
 	m_pTestObject = new GameObject();
 
 	//Load model and fetch meshes
-	m_pModel = new Model("Models/LogoBox.fbx");
+	m_pModel = new Model("Models/SuicuneSAIX.fbx");
 	auto pMesh = &(m_pModel->GetMeshes()[0]);
 
 	std::vector<Texture> textureVect{};
-	textureVect.push_back(Texture("Textures/logo.jpg"));
+	textureVect.push_back(Texture("Textures/SuicuneSaix_A.tga.png"));
 	pMesh->SetTextures(textureVect);
 
 	//Load shaders and bundle in shaderprogram
@@ -50,6 +50,7 @@ void RenderTestScene::OnInit()
 	m_pTestObject->AddComponent(pMeshDrawComp);
 
 	//Translate object and add to scene
-	m_pTestObject->GetTransform()->Translate(0.0f, -4.0f, -15.0f);
+	m_pTestObject->GetTransform()->Translate(0.0f, -7.5f, -22.5f);
+	m_pTestObject->GetTransform()->Scale(1/20.0f, 1/20.0f, 1/ 20.0f);
 	Add(m_pTestObject);
 }
