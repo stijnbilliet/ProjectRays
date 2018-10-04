@@ -4,10 +4,11 @@
 class Renderer;
 class Mesh;
 class ShaderProgram;
+class Texture;
 class MeshDrawComponent final : public BaseComponent
 {
 public:
-	MeshDrawComponent(Mesh* pMeshData, ShaderProgram* pShaderProgram);
+	MeshDrawComponent(const Mesh* pMeshData, ShaderProgram* pShaderProgram);
 	virtual ~MeshDrawComponent();
 
 	MeshDrawComponent(const MeshDrawComponent& other) = delete;
@@ -17,6 +18,6 @@ public:
 
 	virtual void OnDraw(Renderer* pContext) const override;
 private:
-	Mesh* m_pMeshData;
+	const Mesh* m_pMeshData;
 	ShaderProgram* m_pShaderProgram;
 };

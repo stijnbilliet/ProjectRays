@@ -159,7 +159,7 @@ void TransformComponent::RebuildWorldMatrix()
 	glm::mat4 rotationMatrix = glm::mat4_cast(m_Rotation);
 	glm::mat4 translationMatrix = glm::translate(glm::mat4(), glm::vec3(m_Position.x, m_Position.y, m_Position.z));
 
-	m_World = scaleMatrix * rotationMatrix * translationMatrix;
+	m_World = translationMatrix * rotationMatrix * scaleMatrix;
 
 	//Should perform scenegraph?
 	auto parent = m_pAttachedTo->GetParent();

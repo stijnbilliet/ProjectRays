@@ -98,7 +98,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>GamePCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad\include;$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\glm;../Framework/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad\include;$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\stb_image\include;$(SolutionDir)3rdParty\glm;../Framework/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -115,7 +115,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>GamePCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad\include;$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\glm;../Framework/;%(AdditionalIncludeDirectories);$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad\include;$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\stb_image\include;$(SolutionDir)3rdParty\glm;../Framework/;%(AdditionalIncludeDirectories);$(ProjectDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,7 +133,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad\include;$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\glm;../Framework/;%(AdditionalIncludeDirectories);$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad\include;$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\stb_image\include;$(SolutionDir)3rdParty\glm;../Framework/;%(AdditionalIncludeDirectories);$(ProjectDir)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>GamePCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -154,7 +154,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad\include;$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\glm;../Framework/;%(AdditionalIncludeDirectories);$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad\include;$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\stb_image\include;$(SolutionDir)3rdParty\glm;../Framework/;%(AdditionalIncludeDirectories);$(ProjectDir)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>GamePCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>

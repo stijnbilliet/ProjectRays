@@ -1,6 +1,7 @@
 #include "GamePCH.h"
 #include "RenderTestScene.h"
 #include "Content/Model/Mesh.h"
+#include "Content/Model/Model.h"
 #include "Content/Shader/ShaderProgram.h"
 #include "Components/TransformComponent.h"
 
@@ -13,6 +14,7 @@ RenderTestScene::RenderTestScene()
 
 RenderTestScene::~RenderTestScene()
 {
+	safe_delete(m_pModel);
 }
 
 void RenderTestScene::OnUpdate(float elapsedSec)
@@ -22,86 +24,32 @@ void RenderTestScene::OnUpdate(float elapsedSec)
 	m_TotalRotation += 60.0f*elapsedSec;
 	if (m_TotalRotation > 360.0f) m_TotalRotation = 0;
 
-	m_pFirstQuad->GetTransform()->Rotate(m_TotalRotation, m_TotalRotation, m_TotalRotation, false);
+	m_pTestObject->GetTransform()->Rotate(0.0f, m_TotalRotation, 0.0f, false);
 }
 
 void RenderTestScene::OnInit()
 {
 	Super::OnInit();
 
-	m_pFirstQuad = new GameObject();
+	//Create object
+	m_pTestObject = new GameObject();
 
-	std::vector<Vertex> verticesvector{};
+	//Load model and fetch meshes
+	m_pModel = new Model("Models/LogoBox.fbx");
+	auto pMesh = &(m_pModel->GetMeshes()[0]);
 
-	//TODO: FOR THE TIME BEING MANUAL
+	std::vector<Texture> textureVect{};
+	textureVect.push_back(Texture("Textures/logo.jpg"));
+	pMesh->SetTextures(textureVect);
 
-	std::vector<Vertex> verticesVect{};
+	//Load shaders and bundle in shaderprogram
+	auto pShaderProgram = new ShaderProgram("Shaders/Basic.vs", "Shaders/Basic.fs");
 
-	float vertices[] = {
-		-0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-
-		-0.5f, -0.5f,  0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
-
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-
-		-0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f, -0.5f,
-
-		-0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f,
-	};
-
-	for (int i = 0; i < 108; i += 3)
-	{
-		auto newVert = Vertex(vertices[i], vertices[i + 1], vertices[i + 2]);
-		verticesVect.push_back(newVert);
-	}
-
-	auto pMesh = new Mesh(verticesVect);
-
-	//LOAD SHADER
-	//load shader from file
-	std::string assetPath{};
-	PropertyManager::GetInstance().GetString("assetpath", assetPath);
-
-	std::string vshPathStr{ assetPath + "/Shaders/BasicShading.vsh" };
-	std::string fshPathStr{ assetPath + "/Shaders/BasicShading.fsh" };
-	auto pShaderProgram = new ShaderProgram(vshPathStr.c_str(), fshPathStr.c_str());
-
-	//CREATE DRAW COMPONENT
+	//Create draw component
 	auto pMeshDrawComp = new MeshDrawComponent(pMesh, pShaderProgram);
-	m_pFirstQuad->AddComponent(pMeshDrawComp);
+	m_pTestObject->AddComponent(pMeshDrawComp);
 
-	m_pFirstQuad->GetTransform()->Translate(0.0f, 0.0f, 0.0f);
-	Add(m_pFirstQuad);
+	//Translate object and add to scene
+	m_pTestObject->GetTransform()->Translate(0.0f, -4.0f, -15.0f);
+	Add(m_pTestObject);
 }

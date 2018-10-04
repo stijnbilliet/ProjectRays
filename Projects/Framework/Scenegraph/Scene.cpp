@@ -13,7 +13,7 @@ Scene::Scene(const std::string& name)
 	m_pActiveCamera = new CameraComponent();
 
 	pCamera->AddComponent(m_pActiveCamera);
-	pCamera->GetTransform()->Translate(0.0f, 0.0f, 2.0f);
+	pCamera->GetTransform()->Translate(0.0f, 0.0f, 0.0f);
 	Add(pCamera);
 }
 

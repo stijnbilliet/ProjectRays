@@ -9,14 +9,13 @@
 
 using Super = BaseComponent;
 
-MeshDrawComponent::MeshDrawComponent(Mesh* pMeshData, ShaderProgram* pShaderProgram)
+MeshDrawComponent::MeshDrawComponent(const Mesh* pMeshData, ShaderProgram* pShaderProgram)
 	:BaseComponent(), m_pMeshData(pMeshData), m_pShaderProgram(pShaderProgram)
 {
 }
 
 MeshDrawComponent::~MeshDrawComponent()
 {
-	safe_delete(m_pMeshData);
 	safe_delete(m_pShaderProgram);
 }
 
@@ -37,6 +36,29 @@ void MeshDrawComponent::OnDraw(Renderer* pContext) const
 	int wvpMatVar = glGetUniformLocation(m_pShaderProgram->GetId(), "gMatrixWVP");
 	auto pWvpMat = pScene->GetActiveCamera()->GetViewProjection() * pWorldMat;
 	glUniformMatrix4fv(wvpMatVar, 1, GL_FALSE, glm::value_ptr(pWvpMat));
+
+	//Get textures from meshdata
+	std::vector<Texture> textures = m_pMeshData->GetTextures();
+
+	unsigned int diffuseNmb = 1;
+	for (unsigned int i = 0; i < textures.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i); //active proper texture unit
+		std::string number;
+		std::string name;
+		if (textures[i].type == TextureType::DIFFUSE)
+		{
+			number = std::to_string(diffuseNmb++);
+			name = "texture_diffuse";
+		}
+		//else if etc.
+
+		std::string textureName = name + number;
+		int textureloc = glGetUniformLocation(m_pShaderProgram->GetId(), textureName.c_str());
+		glUniform1i(textureloc, i);
+		glBindTexture(GL_TEXTURE_2D, textures[i].id);
+	}
+	glActiveTexture(GL_TEXTURE0);
 
 	// draw mesh
 	m_pShaderProgram->Use();

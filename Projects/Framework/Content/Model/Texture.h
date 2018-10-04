@@ -1,7 +1,16 @@
 #pragma once
-class Texture
+enum TextureType
 {
-public:
-	Texture();
-	virtual ~Texture();
+	DIFFUSE,
+	SPECULAR
+};
+
+struct Texture
+{
+	Texture() = default;
+	Texture(const char *path);
+
+	unsigned int id;
+	TextureType type;
+	std::string path;
 };

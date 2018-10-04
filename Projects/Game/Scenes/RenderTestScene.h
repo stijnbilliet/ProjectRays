@@ -1,6 +1,7 @@
 #pragma once
 #include "Scenegraph/Scene.h"
 
+class Model;
 class RenderTestScene : public Scene
 {
 public:
@@ -10,6 +11,8 @@ public:
 	virtual void OnUpdate(float elapsedSec) override;
 	virtual void OnInit() override;
 private:
-	GameObject * m_pFirstQuad;
+	GameObject * m_pTestObject;
+	Model* m_pModel;
+	Mesh* m_pMesh;
 	float m_TotalRotation;
 };

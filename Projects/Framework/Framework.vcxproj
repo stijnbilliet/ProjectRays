@@ -98,7 +98,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>FrameworkPCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\glad\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\stb_image\include;$(SolutionDir)3rdParty\glad\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4201;4505;4221;4099;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
@@ -111,7 +111,8 @@
       <AdditionalDependencies>sdl2.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y</Command>
+      <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y
+xcopy $(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(OutputPath) /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -122,7 +123,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>FrameworkPCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\glad\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\stb_image\include;$(SolutionDir)3rdParty\glad\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4201;4505;4221;4099;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
@@ -135,7 +136,8 @@
       <AdditionalDependencies>sdl2.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y</Command>
+      <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y
+xcopy $(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(OutputPath) /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -147,7 +149,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\glad\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\stb_image\include;$(SolutionDir)3rdParty\glad\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>FrameworkPCH.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4201;4505;4221;4099;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -163,7 +165,8 @@
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\SDL\lib\$(PLATFORM)\;$(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y</Command>
+      <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y
+xcopy $(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(OutputPath) /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -175,7 +178,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\glad\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\stb_image\include;$(SolutionDir)3rdParty\glad\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>FrameworkPCH.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4201;4505;4221;4099;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -191,7 +194,8 @@
       <AdditionalDependencies>sdl2.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y</Command>
+      <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y
+xcopy $(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(OutputPath) /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

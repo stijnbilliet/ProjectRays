@@ -1,11 +1,18 @@
 #include "FrameworkPCH.h"
 #include "ShaderProgram.h"
 #include "Shader.h"
+#include "PropertyManager.h"
 
 ShaderProgram::ShaderProgram(const char * vshPath, const char * fshPath)
 {
-	Shader vertexShader(vshPath, GL_VERTEX_SHADER);
-	Shader fragmentShader(fshPath, GL_FRAGMENT_SHADER);
+	std::string assetPath{};
+	PropertyManager::GetInstance().GetString("assetpath", assetPath);
+
+	std::string vshPathStr = assetPath + "/" + vshPath;
+	std::string fshPathStr = assetPath + "/" + fshPath;
+
+	Shader vertexShader(vshPathStr.c_str(), GL_VERTEX_SHADER);
+	Shader fragmentShader(fshPathStr.c_str(), GL_FRAGMENT_SHADER);
 
 	int success;
 	char infoLog[512];

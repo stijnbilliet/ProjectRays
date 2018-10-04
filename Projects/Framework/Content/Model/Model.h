@@ -1,11 +1,27 @@
 #pragma once
+
+#include "Content/Model/Mesh.h"
+#include "Content/Model/Texture.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+class Mesh;
 class Model : public BaseObject
 {
 public:
-	Model(const char* modelPath);
+	Model(std::string modelPath, unsigned int loadFlags = aiProcess_Triangulate | aiProcess_FlipUVs);
 	virtual ~Model();
 
-	virtual void OnInit() override;
+	std::vector<Mesh>& GetMeshes();
 private:
-	std::string m_ModelPath;
+
+	void ProcessNode(aiNode* pNode);
+	Mesh ProcessMesh(aiMesh* pMesh);
+	std::vector<Texture> LoadMaterialTextures(aiMaterial* pMat, aiTextureType type, TextureType typeID);
+
+	std::vector<Texture> m_TexturesLoaded;
+	std::vector<Mesh> m_Meshes;
+	std::string m_LoadDirectory;
+	const aiScene* m_ModelScene;
 };
