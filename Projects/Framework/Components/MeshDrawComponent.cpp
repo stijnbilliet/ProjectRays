@@ -23,6 +23,8 @@ void MeshDrawComponent::OnDraw(Renderer* pContext) const
 {
 	Super::OnDraw(pContext);
 	
+	m_pShaderProgram->Use();
+
 	//send variables to shader
 	auto pScene = (Scene*)m_pAttachedTo->GetScene();
 
@@ -61,7 +63,6 @@ void MeshDrawComponent::OnDraw(Renderer* pContext) const
 	glActiveTexture(GL_TEXTURE0);
 
 	// draw mesh
-	m_pShaderProgram->Use();
 	glBindVertexArray(m_pMeshData->GetVertexArrayObj());
 	{
 		if (m_pMeshData->ShouldDrawIndexed())

@@ -58,8 +58,8 @@ void Game::ParseCmdLineArgs()
 
 void Game::FillPropertyManager()
 {
-	PropertyManager::GetInstance().Add("renderer_viewwidth", "854");
-	PropertyManager::GetInstance().Add("renderer_viewheight", "480");
+	PropertyManager::GetInstance().Add("renderer_viewwidth", "1280");
+	PropertyManager::GetInstance().Add("renderer_viewheight", "720");
 	PropertyManager::GetInstance().Add("windowtitle", "ProjectRays(OpenGL+RadeonRays)");
 }
 

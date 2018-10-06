@@ -43,7 +43,7 @@ void RenderTestScene::OnInit()
 	pMesh->SetTextures(textureVect);
 
 	//Load shaders and bundle in shaderprogram
-	auto pShaderProgram = new ShaderProgram("Shaders/Basic.vs", "Shaders/Basic.fs");
+	auto pShaderProgram = new ShaderProgram("Shaders/Deferred_Geometry.vs", "Shaders/Deferred_Geometry.fs");
 
 	//Create draw component
 	auto pMeshDrawComp = new MeshDrawComponent(pMesh, pShaderProgram);
