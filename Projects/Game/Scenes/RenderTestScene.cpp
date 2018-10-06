@@ -50,7 +50,7 @@ void RenderTestScene::OnInit()
 	m_pTestObject->AddComponent(pMeshDrawComp);
 
 	//Translate object and add to scene
-	m_pTestObject->GetTransform()->Translate(0.0f, -7.5f, -22.5f);
+	m_pTestObject->GetTransform()->Translate(0.0f, -7.5f, -25.0f);
 	m_pTestObject->GetTransform()->Scale(1/20.0f, 1/20.0f, 1/ 20.0f);
 	Add(m_pTestObject);
 }

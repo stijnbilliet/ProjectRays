@@ -10,6 +10,9 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui::DestroyContext();
+
 	SDL_GL_DeleteContext(m_Context);
 	SDL_DestroyWindow(m_pWindow);
 	safe_delete(m_pLightPass);
@@ -62,6 +65,16 @@ void Renderer::End()
 	glBlitFramebuffer(0, 0, m_ScrWidth, m_ScrHeight, 0, 0, m_ScrWidth, m_ScrHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	//ImGUI
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame(m_pWindow);
+	ImGui::NewFrame();
+
+	ImGuiOnDraw();
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 	SDL_GL_SwapWindow(m_pWindow);
 }
 
@@ -103,22 +116,7 @@ void Renderer::OnInit()
 	if (m_Context == nullptr) throw std::runtime_error(std::string("SDL_GL_CreateContext Error: ") + SDL_GetError());
 
 	// synchronize it with the vertical retrace
-	if (m_Vsync)
-	{
-		if (SDL_GL_SetSwapInterval(1) < 0)
-		{
-			std::cerr << "Renderer::Initialize( ), error when calling SDL_GL_SetSwapInterval: " << SDL_GetError() << std::endl;
-			return;
-		}
-	}
-	else
-	{
-		if (SDL_GL_SetSwapInterval(0) < 0)
-		{
-			std::cerr << "Renderer::Initialize( ), error when calling SDL_GL_SetSwapInterval: " << SDL_GetError() << std::endl;
-			return;
-		}
-	}
+	SDL_GL_SetSwapInterval(m_Vsync);
 
 	//Ask for function bindings
 	gladLoadGLLoader(SDL_GL_GetProcAddress);
@@ -127,6 +125,17 @@ void Renderer::OnInit()
 	printf("Vendor:   %s\n", glGetString(GL_VENDOR));
 	printf("Renderer: %s\n", glGetString(GL_RENDERER));
 	printf("Version:  %s\n", glGetString(GL_VERSION));
+
+	//ImGUI
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	ImGui_ImplSDL2_InitForOpenGL(m_pWindow, m_Context);
+	ImGui_ImplOpenGL3_Init("#version 330");
+
+	// Setup style
+	ImGui::StyleColorsDark();
 }
 
 void Renderer::PostInit()
@@ -216,6 +225,7 @@ void Renderer::RenderQuad()
 			1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
 			1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
 		};
+
 		// setup plane VAO
 		glGenVertexArrays(1, &quadVAO);
 		glGenBuffers(1, &quadVBO);
@@ -230,4 +240,11 @@ void Renderer::RenderQuad()
 	glBindVertexArray(quadVAO);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
+}
+
+void Renderer::ImGuiOnDraw()
+{
+	ImGui::Begin("Debug");
+		ImGui::Text("Average framerate (%.1f FPS)", ImGui::GetIO().Framerate);
+	ImGui::End();
 }

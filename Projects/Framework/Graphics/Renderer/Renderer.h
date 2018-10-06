@@ -19,6 +19,7 @@ public:
 	virtual void PostInit() override;
 private:
 	void RenderQuad();
+	void ImGuiOnDraw();
 	unsigned int quadVAO = 0;
 	unsigned int quadVBO;
 
