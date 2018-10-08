@@ -9,15 +9,17 @@ in vec3 FragPos;
 in vec3 Normal;
 
 uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_normal1;
+uniform sampler2D texture_ambient1;
 
 void main()
 {   
 	// store the fragment position vector in the first gbuffer texture
     gPosition = FragPos;
     // also store the per-fragment normals into the gbuffer
-    gNormal = normalize(Normal);
+    gNormal.rgb = texture(texture_normal1, TexCoords).rgb;
     // and the diffuse per-fragment color
     gAlbedo.rgb = texture(texture_diffuse1, TexCoords).rgb;
 	//gLightAcc
-	gLightAcc = vec4(1.0f);
+	gLightAcc = texture(texture_ambient1, TexCoords);
 }

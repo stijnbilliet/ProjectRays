@@ -133,7 +133,7 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMat, aiTextureType
 
 			if (!skip)
 			{   // if texture hasn't been loaded already, load it
-				Texture texture(str.C_Str());
+				Texture texture{};
 				texture.type = typeID;
 				texture.path = str.C_Str();
 				textures.push_back(texture);

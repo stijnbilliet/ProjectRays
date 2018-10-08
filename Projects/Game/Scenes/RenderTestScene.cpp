@@ -21,7 +21,7 @@ void RenderTestScene::OnUpdate(float elapsedSec)
 {
 	Super::OnUpdate(elapsedSec);
 
-	m_TotalRotation += 60.0f*elapsedSec;
+	m_TotalRotation += 20.0f*elapsedSec;
 	if (m_TotalRotation > 360.0f) m_TotalRotation = 0;
 
 	m_pTestObject->GetTransform()->Rotate(0.0f, m_TotalRotation, 0.0f, false);
@@ -39,7 +39,9 @@ void RenderTestScene::OnInit()
 	auto pMesh = &(m_pModel->GetMeshes()[0]);
 
 	std::vector<Texture> textureVect{};
-	textureVect.push_back(Texture("Textures/SuicuneSaix_A.tga.png"));
+	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_A.tga.png", DIFFUSE));
+	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_N.tga.png", NORMAL));
+	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_AO.tga.png", AMBIENT));
 	pMesh->SetTextures(textureVect);
 
 	//Load shaders and bundle in shaderprogram

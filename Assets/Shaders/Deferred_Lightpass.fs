@@ -7,6 +7,7 @@ uniform sampler2D gPosition;
 uniform sampler2D gAlbedo;
 uniform sampler2D gNormal;
 uniform sampler2D gLightAcc;
+uniform vec3 viewPos;
 
 void main()
 {             
@@ -14,7 +15,9 @@ void main()
 	vec3 FragPos = texture(gPosition, TexCoords).rgb;
 	vec3 Diffuse = texture(gAlbedo, TexCoords).rgb;
     vec3 Normal = texture(gNormal, TexCoords).rgb;
-    vec3 Light = texture(gLightAcc, TexCoords).rgb;
+    vec3 Ambient = texture(gLightAcc, TexCoords).rgb;
 	
-    FragColor = vec4(Diffuse.r, Diffuse.g, Diffuse.b, 1.0);
+	Diffuse = Diffuse * Ambient.r;
+	
+    FragColor = vec4(Diffuse, 1.0f);
 }

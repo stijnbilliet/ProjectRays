@@ -2,13 +2,17 @@
 enum TextureType
 {
 	DIFFUSE,
-	SPECULAR
+	SPECULAR,
+	NORMAL,
+	OPACITY,
+	AMBIENT
 };
 
-struct Texture
+class Texture
 {
+public:
 	Texture() = default;
-	Texture(const char *path);
+	Texture(const char *path, TextureType type);
 
 	unsigned int id;
 	TextureType type;

@@ -14,6 +14,7 @@ public:
 	void End();
 
 	unsigned int GetGBuffer() const;
+	ShaderProgram* GetLightDrawer() const;
 
 	virtual void OnInit() override;
 	virtual void PostInit() override;

@@ -2,6 +2,7 @@
 #include "CameraComponent.h"
 #include "PropertyManager.h"
 #include "TransformComponent.h"
+#include "Content/Shader/ShaderProgram.h"
 
 CameraComponent::CameraComponent()
 	:m_NearPlane(0.1f), m_FarPlane(100.0f), m_FOV(60.0f), m_UsePerspective(true), m_Orthosize(1.0f)
@@ -10,6 +11,15 @@ CameraComponent::CameraComponent()
 
 CameraComponent::~CameraComponent()
 {
+}
+
+void CameraComponent::OnDraw(Renderer * pContext)
+{
+	glm::vec3 camPos = m_pAttachedTo->GetTransform()->GetWorldPosition();
+	unsigned int shaderId = pContext->GetLightDrawer()->GetId();
+
+	unsigned int viewPosVar = glGetUniformLocation(shaderId, "viewPos");
+	glUniform3f(viewPosVar, camPos.x, camPos.y, camPos.z);
 }
 
 void CameraComponent::OnUpdate(float elapsedSec)

@@ -4,7 +4,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-Texture::Texture(const char* path)
+Texture::Texture(const char* path, TextureType ttype)
+	:type(ttype)
 {
 	std::string assetPath{};
 	PropertyManager::GetInstance().GetString("assetpath", assetPath);

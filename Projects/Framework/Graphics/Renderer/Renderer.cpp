@@ -21,7 +21,7 @@ Renderer::~Renderer()
 void Renderer::Begin()
 {
 	//CLEAR COLOR
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//bind gbuffer
@@ -81,6 +81,11 @@ void Renderer::End()
 unsigned int Renderer::GetGBuffer() const
 {
 	return m_gBuffer;
+}
+
+ShaderProgram * Renderer::GetLightDrawer() const
+{
+	return m_pLightPass;
 }
 
 void Renderer::OnInit()

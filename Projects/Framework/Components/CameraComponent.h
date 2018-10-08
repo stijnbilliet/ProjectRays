@@ -7,6 +7,7 @@ public:
 	CameraComponent();
 	virtual ~CameraComponent();
 
+	virtual void OnDraw(Renderer* pContext);
 	virtual void OnUpdate(float elapsedSec) override;
 
 	const glm::mat4& GetView() const;

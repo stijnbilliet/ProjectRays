@@ -43,17 +43,40 @@ void MeshDrawComponent::OnDraw(Renderer* pContext) const
 	std::vector<Texture> textures = m_pMeshData->GetTextures();
 
 	unsigned int diffuseNmb = 1;
+	unsigned int specularNmb = 1;
+	unsigned int opacityNmb = 1;
+	unsigned int normalNmb = 1;
+	unsigned int ambientNmb = 1;
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i); //active proper texture unit
 		std::string number;
 		std::string name;
-		if (textures[i].type == TextureType::DIFFUSE)
+		switch (textures[i].type)
 		{
-			number = std::to_string(diffuseNmb++);
-			name = "texture_diffuse";
+			case TextureType::DIFFUSE:
+				number = std::to_string(diffuseNmb++);
+				name = "texture_diffuse";
+				break;
+			case TextureType::SPECULAR:
+				number = std::to_string(specularNmb++);
+				name = "texture_specular";
+				break;
+			case TextureType::OPACITY:
+				number = std::to_string(opacityNmb++);
+				name = "texture_opacity";
+				break;
+			case TextureType::NORMAL:
+				number = std::to_string(normalNmb++);
+				name = "texture_normal";
+				break;
+			case TextureType::AMBIENT:
+				number = std::to_string(ambientNmb++);
+				name = "texture_ambient";
+				break;
+			default:
+				break;
 		}
-		//else if etc.
 
 		std::string textureName = name + number;
 		int textureloc = glGetUniformLocation(m_pShaderProgram->GetId(), textureName.c_str());
