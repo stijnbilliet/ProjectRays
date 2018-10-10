@@ -6,7 +6,7 @@
 #include "Graphics/LightManager/LightManager.h"
 
 Renderer::Renderer()
-	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false), m_ScrWidth(), m_ScrHeight(), m_gBuffer(), m_WindowTitle(), m_DirectionalPos(glm::vec3(0.0f, 15.0f, 0.0f)), m_DirectionalCol(glm::vec3(1.0f, 1.0f, 1.0f))
+	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false), m_ScrWidth(), m_ScrHeight(), m_gBuffer(), m_WindowTitle(), m_DirectionalPos(glm::vec3(0.0f, 40.0f, 40.0f)), m_DirectionalCol(glm::vec3(1.0f, 1.0f, 1.0f))
 {
 }
 
