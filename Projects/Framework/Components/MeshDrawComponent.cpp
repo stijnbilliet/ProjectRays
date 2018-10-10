@@ -19,7 +19,7 @@ MeshDrawComponent::~MeshDrawComponent()
 	safe_delete(m_pShaderProgram);
 }
 
-void MeshDrawComponent::OnDraw(Renderer* pContext) const
+void MeshDrawComponent::OnDraw(GL_Renderer* pContext) const
 {
 	Super::OnDraw(pContext);
 	

@@ -38,7 +38,7 @@ void BaseObject::Update(float deltaTime)
 	PostUpdate(deltaTime);
 }
 
-void BaseObject::Draw(Renderer* pContext) const
+void BaseObject::Draw(GL_Renderer* pContext) const
 {
 	PreDraw(pContext);
 	{
@@ -89,17 +89,17 @@ void BaseObject::PostUpdate(float elapsedSec)
 	UNREFERENCED_PARAMETER(elapsedSec);
 }
 
-void BaseObject::PreDraw(Renderer* pContext) const
+void BaseObject::PreDraw(GL_Renderer* pContext) const
 {
 	UNREFERENCED_PARAMETER(pContext);
 }
 
-void BaseObject::OnDraw(Renderer * pContext) const
+void BaseObject::OnDraw(GL_Renderer * pContext) const
 {
 	UNREFERENCED_PARAMETER(pContext);
 }
 
-void BaseObject::PostDraw(Renderer* pContext) const
+void BaseObject::PostDraw(GL_Renderer* pContext) const
 {
 	UNREFERENCED_PARAMETER(pContext);
 }

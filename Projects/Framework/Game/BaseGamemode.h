@@ -1,7 +1,7 @@
 #pragma once
 #include "Patterns/BaseObject.h"
 
-class SceneManager; class Renderer; class InputManager;
+class SceneManager; class GL_Renderer; class InputManager;
 class BasePlayerController; class BasePawn;
 class BaseGamemode : public BaseObject
 {
@@ -13,7 +13,7 @@ public:
 
 	void OnInit() override;
 	void OnUpdate(float deltaTime) override;
-	void OnDraw(Renderer* pContext) const override;
+	void OnDraw(GL_Renderer* pContext) const override;
 
 	//System accessors
 	InputManager* GetInputManager() const;

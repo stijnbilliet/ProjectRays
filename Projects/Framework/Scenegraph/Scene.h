@@ -1,7 +1,7 @@
 #pragma once
 #include "Scenegraph/BasePanel.h"
 
-class Renderer;
+class GL_Renderer;
 class GameObject;
 class CameraComponent;
 class Scene : public BasePanel
@@ -17,7 +17,7 @@ public:
 
 	virtual void OnInit() override;
 	virtual void OnUpdate(float deltaTime) override;
-	virtual void OnDraw(Renderer* pContext) const override;
+	virtual void OnDraw(GL_Renderer* pContext) const override;
 
 	CameraComponent* GetActiveCamera() const;
 	void SetActiveCamera(CameraComponent* pNewCamera);

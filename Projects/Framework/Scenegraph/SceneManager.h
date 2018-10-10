@@ -2,7 +2,7 @@
 #include "Scenegraph/BasePanelManager.h"
 #include "Scenegraph/Scene.h"
 
-class Renderer;
+class GL_Renderer;
 class SceneManager final : public BasePanelManager<Scene>
 {
 public:

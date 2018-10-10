@@ -25,7 +25,7 @@ BaseGamemode::~BaseGamemode()
 	safe_delete(m_pInputManager);
 }
 
-void BaseGamemode::OnDraw(Renderer* pContext) const
+void BaseGamemode::OnDraw(GL_Renderer* pContext) const
 {
 	m_pSceneManager->Draw(pContext);
 

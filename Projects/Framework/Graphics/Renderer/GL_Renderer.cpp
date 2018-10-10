@@ -1,16 +1,16 @@
 #include "FrameworkPCH.h"
-#include "Renderer.h"
+#include "GL_Renderer.h"
 #include "PropertyManager.h"
 #include "Content/Shader/ShaderProgram.h"
 
 #include "Graphics/LightManager/LightManager.h"
 
-Renderer::Renderer()
+GL_Renderer::GL_Renderer()
 	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false), m_ScrWidth(), m_ScrHeight(), m_gBuffer(), m_WindowTitle(), m_DirectionalPos(glm::vec3(0.0f, 40.0f, 40.0f)), m_DirectionalCol(glm::vec3(1.0f, 1.0f, 1.0f))
 {
 }
 
-Renderer::~Renderer()
+GL_Renderer::~GL_Renderer()
 {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui::DestroyContext();
@@ -20,7 +20,7 @@ Renderer::~Renderer()
 	safe_delete(m_pLightPass);
 }
 
-void Renderer::Begin()
+void GL_Renderer::Begin()
 {
 	//CLEAR COLOR
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
@@ -34,7 +34,7 @@ void Renderer::Begin()
 	//...
 }
 
-void Renderer::End()
+void GL_Renderer::End()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -112,17 +112,17 @@ void Renderer::End()
 	SDL_GL_SwapWindow(m_pWindow);
 }
 
-unsigned int Renderer::GetGBuffer() const
+unsigned int GL_Renderer::GetGBuffer() const
 {
 	return m_gBuffer;
 }
 
-ShaderProgram * Renderer::GetLightDrawer() const
+ShaderProgram * GL_Renderer::GetLightDrawer() const
 {
 	return m_pLightPass;
 }
 
-void Renderer::OnInit()
+void GL_Renderer::OnInit()
 {
 	PropertyManager::GetInstance().GetInt("renderer_viewwidth", m_ScrWidth);
 	PropertyManager::GetInstance().GetInt("renderer_viewheight", m_ScrHeight);
@@ -177,7 +177,7 @@ void Renderer::OnInit()
 	ImGui::StyleColorsDark();
 }
 
-void Renderer::PostInit()
+void GL_Renderer::PostInit()
 {
 	//enable depth testing
 	glEnable(GL_DEPTH_TEST);
@@ -253,7 +253,7 @@ void Renderer::PostInit()
 	glUniform1i(gLightAccVar, gLightAcc);
 }
 
-void Renderer::RenderQuad()
+void GL_Renderer::RenderQuad()
 {
 	if (quadVAO == 0)
 	{
@@ -281,7 +281,7 @@ void Renderer::RenderQuad()
 	glBindVertexArray(0);
 }
 
-void Renderer::ImGuiOnDraw()
+void GL_Renderer::ImGuiOnDraw()
 {
 	ImGui::Begin("Debug");
 		ImGui::Text("Average framerate (%.1f FPS)", ImGui::GetIO().Framerate);

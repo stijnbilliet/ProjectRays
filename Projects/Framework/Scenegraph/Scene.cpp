@@ -38,7 +38,7 @@ void Scene::OnUpdate(float deltaTime)
 	}
 }
 
-void Scene::OnDraw(Renderer* pContext) const
+void Scene::OnDraw(GL_Renderer* pContext) const
 {
 	UNREFERENCED_PARAMETER(pContext);
 

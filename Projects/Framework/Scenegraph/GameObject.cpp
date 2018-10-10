@@ -51,7 +51,7 @@ void GameObject::OnUpdate(float deltaTime)
 	}
 }
 
-void GameObject::OnDraw(Renderer* pContext) const
+void GameObject::OnDraw(GL_Renderer* pContext) const
 {
 	Super::OnDraw(pContext);
 

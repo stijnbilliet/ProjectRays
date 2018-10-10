@@ -1,7 +1,7 @@
 #pragma once
 #include "Game/BaseGamemode.h"
 
-class Renderer;
+class GL_Renderer;
 class BasePawn;
 class GameObject;
 class Scene;

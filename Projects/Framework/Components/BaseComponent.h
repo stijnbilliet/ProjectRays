@@ -1,7 +1,7 @@
 #pragma once
 #include "Patterns/BaseObject.h"
 
-class Renderer;
+class GL_Renderer;
 class GameObject;
 class BaseComponent : public BaseObject
 {

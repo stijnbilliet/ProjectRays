@@ -1,7 +1,7 @@
 #pragma once
 #include "Patterns/ParentObject.h"
 
-class Renderer;
+class GL_Renderer;
 class BaseComponent;
 class TransformComponent;
 class BasePanel;
@@ -20,7 +20,7 @@ public:
 	//BaseObject functionality
 	virtual void OnInit() override;
 	virtual void OnUpdate(float deltaTime) override;
-	virtual void OnDraw(Renderer* pContext) const override;
+	virtual void OnDraw(GL_Renderer* pContext) const override;
 
 	//Scene accesors
 	BasePanel* GetScene();

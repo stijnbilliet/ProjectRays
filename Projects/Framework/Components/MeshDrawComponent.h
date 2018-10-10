@@ -1,7 +1,7 @@
 #pragma once
 #include "Components\BaseComponent.h"
 
-class Renderer;
+class GL_Renderer;
 class Mesh;
 class ShaderProgram;
 class Texture;
@@ -16,7 +16,7 @@ public:
 	MeshDrawComponent& operator=(const MeshDrawComponent& other) = delete;
 	MeshDrawComponent& operator=(MeshDrawComponent&& other) = delete;
 
-	virtual void OnDraw(Renderer* pContext) const override;
+	virtual void OnDraw(GL_Renderer* pContext) const override;
 private:
 	const Mesh* m_pMeshData;
 	ShaderProgram* m_pShaderProgram;

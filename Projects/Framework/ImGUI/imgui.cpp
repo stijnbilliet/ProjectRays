@@ -165,7 +165,7 @@ CODE
      // TODO: Fill optional fields of the io structure later.
      // TODO: Load TTF/OTF fonts if you don't want to use the default font.
 
-     // Initialize helper Platform and Renderer bindings (here we are using imgui_impl_win32 and imgui_impl_dx11)
+     // Initialize helper Platform and GL_Renderer bindings (here we are using imgui_impl_win32 and imgui_impl_dx11)
      ImGui_ImplWin32_Init(hwnd);
      ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
@@ -202,7 +202,7 @@ CODE
      // TODO: Load TTF/OTF fonts if you don't want to use the default font.
 
      // Build and load the texture atlas into a texture
-     // (In the examples/ app this is usually done within the ImGui_ImplXXX_Init() function from one of the demo Renderer)
+     // (In the examples/ app this is usually done within the ImGui_ImplXXX_Init() function from one of the demo GL_Renderer)
      int width, height;
      unsigned char* pixels = NULL;
      io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);

@@ -58,7 +58,7 @@ public:
 		}
 	};
 
-	virtual void OnDraw(Renderer* pContext) const override
+	virtual void OnDraw(GL_Renderer* pContext) const override
 	{
 		if (m_pCurPanel)
 		{

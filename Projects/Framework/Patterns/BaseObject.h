@@ -1,6 +1,6 @@
 #pragma once
 
-class Renderer;
+class GL_Renderer;
 class BaseObject
 {
 public:
@@ -15,7 +15,7 @@ public:
 	void Init();
 	void FixedUpdate(float stepRate);
 	void Update(float deltaTime);
-	void Draw(Renderer* pContext) const;
+	void Draw(GL_Renderer* pContext) const;
 
 protected:
 	virtual void PreInit();
@@ -30,7 +30,7 @@ protected:
 	virtual void OnUpdate(float elapsedSec);
 	virtual void PostUpdate(float elapsedSec);
 
-	virtual void PreDraw(Renderer* pContext) const;
-	virtual void OnDraw(Renderer* pContext) const;
-	virtual void PostDraw(Renderer* pContext) const;
+	virtual void PreDraw(GL_Renderer* pContext) const;
+	virtual void OnDraw(GL_Renderer* pContext) const;
+	virtual void PostDraw(GL_Renderer* pContext) const;
 };

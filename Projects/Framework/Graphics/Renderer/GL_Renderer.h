@@ -3,11 +3,11 @@
 
 class ShaderProgram;
 class Light;
-class Renderer : public SingleInstance<Renderer>
+class GL_Renderer : public SingleInstance<GL_Renderer>
 {
 public:
-	Renderer();
-	virtual ~Renderer();
+	GL_Renderer();
+	virtual ~GL_Renderer();
 
 	void Begin();
 	void End();
