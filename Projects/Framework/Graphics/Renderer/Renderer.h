@@ -2,13 +2,12 @@
 #include "Patterns/SingleInstance.h"
 
 class ShaderProgram;
+class Light;
 class Renderer : public SingleInstance<Renderer>
 {
 public:
 	Renderer();
 	virtual ~Renderer();
-
-	//TODO: Renderer should draw instead of game
 
 	void Begin();
 	void End();
@@ -32,6 +31,9 @@ private:
 
 	std::string m_WindowTitle;
 	ShaderProgram* m_pLightPass;
+
+	glm::vec3 m_DirectionalPos;
+	glm::vec3 m_DirectionalCol;
 
 	SDL_GLContext m_Context;
 	SDL_Window* m_pWindow;

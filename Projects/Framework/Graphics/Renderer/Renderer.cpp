@@ -3,8 +3,10 @@
 #include "PropertyManager.h"
 #include "Content/Shader/ShaderProgram.h"
 
+#include "Graphics/LightManager/LightManager.h"
+
 Renderer::Renderer()
-	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false), m_ScrWidth(), m_ScrHeight(), m_gBuffer(), m_WindowTitle()
+	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false), m_ScrWidth(), m_ScrHeight(), m_gBuffer(), m_WindowTitle(), m_DirectionalPos(glm::vec3(0.0f, 15.0f, 0.0f)), m_DirectionalCol(glm::vec3(1.0f, 1.0f, 1.0f))
 {
 }
 
@@ -49,6 +51,38 @@ void Renderer::End()
 	glBindTexture(GL_TEXTURE_2D, gNormal);
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, gLightAcc);
+
+	//send light relevant information
+	/*
+		for (unsigned int i = 0; i < LightManager::GetInstance().GetLights().size(); i++)
+		{
+		Light light = m_Lights[i];
+		std::string lightVarStr = "lights[" + std::to_string(i) + "]";
+
+		unsigned int lDirectionVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Direction").c_str());
+		unsigned int lPositionVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Position").c_str());
+		unsigned int lColorVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Color").c_str());
+		unsigned int lIntensityVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Intensity").c_str());
+		unsigned int lRangeVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Range").c_str());
+		unsigned int lSpotlightAngleVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".SpotlightAngle").c_str());
+		unsigned int lTypeVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Type").c_str());
+
+		glUniform3fv(lDirectionVar, 1, &light.Direction[0]);
+		glUniform3fv(lPositionVar, 1, &light.Position[0]);
+		glUniform3fv(lColorVar, 1, &light.Color[0]);
+		glUniform1f(lIntensityVar, light.Intensity);
+		glUniform1f(lRangeVar, light.Range);
+		glUniform1f(lSpotlightAngleVar, light.SpotlightAngle);
+		glUniform1i(lTypeVar, int(light.Type));
+		}
+	*/
+
+	//send directional light
+	unsigned int directionalPosVar = glGetUniformLocation(m_pLightPass->GetId(), "dLightPos");
+	glUniform3fv(directionalPosVar, 1, &m_DirectionalPos[0]);
+
+	unsigned int directionalColVar = glGetUniformLocation(m_pLightPass->GetId(), "dLightCol");
+	glUniform3fv(directionalColVar, 1, &m_DirectionalCol[0]);
 
 	// finally render quad
 	RenderQuad();
@@ -251,5 +285,10 @@ void Renderer::ImGuiOnDraw()
 {
 	ImGui::Begin("Debug");
 		ImGui::Text("Average framerate (%.1f FPS)", ImGui::GetIO().Framerate);
+	ImGui::End();
+
+	ImGui::Begin("Light");
+		ImGui::SliderFloat3("Light Position", (float*)&m_DirectionalPos, -40.0f, 40.0f); // Edit 1 float using a slider from 0.0f to 1.0f    
+		ImGui::ColorEdit3("Light Color", (float*)&m_DirectionalCol); // Edit 3 floats representing a color
 	ImGui::End();
 }

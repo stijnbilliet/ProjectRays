@@ -221,6 +221,7 @@ xcopy $(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(Out
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Content\Model\Mesh.h" />
     <ClInclude Include="Content\Model\Model.h" />
+    <ClInclude Include="Graphics\LightManager\LightManager.h" />
     <ClInclude Include="Patterns\BaseObject.h" />
     <ClInclude Include="Patterns\ParentObject.h" />
     <ClInclude Include="Patterns\SingleInstance.h" />
@@ -305,6 +306,7 @@ xcopy $(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(Out
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Content\Model\Mesh.cpp" />
     <ClCompile Include="Content\Model\Model.cpp" />
+    <ClCompile Include="Graphics\LightManager\LightManager.cpp" />
     <ClCompile Include="Patterns\BaseObject.cpp" />
     <ClCompile Include="Characters\BaseController.cpp" />
     <ClCompile Include="Characters\Player\BasePlayerController.cpp" />

@@ -33,11 +33,6 @@ void BaseGamemode::OnDraw(Renderer* pContext) const
 	{
 		pPly->Draw(pContext);
 	}
-
-	for (auto pBot : m_pPlayers)
-	{
-		pBot->Draw(pContext);
-	}
 }
 
 std::vector<BasePlayerController*> BaseGamemode::GetPlayers() const

@@ -15,5 +15,7 @@ public:
 
 	void OnUpdate(float deltaTime) override;
 	void PreInit() override;
+
+	void ProcessInput();
 private:
 };

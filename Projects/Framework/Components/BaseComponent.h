@@ -16,6 +16,7 @@ public:
 
 	void Attach(GameObject* gmObj);
 	void Detach();
+	GameObject* GetGameObject() const;
 protected:
 	GameObject* m_pAttachedTo;
 };

@@ -13,7 +13,7 @@ CameraComponent::~CameraComponent()
 {
 }
 
-void CameraComponent::OnDraw(Renderer * pContext)
+void CameraComponent::OnDraw(Renderer* pContext) const
 {
 	glm::vec3 camPos = m_pAttachedTo->GetTransform()->GetWorldPosition();
 	unsigned int shaderId = pContext->GetLightDrawer()->GetId();

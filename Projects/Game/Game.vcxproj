@@ -168,6 +168,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Gamemode\GMSandbox.h" />
+    <ClInclude Include="Gamemode\InputActions.hpp" />
     <ClInclude Include="GamePCH.h" />
     <ClInclude Include="Scenes\RenderTestScene.h" />
     <ClInclude Include="Scenes\SponzaScene.h" />

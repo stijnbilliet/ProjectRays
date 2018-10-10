@@ -31,6 +31,11 @@ public:
 		}
 	};
 
+	const T* GetActive() const
+	{
+		return m_CurPanel;
+	}
+
 	void Add(T* pPanel)
 	{
 		m_pPanels.push_back(pPanel);

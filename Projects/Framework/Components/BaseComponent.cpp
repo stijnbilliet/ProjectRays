@@ -20,3 +20,8 @@ void BaseComponent::Detach()
 {
 	m_pAttachedTo = nullptr;
 }
+
+GameObject * BaseComponent::GetGameObject() const
+{
+	return m_pAttachedTo;
+}

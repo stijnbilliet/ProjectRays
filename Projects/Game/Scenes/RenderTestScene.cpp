@@ -4,6 +4,7 @@
 #include "Content/Model/Model.h"
 #include "Content/Shader/ShaderProgram.h"
 #include "Components/TransformComponent.h"
+#include "Components/CameraComponent.h"
 
 using Super = Scene;
 
@@ -54,5 +55,6 @@ void RenderTestScene::OnInit()
 	//Translate object and add to scene
 	m_pTestObject->GetTransform()->Translate(0.0f, -7.5f, -25.0f);
 	m_pTestObject->GetTransform()->Scale(1/20.0f, 1/20.0f, 1/ 20.0f);
+
 	Add(m_pTestObject);
 }
