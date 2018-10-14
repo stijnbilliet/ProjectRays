@@ -17,6 +17,8 @@ public:
 	MeshDrawComponent& operator=(MeshDrawComponent&& other) = delete;
 
 	virtual void OnDraw(GL_Renderer* pContext) const override;
+
+	const Mesh* GetMeshData() const;
 private:
 	const Mesh* m_pMeshData;
 	ShaderProgram* m_pShaderProgram;

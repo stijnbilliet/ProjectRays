@@ -16,7 +16,6 @@ MeshDrawComponent::MeshDrawComponent(const Mesh* pMeshData, ShaderProgram* pShad
 
 MeshDrawComponent::~MeshDrawComponent()
 {
-	safe_delete(m_pShaderProgram);
 }
 
 void MeshDrawComponent::OnDraw(GL_Renderer* pContext) const
@@ -98,4 +97,9 @@ void MeshDrawComponent::OnDraw(GL_Renderer* pContext) const
 		}
 	}
 	glBindVertexArray(0);
+}
+
+const Mesh * MeshDrawComponent::GetMeshData() const
+{
+	return m_pMeshData;
 }

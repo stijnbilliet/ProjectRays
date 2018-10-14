@@ -133,11 +133,12 @@ xcopy $(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(Out
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\SDL\lib\$(PLATFORM)\;$(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION);$(SolutionDir)3rdParty\RadeonRays\lib\$(platform)\$(configuration);$(SolutionDir)3rdParty\OpenCL\lib\$(platform)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenCL.lib;sdl2.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RadeonRays.lib;OpenCL.lib;sdl2.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y
-xcopy $(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(OutputPath) /Y</Command>
+xcopy $(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(OutputPath) /Y
+xcopy $(SolutionDir)3rdParty\RadeonRays\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(OutputPath) /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -191,11 +192,12 @@ xcopy $(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(Out
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\SDL\lib\$(PLATFORM)\;$(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION);$(SolutionDir)3rdParty\RadeonRays\lib\$(platform)\$(configuration);$(SolutionDir)3rdParty\OpenCL\lib\$(platform)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenCL.lib;sdl2.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RadeonRays.lib;OpenCL.lib;sdl2.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Command>xcopy $(SolutionDir)3rdParty\SDL\lib\$(Platform)\*.dll $(OutputPath) /Y
-xcopy $(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(OutputPath) /Y</Command>
+xcopy $(SolutionDir)3rdParty\assimp\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(OutputPath) /Y
+xcopy $(SolutionDir)3rdParty\RadeonRays\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $(OutputPath) /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -9,7 +9,7 @@
 #include "Graphics/Renderer/CL_Renderer.h"
 
 Game::Game(BaseGamemode* pGamemode, GL_Renderer* pRenderer, const std::vector<std::string>& args)
-	:m_pGameMode(pGamemode), m_pRenderer(pRenderer), m_Args(args), m_pRaytracer(new CL_Renderer())
+	:m_pGameMode(pGamemode), m_pRenderer(pRenderer), m_Args(args), m_pRaytracer(new CL_Renderer(pGamemode))
 {
 	ParseCmdLineArgs();
 	FillPropertyManager();
@@ -43,7 +43,7 @@ void Game::Run()
 		//Render
 		Render();
 	}
-}
+} 
 
 void Game::ParseCmdLineArgs()
 {
@@ -68,8 +68,8 @@ void Game::FillPropertyManager()
 void Game::OnInit()
 {
 	m_pRenderer->Init();
-	m_pRaytracer->Init();
 	m_pGameMode->Init();
+	m_pRaytracer->Init();
 }
 
 bool Game::HandleInput()

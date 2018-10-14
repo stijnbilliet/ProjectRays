@@ -7,7 +7,7 @@ class BasePanelManager : public SingleInstance<BasePanelManager<T>>
 {
 public:
 	BasePanelManager()
-		:SingleInstance()
+		:SingleInstance(), m_pCurPanel(nullptr)
 	{
 
 	};
@@ -33,7 +33,7 @@ public:
 
 	const T* GetActive() const
 	{
-		return m_CurPanel;
+		return m_pCurPanel;
 	}
 
 	void Add(T* pPanel)

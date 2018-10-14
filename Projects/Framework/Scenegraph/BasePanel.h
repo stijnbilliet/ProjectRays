@@ -11,6 +11,8 @@ public:
 	const std::string& GetName() const;
 	void Add(GameObject* object);
 	void Remove(GameObject* object);
+
+	const std::list<GameObject*>& GetObjects() const;
 protected:
 	std::list<GameObject*> m_pObjects;
 	std::string m_Name;

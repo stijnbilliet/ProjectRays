@@ -30,3 +30,8 @@ void BasePanel::Remove(GameObject * object)
 {
 	m_pObjects.remove(object);
 }
+
+const std::list<GameObject*>& BasePanel::GetObjects() const
+{
+	return m_pObjects;
+}
