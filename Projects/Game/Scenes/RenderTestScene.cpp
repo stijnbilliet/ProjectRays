@@ -1,10 +1,5 @@
 #include "GamePCH.h"
 #include "RenderTestScene.h"
-#include "Content/Model/Mesh.h"
-#include "Content/Model/Model.h"
-#include "Content/Shader/ShaderProgram.h"
-#include "Components/TransformComponent.h"
-#include "Components/CameraComponent.h"
 
 using Super = Scene;
 
@@ -40,9 +35,9 @@ void RenderTestScene::OnInit()
 	auto pMesh = &(m_pModel->GetMeshes()[0]);
 
 	std::vector<Texture> textureVect{};
-	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_A.tga.png", DIFFUSE));
-	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_N.tga.png", NORMAL));
-	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_AO.tga.png", AMBIENT));
+	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_A.tga.png", TextureType::DIFFUSE));
+	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_N.tga.png", TextureType::NORMAL));
+	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_AO.tga.png", TextureType::AMBIENT));
 	pMesh->SetTextures(textureVect);
 
 	//Load shaders and bundle in shaderprogram

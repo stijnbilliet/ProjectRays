@@ -1,7 +1,6 @@
 #include "FrameworkPCH.h"
 #include "ShaderProgram.h"
 #include "Shader.h"
-#include "PropertyManager.h"
 
 ShaderProgram::ShaderProgram(const char * vshPath, const char * fshPath)
 {

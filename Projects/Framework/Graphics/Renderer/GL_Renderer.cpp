@@ -1,9 +1,5 @@
 #include "FrameworkPCH.h"
 #include "GL_Renderer.h"
-#include "PropertyManager.h"
-#include "Content/Shader/ShaderProgram.h"
-
-#include "Graphics/LightManager/LightManager.h"
 
 GL_Renderer::GL_Renderer()
 	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false), m_ScrWidth(), m_ScrHeight(), m_gBuffer(), m_WindowTitle(), m_DirectionalPos(glm::vec3(0.0f, 40.0f, 40.0f)), m_DirectionalCol(glm::vec3(1.0f, 1.0f, 1.0f))

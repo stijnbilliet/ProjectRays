@@ -1,11 +1,5 @@
 #include "FrameworkPCH.h"
-#include "Scenegraph/GameObject.h"
 #include "Components/MeshDrawComponent.h"
-#include "Scenegraph/Scene.h"
-#include "Content/Model/Mesh.h"
-#include "Content/Shader/ShaderProgram.h"
-#include "Components/TransformComponent.h"
-#include "Components/CameraComponent.h"
 
 using Super = BaseComponent;
 

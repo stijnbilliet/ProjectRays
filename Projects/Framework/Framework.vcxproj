@@ -201,17 +201,14 @@ xcopy $(SolutionDir)3rdParty\RadeonRays\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Config\Config.h" />
+    <ClInclude Include="Game\Game.h" />
+    <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Graphics\Renderer\CL_Renderer.h" />
     <ClInclude Include="Components\CameraComponent.h" />
-    <ClInclude Include="Characters\Player\BasePlayerState.h" />
-    <ClInclude Include="Camera\BaseCamera.h" />
-    <ClInclude Include="Characters\BasePawn.h" />
-    <ClInclude Include="Characters\BaseControllerState.h" />
-    <ClInclude Include="Characters\Player\BasePlayerController.h" />
     <ClInclude Include="Components\Components.h" />
     <ClInclude Include="Components\MeshDrawComponent.h" />
     <ClInclude Include="Components\TransformComponent.h" />
-    <ClInclude Include="Game\BaseGameState.h" />
     <ClInclude Include="Helpers\Safedelete.h" />
     <ClInclude Include="ImGUI\imconfig.h" />
     <ClInclude Include="ImGUI\imgui.h" />
@@ -221,18 +218,18 @@ xcopy $(SolutionDir)3rdParty\RadeonRays\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $
     <ClInclude Include="ImGUI\imstb_rectpack.h" />
     <ClInclude Include="ImGUI\imstb_textedit.h" />
     <ClInclude Include="ImGUI\imstb_truetype.h" />
+    <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\InputManager.h" />
-    <ClInclude Include="Content\Model\Mesh.h" />
-    <ClInclude Include="Content\Model\Model.h" />
+    <ClInclude Include="Graphics\Model\Mesh.h" />
+    <ClInclude Include="Graphics\Model\Model.h" />
     <ClInclude Include="Graphics\LightManager\LightManager.h" />
     <ClInclude Include="Patterns\BaseObject.h" />
     <ClInclude Include="Patterns\ParentObject.h" />
     <ClInclude Include="Patterns\SingleInstance.h" />
-    <ClInclude Include="Characters\BaseController.h" />
     <ClInclude Include="Game\BaseGamemode.h" />
     <ClInclude Include="FrameworkPCH.h" />
     <ClInclude Include="Components\BaseComponent.h" />
-    <ClInclude Include="Game\Game.h" />
+    <ClInclude Include="Game\Application.h" />
     <ClInclude Include="Content\Parsers\Binary\BinaryIO.hpp" />
     <ClInclude Include="Content\Parsers\XML\XmlParser.h" />
     <ClInclude Include="Content\Parsers\XML\XmlTree.h" />
@@ -243,28 +240,24 @@ xcopy $(SolutionDir)3rdParty\RadeonRays\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $
     <ClInclude Include="Patterns\Singleton.h" />
     <ClInclude Include="Graphics\Renderer\GL_Renderer.h" />
     <ClInclude Include="Patterns\Subject.h" />
-    <ClInclude Include="Content\Shader\ShaderProgram.h" />
-    <ClInclude Include="PropertyManager.h" />
+    <ClInclude Include="Graphics\Shader\ShaderProgram.h" />
+    <ClInclude Include="Config\PropertyManager.h" />
     <ClInclude Include="Scenegraph\BasePanel.h" />
     <ClInclude Include="Scenegraph\BasePanelManager.h" />
     <ClInclude Include="Scenegraph\GameObject.h" />
     <ClInclude Include="Scenegraph\Scene.h" />
+    <ClInclude Include="Scenegraph\Scenegraph.h" />
     <ClInclude Include="Scenegraph\SceneManager.h" />
-    <ClInclude Include="Content\Shader\Shader.h" />
+    <ClInclude Include="Graphics\Shader\Shader.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Content\Model\Vertex.h" />
-    <ClInclude Include="Content\Model\Texture.h" />
+    <ClInclude Include="Graphics\Model\Vertex.h" />
+    <ClInclude Include="Graphics\Model\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Renderer\CL_Renderer.cpp" />
     <ClCompile Include="Components\CameraComponent.cpp" />
-    <ClCompile Include="Characters\Player\BasePlayerState.cpp" />
-    <ClCompile Include="Camera\BaseCamera.cpp" />
-    <ClCompile Include="Characters\BasePawn.cpp" />
-    <ClCompile Include="Characters\BaseControllerState.cpp" />
     <ClCompile Include="Components\MeshDrawComponent.cpp" />
     <ClCompile Include="Components\TransformComponent.cpp" />
-    <ClCompile Include="Game\BaseGameState.cpp" />
     <ClCompile Include="glad.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -308,12 +301,10 @@ xcopy $(SolutionDir)3rdParty\RadeonRays\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Input\InputManager.cpp" />
-    <ClCompile Include="Content\Model\Mesh.cpp" />
-    <ClCompile Include="Content\Model\Model.cpp" />
+    <ClCompile Include="Graphics\Model\Mesh.cpp" />
+    <ClCompile Include="Graphics\Model\Model.cpp" />
     <ClCompile Include="Graphics\LightManager\LightManager.cpp" />
     <ClCompile Include="Patterns\BaseObject.cpp" />
-    <ClCompile Include="Characters\BaseController.cpp" />
-    <ClCompile Include="Characters\Player\BasePlayerController.cpp" />
     <ClCompile Include="Game\BaseGamemode.cpp" />
     <ClCompile Include="FrameworkPCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -322,23 +313,23 @@ xcopy $(SolutionDir)3rdParty\RadeonRays\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Components\BaseComponent.cpp" />
-    <ClCompile Include="Game\Game.cpp" />
+    <ClCompile Include="Game\Application.cpp" />
     <ClCompile Include="Content\Parsers\XML\XmlParser.cpp" />
     <ClCompile Include="Content\Parsers\XML\XmlTree.cpp" />
     <ClCompile Include="Graphics\Renderer\GL_Renderer.cpp" />
     <ClCompile Include="Patterns\Command.cpp" />
     <ClCompile Include="Patterns\Observer.cpp" />
     <ClCompile Include="Patterns\Subject.cpp" />
-    <ClCompile Include="Content\Shader\ShaderProgram.cpp" />
-    <ClCompile Include="PropertyManager.cpp" />
+    <ClCompile Include="Graphics\Shader\ShaderProgram.cpp" />
+    <ClCompile Include="Config\PropertyManager.cpp" />
     <ClCompile Include="Scenegraph\BasePanel.cpp" />
     <ClCompile Include="Scenegraph\GameObject.cpp" />
     <ClCompile Include="Scenegraph\Scene.cpp" />
     <ClCompile Include="Scenegraph\SceneManager.cpp" />
     <ClCompile Include="Scenegraph\BasePanelManager.cpp" />
-    <ClCompile Include="Content\Shader\Shader.cpp" />
-    <ClCompile Include="Content\Model\Vertex.cpp" />
-    <ClCompile Include="Content\Model\Texture.cpp" />
+    <ClCompile Include="Graphics\Shader\Shader.cpp" />
+    <ClCompile Include="Graphics\Model\Vertex.cpp" />
+    <ClCompile Include="Graphics\Model\Texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,9 +1,6 @@
 #include "FrameworkPCH.h"
 #include "Model.h"
 
-#include "Content/Model/Mesh.h"
-#include "PropertyManager.h"
-
 Model::Model(std::string modelPath, unsigned int loadFlags)
 	:m_Meshes()
 {

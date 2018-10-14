@@ -2,11 +2,10 @@
 #include "Patterns/BaseObject.h"
 
 class SceneManager; class GL_Renderer; class InputManager;
-class BasePlayerController; class BasePawn;
 class BaseGamemode : public BaseObject
 {
 public:
-	friend class Game;
+	friend class Application;
 
 	BaseGamemode();
 	virtual ~BaseGamemode();
@@ -18,17 +17,7 @@ public:
 	//System accessors
 	InputManager* GetInputManager() const;
 	SceneManager* GetSceneManager() const;
-
-	//Entity accessors
-	void AddPlayer(BasePlayerController* pPlyContr);
-	BasePlayerController* GetPlayerController(uint8_t plyIndex) const;
-	std::vector<BasePlayerController*> GetPlayers() const;
 protected:
-
-	void AutoPosses(BasePawn* pPawn);
-
 	InputManager* m_pInputManager;
 	SceneManager* m_pSceneManager;
-
-	std::vector<BasePlayerController*> m_pPlayers;
 };

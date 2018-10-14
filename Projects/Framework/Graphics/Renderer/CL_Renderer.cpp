@@ -1,12 +1,7 @@
 #include "FrameworkPCH.h"
 #include "CL_Renderer.h"
-
-#include <CL/cl.h>
-#include "radeon_rays.h"
-#include "Graphics/Renderer/GL_Renderer.h"
 #include "Game/BaseGamemode.h"
-#include "Content/Model/Mesh.h"
-#include "PropertyManager.h"
+#include "Graphics/Model/Mesh.h"
 
 using namespace RadeonRays;
 

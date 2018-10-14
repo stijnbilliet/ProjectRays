@@ -1,8 +1,5 @@
 #pragma once
-#include "Patterns/BaseObject.h"
-
-#include "Content/Model/Vertex.h"
-#include "Content/Model/Texture.h"
+#include "Graphics/Model/Vertex.h"
 
 class Mesh
 {

@@ -1,28 +1,22 @@
 #include "FrameworkPCH.h"
-#include "Game.h"
-#include <chrono>
-#include "Graphics\Renderer\GL_Renderer.h"
-#include "Scenegraph/SceneManager.h"
-#include "Game/BaseGamemode.h"
-#include "Characters/Player/BasePlayerController.h"
-#include "PropertyManager.h"
+#include "Application.h"
 #include "Graphics/Renderer/CL_Renderer.h"
 
-Game::Game(BaseGamemode* pGamemode, GL_Renderer* pRenderer, const std::vector<std::string>& args)
+Application::Application(BaseGamemode* pGamemode, GL_Renderer* pRenderer, const std::vector<std::string>& args)
 	:m_pGameMode(pGamemode), m_pRenderer(pRenderer), m_Args(args), m_pRaytracer(new CL_Renderer(pGamemode))
 {
 	ParseCmdLineArgs();
 	FillPropertyManager();
 }
 
-Game::~Game()
+Application::~Application()
 {
 	safe_delete(m_pGameMode);
 	safe_delete(m_pRenderer);
 	safe_delete(m_pRaytracer);
 }
 
-void Game::Run()
+void Application::Run()
 {
 	Init();
 
@@ -45,7 +39,7 @@ void Game::Run()
 	}
 } 
 
-void Game::ParseCmdLineArgs()
+void Application::ParseCmdLineArgs()
 {
 	//Store asset path
 	std::string exePath = m_Args[0];
@@ -58,21 +52,21 @@ void Game::ParseCmdLineArgs()
 	//...
 }
 
-void Game::FillPropertyManager()
+void Application::FillPropertyManager()
 {
 	PropertyManager::GetInstance().Add("renderer_viewwidth", "1280");
 	PropertyManager::GetInstance().Add("renderer_viewheight", "720");
 	PropertyManager::GetInstance().Add("windowtitle", "ProjectRays(OpenGL+RadeonRays)");
 }
 
-void Game::OnInit()
+void Application::OnInit()
 {
 	m_pRenderer->Init();
 	m_pGameMode->Init();
 	m_pRaytracer->Init();
 }
 
-bool Game::HandleInput()
+bool Application::HandleInput()
 {
 	SDL_Event e{};
 	while (SDL_PollEvent(&e)) {
@@ -83,17 +77,11 @@ bool Game::HandleInput()
 			return false;
 			break;
 		}
-
-		//check all players
-		for (auto ply : m_pGameMode->m_pPlayers)
-		{
-			ply->HandleInput(&e);
-		}
 	}
 	return true;
 }
 
-void Game::Render()
+void Application::Render()
 {
 	m_pRenderer->Begin();
 		m_pGameMode->Draw(m_pRenderer);
@@ -102,7 +90,7 @@ void Game::Render()
 	m_pRaytracer->Draw(m_pRenderer);
 }
 
-void Game::OnUpdate(float deltaTime)
+void Application::OnUpdate(float deltaTime)
 {
 	m_pGameMode->Update(deltaTime);
 }

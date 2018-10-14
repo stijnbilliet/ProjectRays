@@ -1,10 +1,8 @@
 #pragma once
-
-#include "Content/Model/Mesh.h"
-#include "Content/Model/Texture.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "Texture.h"
 
 class Mesh;
 class Model : public BaseObject
