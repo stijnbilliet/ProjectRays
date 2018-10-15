@@ -2,18 +2,23 @@
 #include "Application.h"
 #include "Graphics/Renderer/CL_Renderer.h"
 
-Application::Application(BaseGamemode* pGamemode, GL_Renderer* pRenderer, const std::vector<std::string>& args)
-	:m_pGameMode(pGamemode), m_pRenderer(pRenderer), m_Args(args), m_pRaytracer(new CL_Renderer(pGamemode))
+Application::Application(BaseGamemode* pGamemode, GL_Renderer* pGLRenderer, CL_Renderer* pCLRenderer, const std::vector<std::string>& args)
+	:m_pGameContext(new GameContext()), m_Args(args)
 {
+	m_pGameContext->m_pGamemode = pGamemode;
+	m_pGameContext->m_pGLRenderer = pGLRenderer;
+	m_pGameContext->m_pCLRenderer = pCLRenderer;
+	m_pGameContext->m_pInputManager = new InputManager();
+	m_pGameContext->m_pSceneManager = new SceneManager();
+	m_pGameContext->m_pLightManager = new LightManager();
+
 	ParseCmdLineArgs();
 	FillPropertyManager();
 }
 
 Application::~Application()
 {
-	safe_delete(m_pGameMode);
-	safe_delete(m_pRenderer);
-	safe_delete(m_pRaytracer);
+	safe_delete(m_pGameContext);
 }
 
 void Application::Run()
@@ -32,7 +37,8 @@ void Application::Run()
 		doContinue = HandleInput();
 
 		//Game Logic
-		Update(deltaTime);
+		m_pGameContext->elapsedSec = deltaTime;
+		Update(m_pGameContext);
 
 		//Render
 		Render();
@@ -61,9 +67,9 @@ void Application::FillPropertyManager()
 
 void Application::OnInit()
 {
-	m_pRenderer->Init();
-	m_pGameMode->Init();
-	m_pRaytracer->Init();
+	m_pGameContext->m_pGLRenderer->Init();
+	m_pGameContext->m_pGamemode->Init();
+	m_pGameContext->m_pCLRenderer->Init();
 }
 
 bool Application::HandleInput()
@@ -83,14 +89,14 @@ bool Application::HandleInput()
 
 void Application::Render()
 {
-	m_pRenderer->Begin();
-		m_pGameMode->Draw(m_pRenderer);
-	m_pRenderer->End();
+	m_pGameContext->m_pGLRenderer->Begin();
+		m_pGameContext->m_pGamemode->Draw(m_pGameContext);
+	m_pGameContext->m_pGLRenderer->End();
 
-	m_pRaytracer->Draw(m_pRenderer);
+	m_pGameContext->m_pCLRenderer->Draw(m_pGameContext);
 }
 
-void Application::OnUpdate(float deltaTime)
+void Application::OnUpdate(GameContext* pGameContext)
 {
-	m_pGameMode->Update(deltaTime);
+	m_pGameContext->m_pGamemode->Update(pGameContext);
 }

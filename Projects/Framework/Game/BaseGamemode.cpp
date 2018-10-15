@@ -14,7 +14,7 @@ BaseGamemode::~BaseGamemode()
 	safe_delete(m_pInputManager);
 }
 
-void BaseGamemode::OnDraw(GL_Renderer* pContext) const
+void BaseGamemode::OnDraw(GameContext* pContext) const
 {
 	m_pSceneManager->Draw(pContext);
 }
@@ -29,13 +29,15 @@ SceneManager* BaseGamemode::GetSceneManager() const
 	return m_pSceneManager;
 }
 
-void BaseGamemode::OnUpdate(float deltaTime)
+void BaseGamemode::OnUpdate(GameContext* pContext)
 {
-	m_pSceneManager->Update(deltaTime);
+	m_pSceneManager->Update(pContext);
 }
 
 void BaseGamemode::OnInit()
 {
+
+
 	m_pInputManager->Init();
 	m_pSceneManager->Init();
 }

@@ -2,7 +2,6 @@
 #include "Patterns/SingleInstance.h"
 
 class ShaderProgram;
-class Light;
 class GL_Renderer : public SingleInstance<GL_Renderer>
 {
 public:

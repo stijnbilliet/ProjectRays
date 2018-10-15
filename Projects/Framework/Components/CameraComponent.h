@@ -7,8 +7,8 @@ public:
 	CameraComponent();
 	virtual ~CameraComponent();
 
-	virtual void OnDraw(GL_Renderer* pContext) const override;
-	virtual void OnUpdate(float elapsedSec) override;
+	virtual void OnDraw(GameContext* pContext) const override;
+	virtual void OnUpdate(GameContext* pContext) override;
 
 	const glm::mat4& GetView() const;
 	const glm::mat4& GetProjection() const;

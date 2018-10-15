@@ -50,15 +50,15 @@ public:
 		}
 	};
 
-	virtual void OnUpdate(float deltaTime) override
+	virtual void OnUpdate(GameContext* pContext) override
 	{
 		if (m_pCurPanel)
 		{
-			m_pCurPanel->Update(deltaTime);
+			m_pCurPanel->Update(pContext);
 		}
 	};
 
-	virtual void OnDraw(GL_Renderer* pContext) const override
+	virtual void OnDraw(GameContext* pContext) const override
 	{
 		if (m_pCurPanel)
 		{

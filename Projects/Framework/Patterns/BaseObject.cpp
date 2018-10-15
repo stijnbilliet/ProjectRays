@@ -18,33 +18,22 @@ void BaseObject::Init()
 	PostInit();
 }
 
-void BaseObject::FixedUpdate(float stepRate)
+void BaseObject::Update(GameContext * pGameContext)
 {
-	PreFixedUpdate(stepRate);
+	PreUpdate(pGameContext);
 	{
-
-		OnFixedUpdate(stepRate);
+		OnUpdate(pGameContext);
 	}
-	PostFixedUpdate(stepRate);
+	PostUpdate(pGameContext);
 }
 
-void BaseObject::Update(float deltaTime)
+void BaseObject::Draw(GameContext* pGameContext) const
 {
-	PreUpdate(deltaTime);
+	PreDraw(pGameContext);
 	{
-
-		OnUpdate(deltaTime);
+		OnDraw(pGameContext);
 	}
-	PostUpdate(deltaTime);
-}
-
-void BaseObject::Draw(GL_Renderer* pContext) const
-{
-	PreDraw(pContext);
-	{
-		OnDraw(pContext);
-	}
-	PostDraw(pContext);
+	PostDraw(pGameContext);
 }
 
 void BaseObject::PreInit()
@@ -59,47 +48,32 @@ void BaseObject::PostInit()
 {
 }
 
-void BaseObject::PreFixedUpdate(float stepRate)
+void BaseObject::PreUpdate(GameContext* pGameContext)
 {
-	UNREFERENCED_PARAMETER(stepRate);
+	UNREFERENCED_PARAMETER(pGameContext);
 }
 
-void BaseObject::OnFixedUpdate(float stepRate)
+void BaseObject::OnUpdate(GameContext* pGameContext)
 {
-	UNREFERENCED_PARAMETER(stepRate);
+	UNREFERENCED_PARAMETER(pGameContext);
 }
 
-void BaseObject::PostFixedUpdate(float stepRate)
+void BaseObject::PostUpdate(GameContext* pGameContext)
 {
-	UNREFERENCED_PARAMETER(stepRate);
+	UNREFERENCED_PARAMETER(pGameContext);
 }
 
-void BaseObject::PreUpdate(float elapsedSec)
+void BaseObject::PreDraw(GameContext* pGameContext) const
 {
-	UNREFERENCED_PARAMETER(elapsedSec);
+	UNREFERENCED_PARAMETER(pGameContext);
 }
 
-void BaseObject::OnUpdate(float elapsedSec)
+void BaseObject::OnDraw(GameContext* pGameContext) const
 {
-	UNREFERENCED_PARAMETER(elapsedSec);
+	UNREFERENCED_PARAMETER(pGameContext);
 }
 
-void BaseObject::PostUpdate(float elapsedSec)
+void BaseObject::PostDraw(GameContext* pGameContext) const
 {
-	UNREFERENCED_PARAMETER(elapsedSec);
-}
-
-void BaseObject::PreDraw(GL_Renderer* pContext) const
-{
-	UNREFERENCED_PARAMETER(pContext);
-}
-
-void BaseObject::OnDraw(GL_Renderer * pContext) const
-{
-	UNREFERENCED_PARAMETER(pContext);
-}
-
-void BaseObject::PostDraw(GL_Renderer* pContext) const
-{
-	UNREFERENCED_PARAMETER(pContext);
+	UNREFERENCED_PARAMETER(pGameContext);
 }

@@ -10,18 +10,18 @@ CameraComponent::~CameraComponent()
 {
 }
 
-void CameraComponent::OnDraw(GL_Renderer* pContext) const
+void CameraComponent::OnDraw(GameContext* pContext) const
 {
 	glm::vec3 camPos = m_pAttachedTo->GetTransform()->GetWorldPosition();
-	unsigned int shaderId = pContext->GetLightDrawer()->GetId();
+	unsigned int shaderId = pContext->m_pGLRenderer->GetLightDrawer()->GetId();
 
 	unsigned int viewPosVar = glGetUniformLocation(shaderId, "viewPos");
 	glUniform3f(viewPosVar, camPos.x, camPos.y, camPos.z);
 }
 
-void CameraComponent::OnUpdate(float elapsedSec)
+void CameraComponent::OnUpdate(GameContext* pContext)
 {
-	UNREFERENCED_PARAMETER(elapsedSec);
+	UNREFERENCED_PARAMETER(pContext);
 
 	int width{};
 	int height{};

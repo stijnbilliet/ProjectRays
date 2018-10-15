@@ -13,10 +13,11 @@ RenderTestScene::~RenderTestScene()
 	safe_delete(m_pModel);
 }
 
-void RenderTestScene::OnUpdate(float elapsedSec)
+void RenderTestScene::OnUpdate(GameContext* pContext)
 {
-	Super::OnUpdate(elapsedSec);
+	Super::OnUpdate(pContext);
 
+	float elapsedSec = pContext->elapsedSec;
 	m_TotalRotation += 20.0f*elapsedSec;
 	if (m_TotalRotation > 360.0f) m_TotalRotation = 0;
 

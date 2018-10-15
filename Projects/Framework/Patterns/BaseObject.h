@@ -1,6 +1,6 @@
 #pragma once
 
-class GL_Renderer;
+class GameContext;
 class BaseObject
 {
 public:
@@ -13,24 +13,19 @@ public:
 	BaseObject& operator=(BaseObject&& other) = default;
 
 	void Init();
-	void FixedUpdate(float stepRate);
-	void Update(float deltaTime);
-	void Draw(GL_Renderer* pContext) const;
+	void Update(GameContext* pGameContext);
+	void Draw(GameContext* pGameContext) const;
 
 protected:
 	virtual void PreInit();
 	virtual void OnInit();
 	virtual void PostInit();
 
-	virtual void PreFixedUpdate(float stepRate);
-	virtual void OnFixedUpdate(float stepRate);
-	virtual void PostFixedUpdate(float stepRate);
+	virtual void PreUpdate(GameContext* pGameContext);
+	virtual void OnUpdate(GameContext* pGameContext);
+	virtual void PostUpdate(GameContext* pGameContext);
 
-	virtual void PreUpdate(float elapsedSec);
-	virtual void OnUpdate(float elapsedSec);
-	virtual void PostUpdate(float elapsedSec);
-
-	virtual void PreDraw(GL_Renderer* pContext) const;
-	virtual void OnDraw(GL_Renderer* pContext) const;
-	virtual void PostDraw(GL_Renderer* pContext) const;
+	virtual void PreDraw(GameContext* pGameContext) const;
+	virtual void OnDraw(GameContext* pGameContext) const;
+	virtual void PostDraw(GameContext* pGameContext) const;
 };

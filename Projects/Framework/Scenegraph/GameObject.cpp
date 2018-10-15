@@ -36,22 +36,22 @@ void GameObject::OnInit()
 	}
 }
 
-void GameObject::OnUpdate(float deltaTime)
+void GameObject::OnUpdate(GameContext* pContext)
 {
-	Super::OnUpdate(deltaTime);
+	Super::OnUpdate(pContext);
 
 	for (auto comp : m_pComponents)
 	{
-		comp->Update(deltaTime);
+		comp->Update(pContext);
 	}
 
 	for (auto child : m_pChildren)
 	{
-		child->Update(deltaTime);
+		child->Update(pContext);
 	}
 }
 
-void GameObject::OnDraw(GL_Renderer* pContext) const
+void GameObject::OnDraw(GameContext* pContext) const
 {
 	Super::OnDraw(pContext);
 

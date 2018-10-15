@@ -29,16 +29,16 @@ void Scene::OnInit()
 	}
 }
 
-void Scene::OnUpdate(float deltaTime)
+void Scene::OnUpdate(GameContext* pContext)
 {
 	//Update gameObjects
 	for (auto gameObject : m_pObjects)
 	{
-		gameObject->Update(deltaTime);
+		gameObject->Update(pContext);
 	}
 }
 
-void Scene::OnDraw(GL_Renderer* pContext) const
+void Scene::OnDraw(GameContext* pContext) const
 {
 	UNREFERENCED_PARAMETER(pContext);
 

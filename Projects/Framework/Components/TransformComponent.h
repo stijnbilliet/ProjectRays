@@ -1,6 +1,7 @@
 #pragma once
 #include "Components\BaseComponent.h"
 
+class GameContext;
 class TransformComponent : public BaseComponent
 {
 public:
@@ -13,7 +14,7 @@ public:
 	TransformComponent& operator=(TransformComponent&& other) = delete;
 
 	//BaseObject implementation
-	virtual void OnUpdate(float elapsedSec) override;
+	virtual void OnUpdate(GameContext* pContext) override;
 
 	//Translation accessors
 	void Translate(const glm::vec3& pos);

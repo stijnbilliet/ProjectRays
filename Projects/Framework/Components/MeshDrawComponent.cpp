@@ -12,7 +12,7 @@ MeshDrawComponent::~MeshDrawComponent()
 {
 }
 
-void MeshDrawComponent::OnDraw(GL_Renderer* pContext) const
+void MeshDrawComponent::OnDraw(GameContext* pContext) const
 {
 	Super::OnDraw(pContext);
 	

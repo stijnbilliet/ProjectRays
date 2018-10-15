@@ -135,9 +135,9 @@ bool TransformComponent::WasTranslated() const
 	return m_bWasTranslated;
 }
 
-void TransformComponent::OnUpdate(float elapsedSec)
+void TransformComponent::OnUpdate(GameContext* pContext)
 {
-	UNREFERENCED_PARAMETER(elapsedSec);
+	UNREFERENCED_PARAMETER(pContext);
 
 	m_bWasTranslated = false;
 

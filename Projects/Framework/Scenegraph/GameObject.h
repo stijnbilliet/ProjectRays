@@ -19,8 +19,8 @@ public:
 
 	//BaseObject functionality
 	virtual void OnInit() override;
-	virtual void OnUpdate(float deltaTime) override;
-	virtual void OnDraw(GL_Renderer* pContext) const override;
+	virtual void OnUpdate(GameContext* pContext) override;
+	virtual void OnDraw(GameContext* pContext) const override;
 
 	//Scene accesors
 	BasePanel* GetScene();

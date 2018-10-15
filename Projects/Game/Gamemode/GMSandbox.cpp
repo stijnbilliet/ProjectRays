@@ -16,9 +16,9 @@ GMSandbox::~GMSandbox()
 
 }
 
-void GMSandbox::OnUpdate(float deltaTime)
+void GMSandbox::OnUpdate(GameContext* pContext)
 {
-	Super::OnUpdate(deltaTime);
+	Super::OnUpdate(pContext);
 }
 
 void GMSandbox::PreInit()

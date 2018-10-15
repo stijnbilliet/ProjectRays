@@ -5,6 +5,7 @@ class GL_Renderer;
 class Mesh;
 class ShaderProgram;
 class Texture;
+class GameContext;
 class MeshDrawComponent final : public BaseComponent
 {
 public:
@@ -16,7 +17,7 @@ public:
 	MeshDrawComponent& operator=(const MeshDrawComponent& other) = delete;
 	MeshDrawComponent& operator=(MeshDrawComponent&& other) = delete;
 
-	virtual void OnDraw(GL_Renderer* pContext) const override;
+	virtual void OnDraw(GameContext* pContext) const override;
 
 	const Mesh* GetMeshData() const;
 private:

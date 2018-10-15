@@ -13,9 +13,8 @@ public:
 	GMSandbox();
 	virtual ~GMSandbox();
 
-	void OnUpdate(float deltaTime) override;
+	void OnUpdate(GameContext* pContext) override;
 	void PreInit() override;
 
-	void ProcessInput();
 private:
 };

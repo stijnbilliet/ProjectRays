@@ -2,6 +2,7 @@
 #include "Patterns/BaseObject.h"
 
 class SceneManager; class GL_Renderer; class InputManager;
+class GameContext;
 class BaseGamemode : public BaseObject
 {
 public:
@@ -11,8 +12,8 @@ public:
 	virtual ~BaseGamemode();
 
 	void OnInit() override;
-	void OnUpdate(float deltaTime) override;
-	void OnDraw(GL_Renderer* pContext) const override;
+	void OnUpdate(GameContext* pContext) override;
+	void OnDraw(GameContext* pContext) const override;
 
 	//System accessors
 	InputManager* GetInputManager() const;

@@ -45,19 +45,10 @@
     <ClInclude Include="Patterns\Command.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Camera\BaseCamera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Characters\BaseController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Patterns\BaseObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Input\InputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Characters\BasePawn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scenegraph\SceneManager.h">
@@ -76,18 +67,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\Components.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Characters\Player\BasePlayerController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Characters\Player\BasePlayerState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\BaseGameState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Characters\BaseControllerState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Helpers\Safedelete.h">
@@ -189,6 +168,9 @@
     <ClInclude Include="Game\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game\GameContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scenegraph\GameObject.cpp">
@@ -212,19 +194,10 @@
     <ClCompile Include="Patterns\Command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Camera\BaseCamera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Characters\BaseController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Patterns\BaseObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Input\InputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Characters\BasePawn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scenegraph\SceneManager.cpp">
@@ -234,18 +207,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scenegraph\BasePanel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Characters\Player\BasePlayerController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Characters\Player\BasePlayerState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\BaseGameState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Characters\BaseControllerState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\BaseComponent.cpp">
@@ -318,6 +279,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Game\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

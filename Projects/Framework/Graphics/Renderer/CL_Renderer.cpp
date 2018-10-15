@@ -5,8 +5,8 @@
 
 using namespace RadeonRays;
 
-CL_Renderer::CL_Renderer(BaseGamemode* pGamemode)
-	:SingleInstance<CL_Renderer>(), m_pSceneManager(pGamemode->GetSceneManager())
+CL_Renderer::CL_Renderer()
+	:SingleInstance<CL_Renderer>()
 {
 }
 
@@ -86,12 +86,12 @@ void CL_Renderer::OnInit()
 	//const int k_raypack_size = viewWidth * viewHeight;
 }
 
-void CL_Renderer::PreDraw(GL_Renderer * pContext) const
+void CL_Renderer::PreDraw(GameContext* pContext) const
 {
 	UNREFERENCED_PARAMETER(pContext);
 }
 
-void CL_Renderer::OnDraw(GL_Renderer* pContext) const
+void CL_Renderer::OnDraw(GameContext* pContext) const
 {
 	UNREFERENCED_PARAMETER(pContext);
 }

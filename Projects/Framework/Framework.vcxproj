@@ -203,6 +203,7 @@ xcopy $(SolutionDir)3rdParty\RadeonRays\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $
   <ItemGroup>
     <ClInclude Include="Config\Config.h" />
     <ClInclude Include="Game\Game.h" />
+    <ClInclude Include="Game\GameContext.h" />
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Graphics\Renderer\CL_Renderer.h" />
     <ClInclude Include="Components\CameraComponent.h" />
@@ -254,6 +255,7 @@ xcopy $(SolutionDir)3rdParty\RadeonRays\lib\$(PLATFORM)\$(CONFIGURATION)\*.dll $
     <ClInclude Include="Graphics\Model\Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Game\GameContext.cpp" />
     <ClCompile Include="Graphics\Renderer\CL_Renderer.cpp" />
     <ClCompile Include="Components\CameraComponent.cpp" />
     <ClCompile Include="Components\MeshDrawComponent.cpp" />

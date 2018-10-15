@@ -8,7 +8,7 @@ public:
 	RenderTestScene();
 	virtual ~RenderTestScene();
 
-	virtual void OnUpdate(float elapsedSec) override;
+	virtual void OnUpdate(GameContext* pContext) override;
 	virtual void OnInit() override;
 private:
 	GameObject * m_pTestObject;

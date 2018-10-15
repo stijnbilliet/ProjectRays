@@ -16,8 +16,8 @@ public:
 	Scene& operator=(Scene&& other) = delete;
 
 	virtual void OnInit() override;
-	virtual void OnUpdate(float deltaTime) override;
-	virtual void OnDraw(GL_Renderer* pContext) const override;
+	virtual void OnUpdate(GameContext* pContext) override;
+	virtual void OnDraw(GameContext* pContext) const override;
 
 	CameraComponent* GetActiveCamera() const;
 	void SetActiveCamera(CameraComponent* pNewCamera);
