@@ -12,14 +12,14 @@ public:
 	BaseObject& operator=(const BaseObject& other) = default;
 	BaseObject& operator=(BaseObject&& other) = default;
 
-	void Init();
+	void Init(GameContext* pContext);
 	void Update(GameContext* pGameContext);
 	void Draw(GameContext* pGameContext) const;
 
 protected:
-	virtual void PreInit();
-	virtual void OnInit();
-	virtual void PostInit();
+	virtual void PreInit(GameContext* pGameContext);
+	virtual void OnInit(GameContext* pGameContext);
+	virtual void PostInit(GameContext* pGameContext);
 
 	virtual void PreUpdate(GameContext* pGameContext);
 	virtual void OnUpdate(GameContext* pGameContext);

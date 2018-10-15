@@ -42,11 +42,11 @@ public:
 	};
 
 	/*Implementation of BaseObj*/
-	virtual void OnInit() override
+	virtual void OnInit(GameContext* pGameContext) override
 	{
 		if (m_pCurPanel)
 		{
-			m_pCurPanel->Init();
+			m_pCurPanel->Init(pGameContext);
 		}
 	};
 

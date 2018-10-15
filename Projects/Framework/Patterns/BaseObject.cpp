@@ -9,13 +9,13 @@ BaseObject::~BaseObject()
 {
 }
 
-void BaseObject::Init()
+void BaseObject::Init(GameContext* pGameContext)
 {
-	PreInit();
+	PreInit(pGameContext);
 	{
-		OnInit();
+		OnInit(pGameContext);
 	}
-	PostInit();
+	PostInit(pGameContext);
 }
 
 void BaseObject::Update(GameContext * pGameContext)
@@ -36,16 +36,19 @@ void BaseObject::Draw(GameContext* pGameContext) const
 	PostDraw(pGameContext);
 }
 
-void BaseObject::PreInit()
+void BaseObject::PreInit(GameContext* pGameContext)
 {
+	UNREFERENCED_PARAMETER(pGameContext);
 }
 
-void BaseObject::OnInit()
+void BaseObject::OnInit(GameContext* pGameContext)
 {
+	UNREFERENCED_PARAMETER(pGameContext);
 }
 
-void BaseObject::PostInit()
+void BaseObject::PostInit(GameContext* pGameContext)
 {
+	UNREFERENCED_PARAMETER(pGameContext);
 }
 
 void BaseObject::PreUpdate(GameContext* pGameContext)

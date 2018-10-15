@@ -14,8 +14,8 @@ public:
 	unsigned int GetGBuffer() const;
 	ShaderProgram* GetLightDrawer() const;
 
-	virtual void OnInit() override;
-	virtual void PostInit() override;
+	virtual void OnInit(GameContext* pGameContext) override;
+	virtual void PostInit(GameContext* pGameContext) override;
 private:
 	void RenderQuad();
 	void ImGuiOnDraw();

@@ -23,7 +23,7 @@ Application::~Application()
 
 void Application::Run()
 {
-	Init();
+	Init(m_pGameContext);
 
 	bool doContinue = true;
 	auto lastTime = std::chrono::high_resolution_clock::now();
@@ -65,11 +65,13 @@ void Application::FillPropertyManager()
 	PropertyManager::GetInstance().Add("windowtitle", "ProjectRays(OpenGL+RadeonRays)");
 }
 
-void Application::OnInit()
+void Application::OnInit(GameContext* pGameContext)
 {
-	m_pGameContext->m_pGLRenderer->Init();
-	m_pGameContext->m_pGamemode->Init();
-	m_pGameContext->m_pCLRenderer->Init();
+	m_pGameContext->m_pGLRenderer->Init(pGameContext);
+	m_pGameContext->m_pGamemode->Init(pGameContext);
+	m_pGameContext->m_pCLRenderer->Init(pGameContext);
+	m_pGameContext->m_pInputManager->Init(pGameContext);
+	m_pGameContext->m_pSceneManager->Init(pGameContext);
 }
 
 bool Application::HandleInput()

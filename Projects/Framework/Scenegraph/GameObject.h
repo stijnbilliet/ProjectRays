@@ -18,7 +18,7 @@ public:
 	GameObject& operator=(GameObject&& other) = delete;
 
 	//BaseObject functionality
-	virtual void OnInit() override;
+	virtual void OnInit(GameContext* pGameContext) override;
 	virtual void OnUpdate(GameContext* pContext) override;
 	virtual void OnDraw(GameContext* pContext) const override;
 

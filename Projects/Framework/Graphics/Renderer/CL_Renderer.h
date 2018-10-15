@@ -9,7 +9,7 @@ public:
 	CL_Renderer();
 	virtual ~CL_Renderer();
 
-	virtual void OnInit() override;
+	virtual void OnInit(GameContext* pGameContext) override;
 	virtual void PreDraw(GameContext* pContext) const override;
 	virtual void OnDraw(GameContext* pContext) const override;
 private:

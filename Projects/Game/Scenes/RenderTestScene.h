@@ -9,7 +9,7 @@ public:
 	virtual ~RenderTestScene();
 
 	virtual void OnUpdate(GameContext* pContext) override;
-	virtual void OnInit() override;
+	virtual void OnInit(GameContext* pContext) override;
 private:
 	GameObject * m_pTestObject;
 	Model* m_pModel;

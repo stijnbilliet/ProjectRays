@@ -12,7 +12,7 @@ public:
 
 	void Run();
 private:
-	void OnInit() override;
+	void OnInit(GameContext* pGameContext) override;
 	void OnUpdate(GameContext* pGameContext) override;
 
 	void Render();

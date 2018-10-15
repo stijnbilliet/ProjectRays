@@ -8,24 +8,27 @@
 Scene::Scene(const std::string& name)
 	:BasePanel(name)
 {
-	//TODO: not ideal solution
-	auto pCamera = new GameObject();
-	m_pActiveCamera = new CameraComponent();
 
-	pCamera->AddComponent(m_pActiveCamera);
-	pCamera->GetTransform()->Translate(0.0f, 0.0f, 0.0f);
-	Add(pCamera);
 }
 
 Scene::~Scene()
 {
 }
 
-void Scene::OnInit()
+void Scene::OnInit(GameContext* pGameContext)
 {
+	//TODO: not ideal solution
+	auto pCamera = new GameObject();
+	m_pActiveCamera = new CameraComponent();
+	pGameContext->m_pActiveCamera = m_pActiveCamera;
+
+	pCamera->AddComponent(m_pActiveCamera);
+	pCamera->GetTransform()->Translate(0.0f, 0.0f, 0.0f);
+	Add(pCamera);
+
 	for (auto gameObject : m_pObjects)
 	{
-		gameObject->Init();
+		gameObject->Init(pGameContext);
 	}
 }
 

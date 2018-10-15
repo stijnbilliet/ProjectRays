@@ -24,9 +24,9 @@ void RenderTestScene::OnUpdate(GameContext* pContext)
 	m_pTestObject->GetTransform()->Rotate(0.0f, m_TotalRotation, 0.0f, false);
 }
 
-void RenderTestScene::OnInit()
+void RenderTestScene::OnInit(GameContext* pContext)
 {
-	Super::OnInit();
+	Super::OnInit(pContext);
 
 	//Create object
 	m_pTestObject = new GameObject();

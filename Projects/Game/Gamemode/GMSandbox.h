@@ -14,7 +14,7 @@ public:
 	virtual ~GMSandbox();
 
 	void OnUpdate(GameContext* pContext) override;
-	void PreInit() override;
+	void PreInit(GameContext* pContext) override;
 
 private:
 };

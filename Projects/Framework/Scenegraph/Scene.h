@@ -15,7 +15,7 @@ public:
 	Scene& operator=(const Scene& other) = delete;
 	Scene& operator=(Scene&& other) = delete;
 
-	virtual void OnInit() override;
+	virtual void OnInit(GameContext* pGameContext) override;
 	virtual void OnUpdate(GameContext* pContext) override;
 	virtual void OnDraw(GameContext* pContext) const override;
 

@@ -118,8 +118,10 @@ ShaderProgram * GL_Renderer::GetLightDrawer() const
 	return m_pLightPass;
 }
 
-void GL_Renderer::OnInit()
+void GL_Renderer::OnInit(GameContext* pGameContext)
 {
+	UNREFERENCED_PARAMETER(pGameContext);
+
 	PropertyManager::GetInstance().GetInt("renderer_viewwidth", m_ScrWidth);
 	PropertyManager::GetInstance().GetInt("renderer_viewheight", m_ScrHeight);
 	PropertyManager::GetInstance().GetString("windowtitle", m_WindowTitle);
@@ -173,8 +175,10 @@ void GL_Renderer::OnInit()
 	ImGui::StyleColorsDark();
 }
 
-void GL_Renderer::PostInit()
+void GL_Renderer::PostInit(GameContext* pGameContext)
 {
+	UNREFERENCED_PARAMETER(pGameContext);
+
 	//enable depth testing
 	glEnable(GL_DEPTH_TEST);
 

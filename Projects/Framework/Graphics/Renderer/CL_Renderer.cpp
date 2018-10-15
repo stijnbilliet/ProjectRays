@@ -1,7 +1,5 @@
 #include "FrameworkPCH.h"
 #include "CL_Renderer.h"
-#include "Game/BaseGamemode.h"
-#include "Graphics/Model/Mesh.h"
 
 using namespace RadeonRays;
 
@@ -14,8 +12,10 @@ CL_Renderer::~CL_Renderer()
 {
 }
 
-void CL_Renderer::OnInit()
+void CL_Renderer::OnInit(GameContext* pGameContext)
 {
+	UNREFERENCED_PARAMETER(pGameContext);
+
 	//// Choose device
 	//int nativeidx = -1;
 	//// Always use OpenCL

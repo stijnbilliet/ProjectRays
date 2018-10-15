@@ -21,18 +21,18 @@ GameObject::~GameObject()
 	}
 }
 
-void GameObject::OnInit()
+void GameObject::OnInit(GameContext* pGameContext)
 {
-	Super::OnInit();
+	Super::OnInit(pGameContext);
 
 	for (auto comp : m_pComponents)
 	{
-		comp->Init();
+		comp->Init(pGameContext);
 	}
 
 	for (auto child : m_pChildren)
 	{
-		child->Init();
+		child->Init(pGameContext);
 	}
 }
 

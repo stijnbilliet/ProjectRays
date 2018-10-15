@@ -21,12 +21,12 @@ void GMSandbox::OnUpdate(GameContext* pContext)
 	Super::OnUpdate(pContext);
 }
 
-void GMSandbox::PreInit()
+void GMSandbox::PreInit(GameContext* pContext)
 {
-	Super::OnInit();
+	Super::OnInit(pContext);
 
 	//Level
 	auto pLevel = new RenderTestScene();
-	m_pSceneManager->Add(pLevel);
-	m_pSceneManager->SetActive("RenderTestScene");
+	pContext->m_pSceneManager->Add(pLevel);
+	pContext->m_pSceneManager->SetActive("RenderTestScene");
 }
