@@ -69,9 +69,9 @@ void Application::OnInit(GameContext* pGameContext)
 {
 	m_pGameContext->m_pGLRenderer->Init(pGameContext);
 	m_pGameContext->m_pGamemode->Init(pGameContext);
-	m_pGameContext->m_pCLRenderer->Init(pGameContext);
 	m_pGameContext->m_pInputManager->Init(pGameContext);
 	m_pGameContext->m_pSceneManager->Init(pGameContext);
+	m_pGameContext->m_pCLRenderer->Init(pGameContext);
 }
 
 bool Application::HandleInput()

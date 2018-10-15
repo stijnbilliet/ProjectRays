@@ -13,4 +13,5 @@ public:
 	virtual void PreDraw(GameContext* pContext) const override;
 	virtual void OnDraw(GameContext* pContext) const override;
 private:
+	RadeonRays::IntersectionApi* m_pApi;
 };
