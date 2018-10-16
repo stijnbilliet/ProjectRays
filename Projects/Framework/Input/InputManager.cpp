@@ -2,8 +2,6 @@
 #include "InputManager.h"
 #include "Patterns/Command.h"
 
-using Bind = std::pair<unsigned int, std::pair<SDL_Event, Command*>>;
-
 SDL_Event EventFactory::CreateDesc(SDL_EventType eType, SDL_Keycode key)
 {
 	SDL_Event output{};
@@ -15,9 +13,9 @@ SDL_Event EventFactory::CreateDesc(SDL_EventType eType, SDL_Keycode key)
 SDL_Event EventFactory::CreateDesc(SDL_EventType eType, uint8_t button)
 {
 	SDL_Event output{};
-	output.type = eType;
+	output.button.type = eType;
 
-	if (eType == SDL_KEYDOWN || eType == SDL_KEYUP)
+	if (eType == SDL_MOUSEBUTTONDOWN || eType == SDL_MOUSEBUTTONUP)
 	{
 		output.button.button = button;
 	}
@@ -38,77 +36,79 @@ InputManager::~InputManager()
 {
 	for (auto kvPair : m_pInputs)
 	{
-		safe_delete(kvPair.second.second);
+		safe_delete(kvPair.second);
 	}
 }
 
-void InputManager::AddInputAction(SDL_Event e, Command* cmd, unsigned int plyIndex)
+void InputManager::AddInputAction(SDL_Event e, Command* cmd)
 {
 	auto inputMapping = std::pair<SDL_Event, Command*>(e, cmd);
-	auto playerMapping = Bind(plyIndex, inputMapping);
-
-	m_pInputs.insert(playerMapping);
+	m_pInputs.push_back(inputMapping);
 }
 
 void InputManager::AttachObserver(Observer* obs)
 {
 	if (obs)
 	{
-		for (Bind kvPair : m_pInputs)
+		for (auto kvPair : m_pInputs)
 		{
-			auto command = kvPair.second.second;
+			auto command = kvPair.second;
 			command->addObserver(obs);
 		}
 	}
 }
 
-void InputManager::HandleInput(SDL_Event* e, unsigned int playerIndex)
+void InputManager::HandleInput(SDL_Event e)
 {
 	//Keyboard
-	if (e->type == SDL_KEYDOWN || e->type == SDL_KEYUP)
+	if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 	{
-		EvaluateKeyCode(&e->key, playerIndex);
+		EvaluateKeyCode(e.key);
 	}
 
 	//Mouse
-	if (e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP)
+	if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP)
 	{
-		EvaluateMouseClick(&e->button, playerIndex);
+		EvaluateMouseClick(e.button);
+	}
+	
+	if (e.type == SDL_MOUSEMOTION)
+	{
+		m_MousePos = glm::vec2(e.motion.x, e.motion.y);
 	}
 }
 
-void InputManager::EvaluateKeyCode(SDL_KeyboardEvent* e, unsigned int playerIndex)
+const glm::vec2 & InputManager::GetMousePos() const
 {
-	for (Bind kvPair : m_pInputs)
+	return m_MousePos;
+}
+
+void InputManager::EvaluateKeyCode(SDL_KeyboardEvent e)
+{
+	for (auto kvPair : m_pInputs)
 	{
-		if (playerIndex == kvPair.first)
+		auto event = kvPair.first.key;
+		auto type = kvPair.first.type;
+		if (e.type == type && e.keysym.sym == event.keysym.sym)
 		{
-			auto event = kvPair.second.first.key;
-			auto type = kvPair.second.first.type;
-			if (e->type == type && e->keysym.sym == event.keysym.sym)
-			{
-				auto command = kvPair.second.second;
-				command->execute();
-				break;
-			}
+			auto command = kvPair.second;
+			command->execute();
+			break;
 		}
 	}
 }
 
-void InputManager::EvaluateMouseClick(SDL_MouseButtonEvent* e, unsigned int playerIndex)
+void InputManager::EvaluateMouseClick(SDL_MouseButtonEvent e)
 {
-	for (Bind kvPair : m_pInputs)
+	for (auto kvPair : m_pInputs)
 	{
-		if (playerIndex == kvPair.first)
+		auto event = kvPair.first.button;
+		auto type = kvPair.first.type;
+		if (e.type == type && e.button == event.button)
 		{
-			auto event = kvPair.second.first.button;
-			auto type = kvPair.second.first.type;
-			if (e->type == type && e->button == event.button)
-			{
-				auto command = kvPair.second.second;
-				command->execute();
-				break;
-			}
+			auto command = kvPair.second;
+			command->execute();
+			break;
 		}
 	}
 }

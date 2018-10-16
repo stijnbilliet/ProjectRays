@@ -159,9 +159,9 @@ void GL_Renderer::OnInit(GameContext* pGameContext)
 	gladLoadGLLoader(SDL_GL_GetProcAddress);
 
 	// Check OpenGL properties
-	printf("Vendor:   %s\n", glGetString(GL_VENDOR));
-	printf("Renderer: %s\n", glGetString(GL_RENDERER));
-	printf("Version:  %s\n", glGetString(GL_VERSION));
+	std::stringstream openGLInfo;
+	openGLInfo << "OpenGL Specification Info\nVendor: " << glGetString(GL_VENDOR) << "\nRenderer: " << glGetString(GL_RENDERER) << "\nVersion: " << glGetString(GL_VERSION) << '\n';
+	Logger::GetInstance().LogInfo(openGLInfo.str());
 
 	//ImGUI
 	IMGUI_CHECKVERSION();

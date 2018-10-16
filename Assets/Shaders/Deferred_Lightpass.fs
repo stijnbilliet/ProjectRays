@@ -17,7 +17,7 @@ void main()
 	vec3 FragPos = texture(gPosition, TexCoords).rgb;
 	vec3 Diffuse = texture(gAlbedo, TexCoords).rgb;
     vec3 Normal = texture(gNormal, TexCoords).rgb;
-    vec3 Ambient = texture(gLightAcc, TexCoords).rgb;
+    vec3 LightAcc = texture(gLightAcc, TexCoords).rgb;
 	
 	//lightingvar
 	vec3 viewDir  = normalize(viewPos - FragPos);
@@ -30,7 +30,8 @@ void main()
     vec3 halfwayDir = normalize(lightDir + viewDir);  
     float spec = pow(max(dot(Normal, halfwayDir), 0.0), 16.0);
     vec3 specular = dLightCol * spec;
+	LightAcc += specular;
 	
-	Diffuse = (diffuse * Ambient.r) + specular;
+	Diffuse = diffuse * LightAcc;
     FragColor = vec4(Diffuse, 1.0f);
 }

@@ -4,7 +4,7 @@ class Command : public Subject
 {
 public:
 	Command();
-	~Command();
+	virtual ~Command();
 
 	virtual void execute() = 0;
 };

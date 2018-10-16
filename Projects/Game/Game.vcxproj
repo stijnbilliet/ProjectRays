@@ -168,7 +168,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Gamemode\GMSandbox.h" />
-    <ClInclude Include="Gamemode\InputActions.hpp" />
+    <ClInclude Include="Gamemode\InputActions.h" />
     <ClInclude Include="GamePCH.h" />
     <ClInclude Include="Scenes\RenderTestScene.h" />
     <ClInclude Include="Scenes\SponzaScene.h" />
@@ -176,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gamemode\GMSandbox.cpp" />
+    <ClCompile Include="Gamemode\InputActions.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GamePCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

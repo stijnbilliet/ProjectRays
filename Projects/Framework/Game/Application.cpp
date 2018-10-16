@@ -68,10 +68,8 @@ void Application::FillPropertyManager()
 void Application::OnInit(GameContext* pGameContext)
 {
 	m_pGameContext->m_pGLRenderer->Init(pGameContext);
-	m_pGameContext->m_pGamemode->Init(pGameContext);
-	m_pGameContext->m_pInputManager->Init(pGameContext);
-	m_pGameContext->m_pSceneManager->Init(pGameContext);
 	m_pGameContext->m_pCLRenderer->Init(pGameContext);
+	m_pGameContext->m_pGamemode->Init(pGameContext);
 }
 
 bool Application::HandleInput()
@@ -85,6 +83,8 @@ bool Application::HandleInput()
 			return false;
 			break;
 		}
+
+		m_pGameContext->m_pInputManager->HandleInput(e);
 	}
 	return true;
 }

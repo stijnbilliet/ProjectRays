@@ -15,6 +15,11 @@ void BaseGamemode::OnDraw(GameContext* pContext) const
 	pContext->m_pSceneManager->Draw(pContext);
 }
 
+void BaseGamemode::OnInit(GameContext * pContext)
+{
+	pContext->m_pSceneManager->Init(pContext);
+}
+
 void BaseGamemode::OnUpdate(GameContext* pContext)
 {
 	pContext->m_pSceneManager->Update(pContext);

@@ -22,4 +22,5 @@ private:
 	std::vector<Mesh> m_Meshes;
 	std::string m_LoadDirectory;
 	const aiScene* m_ModelScene;
+	std::string m_AssetPath;
 };

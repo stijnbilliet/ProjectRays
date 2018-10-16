@@ -22,13 +22,16 @@ public:
 	InputManager& operator=(InputManager&& other) noexcept = delete;
 
 	void AttachObserver(Observer* obs);
-	void AddInputAction(SDL_Event event, Command* cmd, unsigned int plyIndex);
-	void HandleInput(SDL_Event* e, unsigned int playerIndex);
+	void AddInputAction(SDL_Event event, Command* cmd);
+	void HandleInput(SDL_Event e);
+
+	const glm::vec2& GetMousePos() const;
 
 private:
 	//Keyboard/Mouse
-	void EvaluateKeyCode(SDL_KeyboardEvent* e, unsigned int playerIndex);
-	void EvaluateMouseClick(SDL_MouseButtonEvent* e, unsigned int playerIndex);
+	void EvaluateKeyCode(SDL_KeyboardEvent e);
+	void EvaluateMouseClick(SDL_MouseButtonEvent e);
 
-	std::unordered_multimap<unsigned int, std::pair<SDL_Event, Command*>> m_pInputs;
+	std::vector<std::pair<SDL_Event, Command*>> m_pInputs;
+	glm::vec2 m_MousePos;
 };

@@ -6,9 +6,6 @@ using kvproperty = std::pair<std::string, std::string>;
 class PropertyManager : public Singleton<PropertyManager>
 {
 public:
-	PropertyManager();
-	virtual ~PropertyManager();
-
 	bool Add(std::string propertyName, std::string propertyVal);
 
 	bool GetBool(std::string propertyName, bool& propertyVal) const;

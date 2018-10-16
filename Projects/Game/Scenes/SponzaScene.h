@@ -6,4 +6,8 @@ class SponzaScene : public Scene
 public:
 	SponzaScene();
 	virtual ~SponzaScene();
+private:
+	virtual void PreInit(GameContext* pContext) override;
+
+	std::vector<Mesh> m_Meshes;
 };

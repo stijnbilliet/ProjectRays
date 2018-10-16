@@ -4,10 +4,9 @@
 Model::Model(std::string modelPath, unsigned int loadFlags)
 	:m_Meshes()
 {
-	std::string assetPath{};
-	PropertyManager::GetInstance().GetString("assetpath", assetPath);
+	PropertyManager::GetInstance().GetString("assetpath", m_AssetPath);
 
-	std::string modelPathStr = assetPath + "/" + modelPath;
+	std::string modelPathStr = m_AssetPath + "/" + modelPath;
 
 	Assimp::Importer importer;
 	m_ModelScene = importer.ReadFile(modelPathStr, loadFlags);
@@ -105,8 +104,16 @@ Mesh Model::ProcessMesh(aiMesh* pMesh)
 	// diffuse: texture_diffuseN
 
 	// 1. diffuse maps
-	std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::DIFFUSE);
+	auto diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::DIFFUSE);
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
+	// 2. ambient maps
+	auto ambientMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT, TextureType::AMBIENT);
+	textures.insert(textures.end(), ambientMaps.begin(), ambientMaps.end());
+
+	// 3. ambient maps
+	auto normalMaps = LoadMaterialTextures(material, aiTextureType_NORMALS, TextureType::NORMAL);
+	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
 	return Mesh(vertices, indices, textures);
 }
@@ -127,15 +134,12 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMat, aiTextureType
 				skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
 				break;
 			}
-
-			if (!skip)
-			{   // if texture hasn't been loaded already, load it
-				Texture texture{};
-				texture.type = typeID;
-				texture.path = str.C_Str();
-				textures.push_back(texture);
-				m_TexturesLoaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
-			}
+		}
+		if (!skip)
+		{   // if texture hasn't been loaded already, load it
+			Texture texture(str.C_Str(), typeID);
+			textures.push_back(texture);
+			m_TexturesLoaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
 		}
 	}
 	return textures;

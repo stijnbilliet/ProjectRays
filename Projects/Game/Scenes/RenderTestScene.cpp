@@ -24,7 +24,7 @@ void RenderTestScene::OnUpdate(GameContext* pContext)
 	m_pTestObject->GetTransform()->Rotate(0.0f, m_TotalRotation, 0.0f, false);
 }
 
-void RenderTestScene::OnInit(GameContext* pContext)
+void RenderTestScene::PreInit(GameContext* pContext)
 {
 	Super::OnInit(pContext);
 
@@ -47,6 +47,9 @@ void RenderTestScene::OnInit(GameContext* pContext)
 	//Create draw component
 	auto pMeshDrawComp = new MeshDrawComponent(pMesh, pShaderProgram);
 	m_pTestObject->AddComponent(pMeshDrawComp);
+
+	auto pRayShapeComponent = new RayShapeComponent(pMesh);
+	m_pTestObject->AddComponent(pRayShapeComponent);
 
 	//Translate object and add to scene
 	m_pTestObject->GetTransform()->Translate(0.0f, -7.5f, -25.0f);

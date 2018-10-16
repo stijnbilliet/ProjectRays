@@ -1,16 +1,6 @@
 #include "FrameworkPCH.h"
 #include "PropertyManager.h"
 
-
-PropertyManager::PropertyManager()
-{
-}
-
-
-PropertyManager::~PropertyManager()
-{
-}
-
 bool PropertyManager::Add(std::string propertyName, std::string propertyVal)
 {
 	if (m_Properties.find(propertyName) != m_Properties.end())

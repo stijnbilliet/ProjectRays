@@ -30,7 +30,7 @@
     <ClInclude Include="Scenes\SponzaScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Gamemode\InputActions.hpp">
+    <ClInclude Include="Gamemode\InputActions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -48,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scenes\SponzaScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gamemode\InputActions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,6 +11,7 @@ public:
 	BaseGamemode();
 	virtual ~BaseGamemode();
 
+	void OnInit(GameContext* pContext) override;
 	void OnUpdate(GameContext* pContext) override;
 	void OnDraw(GameContext* pContext) const override;
 };

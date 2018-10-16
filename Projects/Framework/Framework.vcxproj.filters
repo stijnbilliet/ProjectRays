@@ -171,6 +171,15 @@
     <ClInclude Include="Game\GameContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Debug\Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug\Logger\Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\RayShapeComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scenegraph\GameObject.cpp">
@@ -282,6 +291,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\Logger\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\RayShapeComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

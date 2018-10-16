@@ -21,17 +21,22 @@ void MeshDrawComponent::OnDraw(GameContext* pContext) const
 	//send variables to shader
 	auto pScene = (Scene*)m_pAttachedTo->GetScene();
 
-	auto pWorldMat = m_pAttachedTo->GetTransform()->GetWorldMatrix();
+	auto pTransformComp = m_pAttachedTo->GetTransform();
+	auto pCamTransform = pContext->m_pActiveCamera->GetGameObject()->GetTransform();
+	if (pTransformComp->WasTranslated() || pCamTransform->WasTranslated())
+	{
+		auto pWorldMat = pTransformComp->GetWorldMatrix();
 
-	//worldvar
-	int worldMatVar = glGetUniformLocation(m_pShaderProgram->GetId(), "gMatrixWorld");
-	glUniformMatrix4fv(worldMatVar, 1, GL_FALSE, glm::value_ptr(pWorldMat));
+		//worldvar
+		int worldMatVar = glGetUniformLocation(m_pShaderProgram->GetId(), "gMatrixWorld");
+		glUniformMatrix4fv(worldMatVar, 1, GL_FALSE, glm::value_ptr(pWorldMat));
 
-	//worldviewprojection
-	int wvpMatVar = glGetUniformLocation(m_pShaderProgram->GetId(), "gMatrixWVP");
-	auto pWvpMat = pScene->GetActiveCamera()->GetViewProjection() * pWorldMat;
-	glUniformMatrix4fv(wvpMatVar, 1, GL_FALSE, glm::value_ptr(pWvpMat));
-
+		//worldviewprojection
+		int wvpMatVar = glGetUniformLocation(m_pShaderProgram->GetId(), "gMatrixWVP");
+		auto pWvpMat = pScene->GetActiveCamera()->GetViewProjection() * pWorldMat;
+		glUniformMatrix4fv(wvpMatVar, 1, GL_FALSE, glm::value_ptr(pWvpMat));
+	}
+	
 	//Get textures from meshdata
 	std::vector<Texture> textures = m_pMeshData->GetTextures();
 
@@ -93,7 +98,7 @@ void MeshDrawComponent::OnDraw(GameContext* pContext) const
 	glBindVertexArray(0);
 }
 
-const Mesh * MeshDrawComponent::GetMeshData() const
+const Mesh* MeshDrawComponent::GetMeshData() const
 {
 	return m_pMeshData;
 }
