@@ -132,6 +132,16 @@ unsigned int GL_Renderer::GetWorldPosBuffer() const
 	return gPosition;
 }
 
+unsigned int GL_Renderer::GetNormalBuffer() const
+{
+	return gNormal;
+}
+
+const glm::vec3 & GL_Renderer::GetDirectionalLightPos() const
+{
+	return m_DirectionalPos;
+}
+
 ShaderProgram * GL_Renderer::GetLightDrawer() const
 {
 	return m_pLightPass;
@@ -224,7 +234,7 @@ void GL_Renderer::PostInit(GameContext* pGameContext)
 	//gNormal
 	glGenTextures(1, &gNormal);
 	glBindTexture(GL_TEXTURE_2D, gNormal);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, m_ScrWidth, m_ScrHeight, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_ScrWidth, m_ScrHeight, 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gNormal, 0);

@@ -17,6 +17,8 @@ public:
 
 	unsigned int GetGBuffer() const;
 	unsigned int GetWorldPosBuffer() const;
+	unsigned int GetNormalBuffer() const;
+	const glm::vec3& GetDirectionalLightPos() const;
 
 	ShaderProgram* GetLightDrawer() const;
 
