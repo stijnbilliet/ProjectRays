@@ -19,29 +19,41 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ********************************************************************/
-#pragma once
+#include "CLWCommandQueue.h"
+#include "CLWContext.h"
+#include "CLWDevice.h"
+#include "CLWExcept.h"
 
-#ifndef RADEON_RAYS_CL_H
-#define RADEON_RAYS_CL_H
-#define USE_OPENCL 1
-#include "radeon_rays.h"
+// Disable OCL 2.0 deprecations
+#pragma warning(push)
+#pragma warning(disable:4996)
 
-#if USE_OPENCL
-#ifdef __APPLE__
-#include <OpenCL/OpenCL.h>
-#else
-#include <CL/cl.h>
-#endif
+CLWCommandQueue CLWCommandQueue::Create(CLWDevice device, CLWContext context)
+{
+    cl_int status = CL_SUCCESS;
 
-namespace RadeonRays {
-    class IntersectionApi;
-    class Buffer;
+    cl_command_queue commandQueue = clCreateCommandQueue(context, device, CL_QUEUE_PROFILING_ENABLE, &status);
 
-    RRAPI IntersectionApi* CreateFromOpenClContext(cl_context context, cl_device_id device, cl_command_queue queue);
-    RRAPI Buffer* CreateFromOpenClBuffer(IntersectionApi* api, cl_mem buffer);
+    ThrowIf(status != CL_SUCCESS, status, "clCreateCommandQueue failed");
+
+    CLWCommandQueue cmdQueue(commandQueue);
+
+    clReleaseCommandQueue(commandQueue);
+
+    return cmdQueue;
 }
 
+CLWCommandQueue CLWCommandQueue::Create(cl_command_queue queue)
+{
+    return CLWCommandQueue(queue);
+    
+}
 
-#endif
+CLWCommandQueue::CLWCommandQueue(cl_command_queue cmdQueue)
+: ReferenceCounter<cl_command_queue, clRetainCommandQueue, clReleaseCommandQueue>(cmdQueue)
+{
+}
 
-#endif // RADEON_RAYS_CL_H
+#pragma warning(pop)
+
+

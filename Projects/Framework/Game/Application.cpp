@@ -91,11 +91,15 @@ bool Application::HandleInput()
 
 void Application::Render()
 {
-	m_pGameContext->m_pGLRenderer->Begin();
-		m_pGameContext->m_pGamemode->Draw(m_pGameContext);
-	m_pGameContext->m_pGLRenderer->End();
+	auto pGLRenderer = m_pGameContext->m_pGLRenderer;
+	auto pCLRenderer = m_pGameContext->m_pCLRenderer;
+	auto pGameMode = m_pGameContext->m_pGamemode;
 
-	m_pGameContext->m_pCLRenderer->Draw(m_pGameContext);
+	pGLRenderer->Begin();
+	pGameMode->Draw(m_pGameContext);
+	pCLRenderer->Draw(m_pGameContext);
+	pGLRenderer->LightPass();
+	pGLRenderer->End();
 }
 
 void Application::OnUpdate(GameContext* pGameContext)

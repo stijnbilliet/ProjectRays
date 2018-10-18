@@ -19,29 +19,37 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ********************************************************************/
-#pragma once
+#ifndef __CLW__CLWCommandQueue__
+#define __CLW__CLWCommandQueue__
 
-#ifndef RADEON_RAYS_CL_H
-#define RADEON_RAYS_CL_H
-#define USE_OPENCL 1
-#include "radeon_rays.h"
+#include <iostream>
+#include <memory>
 
-#if USE_OPENCL
 #ifdef __APPLE__
 #include <OpenCL/OpenCL.h>
 #else
 #include <CL/cl.h>
 #endif
 
-namespace RadeonRays {
-    class IntersectionApi;
-    class Buffer;
+#include "ReferenceCounter.h"
 
-    RRAPI IntersectionApi* CreateFromOpenClContext(cl_context context, cl_device_id device, cl_command_queue queue);
-    RRAPI Buffer* CreateFromOpenClBuffer(IntersectionApi* api, cl_mem buffer);
-}
+class CLWContext;
+class CLWDevice;
+
+class CLWCommandQueue : public ReferenceCounter<cl_command_queue, clRetainCommandQueue, clReleaseCommandQueue>
+{
+public:
+    static CLWCommandQueue Create(CLWDevice device, CLWContext context);
+    static CLWCommandQueue Create(cl_command_queue queue);
+    
+    
+    CLWCommandQueue() = default;
+    virtual ~CLWCommandQueue() = default;
+    
+    
+private:
+    CLWCommandQueue(cl_command_queue cmdQueue);
+};
 
 
-#endif
-
-#endif // RADEON_RAYS_CL_H
+#endif /* defined(__CLW__CLWCommandQueue__) */

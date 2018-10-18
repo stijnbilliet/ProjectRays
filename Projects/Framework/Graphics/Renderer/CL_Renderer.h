@@ -15,5 +15,17 @@ public:
 
 	RadeonRays::IntersectionApi* GetRaysAPI() const;
 private:
+	void InitCL(GameContext* pGameContext);
+	void InitRadeonRays(GameContext* pGameContext);
+	void InitKernels(GameContext* pGameContext);
+
 	RadeonRays::IntersectionApi* m_pApi;
+	CLWContext m_CLContext; //runtime interface between cpu and gpu
+	CLWProgram m_ShadowProgram; //one or more kernels bundled in one
+	CLWDevice m_CLDevice;
+
+	std::vector<RadeonRays::ray> m_Rays;
+	int m_ScreenWidth;
+	int m_ScreenHeight;
+	std::string m_AssetPath;
 };

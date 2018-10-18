@@ -54,6 +54,6 @@ void GMSandbox::PreInit(GameContext* pContext)
 	pContext->m_pInputManager->AddInputAction(EventFactory::CreateDesc(SDL_KEYDOWN, SDLK_e), pDown);
 
 	auto pLook = new LookAround(pContext);
-	auto output = EventFactory::CreateDesc(SDL_MOUSEBUTTONDOWN, (uint8_t)SDL_BUTTON_LEFT);
+	auto output = EventFactory::CreateDesc(SDL_KEYDOWN, SDLK_p);
 	pContext->m_pInputManager->AddInputAction(output, pLook);
 }

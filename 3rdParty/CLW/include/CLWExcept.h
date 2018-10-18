@@ -19,29 +19,34 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ********************************************************************/
-#pragma once
+#ifndef CLW_CLWExcept_h
+#define CLW_CLWExcept_h
 
-#ifndef RADEON_RAYS_CL_H
-#define RADEON_RAYS_CL_H
-#define USE_OPENCL 1
-#include "radeon_rays.h"
+#include <string>
+#include <stdexcept>
 
-#if USE_OPENCL
 #ifdef __APPLE__
 #include <OpenCL/OpenCL.h>
 #else
 #include <CL/cl.h>
 #endif
 
-namespace RadeonRays {
-    class IntersectionApi;
-    class Buffer;
+class CLWException : public std::runtime_error
+{
+public:
+    CLWException(cl_int errcode, std::string const& message)
+    : std::runtime_error(message)
+    , errcode_(errcode)
+    {
+    }
 
-    RRAPI IntersectionApi* CreateFromOpenClContext(cl_context context, cl_device_id device, cl_command_queue queue);
-    RRAPI Buffer* CreateFromOpenClBuffer(IntersectionApi* api, cl_mem buffer);
+    cl_int errcode_;
+};
+
+inline void ThrowIf(bool condition, cl_int errcode, std::string const& message)
+{
+    if (condition)
+        throw CLWException(errcode, message);
 }
 
-
 #endif
-
-#endif // RADEON_RAYS_CL_H

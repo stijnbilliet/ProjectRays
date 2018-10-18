@@ -95,4 +95,5 @@ void RayShapeComponent::OnUpdate(GameContext * pContext)
 void RayShapeComponent::OnDraw(GameContext * pContext) const
 {
 	UNREFERENCED_PARAMETER(pContext);
+
 }

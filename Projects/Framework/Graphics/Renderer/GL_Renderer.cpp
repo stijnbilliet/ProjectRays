@@ -14,6 +14,7 @@ GL_Renderer::~GL_Renderer()
 	SDL_GL_DeleteContext(m_Context);
 	SDL_DestroyWindow(m_pWindow);
 	safe_delete(m_pLightPass);
+	safe_delete(m_pSimpleShader);
 }
 
 void GL_Renderer::Begin()
@@ -30,13 +31,13 @@ void GL_Renderer::Begin()
 	//...
 }
 
-void GL_Renderer::End()
+void GL_Renderer::LightPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//2. lighting pass etc.
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	m_pLightPass->Use();
 
 	glActiveTexture(GL_TEXTURE1);
@@ -50,27 +51,27 @@ void GL_Renderer::End()
 
 	//send light relevant information
 	/*
-		for (unsigned int i = 0; i < LightManager::GetInstance().GetLights().size(); i++)
-		{
-		Light light = m_Lights[i];
-		std::string lightVarStr = "lights[" + std::to_string(i) + "]";
+	for (unsigned int i = 0; i < LightManager::GetInstance().GetLights().size(); i++)
+	{
+	Light light = m_Lights[i];
+	std::string lightVarStr = "lights[" + std::to_string(i) + "]";
 
-		unsigned int lDirectionVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Direction").c_str());
-		unsigned int lPositionVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Position").c_str());
-		unsigned int lColorVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Color").c_str());
-		unsigned int lIntensityVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Intensity").c_str());
-		unsigned int lRangeVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Range").c_str());
-		unsigned int lSpotlightAngleVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".SpotlightAngle").c_str());
-		unsigned int lTypeVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Type").c_str());
+	unsigned int lDirectionVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Direction").c_str());
+	unsigned int lPositionVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Position").c_str());
+	unsigned int lColorVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Color").c_str());
+	unsigned int lIntensityVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Intensity").c_str());
+	unsigned int lRangeVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Range").c_str());
+	unsigned int lSpotlightAngleVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".SpotlightAngle").c_str());
+	unsigned int lTypeVar = glGetUniformLocation(m_pLightPass->GetId(), (lightVarStr + ".Type").c_str());
 
-		glUniform3fv(lDirectionVar, 1, &light.Direction[0]);
-		glUniform3fv(lPositionVar, 1, &light.Position[0]);
-		glUniform3fv(lColorVar, 1, &light.Color[0]);
-		glUniform1f(lIntensityVar, light.Intensity);
-		glUniform1f(lRangeVar, light.Range);
-		glUniform1f(lSpotlightAngleVar, light.SpotlightAngle);
-		glUniform1i(lTypeVar, int(light.Type));
-		}
+	glUniform3fv(lDirectionVar, 1, &light.Direction[0]);
+	glUniform3fv(lPositionVar, 1, &light.Position[0]);
+	glUniform3fv(lColorVar, 1, &light.Color[0]);
+	glUniform1f(lIntensityVar, light.Intensity);
+	glUniform1f(lRangeVar, light.Range);
+	glUniform1f(lSpotlightAngleVar, light.SpotlightAngle);
+	glUniform1i(lTypeVar, int(light.Type));
+	}
 	*/
 
 	//send directional light
@@ -79,7 +80,10 @@ void GL_Renderer::End()
 
 	unsigned int directionalColVar = glGetUniformLocation(m_pLightPass->GetId(), "dLightCol");
 	glUniform3fv(directionalColVar, 1, &m_DirectionalCol[0]);
+}
 
+void GL_Renderer::End()
+{
 	// finally render quad
 	RenderQuad();
 
@@ -108,9 +112,24 @@ void GL_Renderer::End()
 	SDL_GL_SwapWindow(m_pWindow);
 }
 
+const SDL_GLContext & GL_Renderer::GetGLContext() const
+{
+	return m_Context;
+}
+
+SDL_Window * GL_Renderer::GetWindow() const
+{
+	return m_pWindow;
+}
+
 unsigned int GL_Renderer::GetGBuffer() const
 {
 	return m_gBuffer;
+}
+
+unsigned int GL_Renderer::GetWorldPosBuffer() const
+{
+	return gPosition;
 }
 
 ShaderProgram * GL_Renderer::GetLightDrawer() const
@@ -189,7 +208,7 @@ void GL_Renderer::PostInit(GameContext* pGameContext)
 	//gPosition
 	glGenTextures(1, &gPosition);
 	glBindTexture(GL_TEXTURE_2D, gPosition);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, m_ScrWidth, m_ScrHeight, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_ScrWidth, m_ScrHeight, 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPosition, 0);

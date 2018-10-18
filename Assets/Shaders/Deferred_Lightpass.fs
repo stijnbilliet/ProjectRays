@@ -31,7 +31,7 @@ void main()
     float spec = pow(max(dot(Normal, halfwayDir), 0.0), 16.0);
     vec3 specular = dLightCol * spec;
 	LightAcc += specular;
-	
+
 	Diffuse = diffuse * LightAcc;
     FragColor = vec4(Diffuse, 1.0f);
 }

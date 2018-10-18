@@ -9,9 +9,15 @@ public:
 	virtual ~GL_Renderer();
 
 	void Begin();
+	void LightPass();
 	void End();
 
+	const SDL_GLContext& GetGLContext() const;
+	SDL_Window* GetWindow() const;
+
 	unsigned int GetGBuffer() const;
+	unsigned int GetWorldPosBuffer() const;
+
 	ShaderProgram* GetLightDrawer() const;
 
 	virtual void OnInit(GameContext* pGameContext) override;
@@ -30,6 +36,7 @@ private:
 
 	std::string m_WindowTitle;
 	ShaderProgram* m_pLightPass;
+	ShaderProgram* m_pSimpleShader;
 
 	glm::vec3 m_DirectionalPos;
 	glm::vec3 m_DirectionalCol;

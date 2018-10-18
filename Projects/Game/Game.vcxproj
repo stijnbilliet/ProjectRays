@@ -115,13 +115,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>GamePCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad\include;$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\stb_image\include;$(SolutionDir)3rdParty\RadeonRays\include;$(SolutionDir)3rdParty\OpenCL\include;$(SolutionDir)3rdParty\glm;../Framework/;%(AdditionalIncludeDirectories);$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad\include;$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\stb_image\include;$(SolutionDir)3rdParty\RadeonRays\include;$(SolutionDir)3rdParty\OpenCL\include;$(SolutionDir)3rdParty\CLW\include;$(SolutionDir)3rdParty\glm;../Framework/;%(AdditionalIncludeDirectories);$(ProjectDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\SDL\lib\$(platform);$(SolutionDir)3rdParty\assimp\lib\$(platform)\$(configuration);$(SolutionDir)3rdParty\RadeonRays\lib\$(platform)\$(configuration);$(SolutionDir)3rdParty\OpenCL\lib\$(platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\SDL\lib\$(platform);$(SolutionDir)3rdParty\assimp\lib\$(platform)\$(configuration);$(SolutionDir)3rdParty\RadeonRays\lib\$(platform)\$(configuration);$(SolutionDir)3rdParty\OpenCL\lib\$(platform);$(SolutionDir)3rdParty\CLW\lib\$(platform)\$(configuration)</AdditionalLibraryDirectories>
+      <PerUserRedirection>true</PerUserRedirection>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -154,7 +155,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad\include;$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\stb_image\include;$(SolutionDir)3rdParty\RadeonRays\include;$(SolutionDir)3rdParty\OpenCL\include;$(SolutionDir)3rdParty\glm;../Framework/;%(AdditionalIncludeDirectories);$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad\include;$(SolutionDir)3rdParty\SDL\include;$(SolutionDir)3rdParty\assimp\include;$(SolutionDir)3rdParty\stb_image\include;$(SolutionDir)3rdParty\RadeonRays\include;$(SolutionDir)3rdParty\OpenCL\include;$(SolutionDir)3rdParty\CLW\include;$(SolutionDir)3rdParty\glm;../Framework/;%(AdditionalIncludeDirectories);$(ProjectDir)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>GamePCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -162,8 +163,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\SDL\lib\$(platform);$(SolutionDir)3rdParty\assimp\lib\$(platform)\$(configuration);$(SolutionDir)3rdParty\RadeonRays\lib\$(platform)\$(configuration);$(SolutionDir)3rdParty\OpenCL\lib\$(platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\SDL\lib\$(platform);$(SolutionDir)3rdParty\assimp\lib\$(platform)\$(configuration);$(SolutionDir)3rdParty\RadeonRays\lib\$(platform)\$(configuration);$(SolutionDir)3rdParty\OpenCL\lib\$(platform);$(SolutionDir)3rdParty\CLW\lib\$(platform)\$(configuration)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <PerUserRedirection>true</PerUserRedirection>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
