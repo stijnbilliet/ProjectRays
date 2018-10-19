@@ -145,7 +145,6 @@ void CL_Renderer::GenerateShadowRays(GameContext * pGameContext)
 	m_CLContext.Flush(0);
 
 	//Fetch results
-	//TODO MIGHT BE CORRUPT BECAUSE RAY BUFFERS ARE NOT SAME SIZE
 	m_RRaysBuffer = CreateFromOpenClBuffer(m_pRRContext, m_CLGLRaysBuffer);
 }
 
@@ -201,7 +200,4 @@ void CL_Renderer::RaytracedShadows(GameContext* pGameContext)
 	m_pRRContext->QueryOcclusion(m_RRaysBuffer, m_ScreenWidth*m_ScreenHeight, m_OcclusionBuffer, nullptr, nullptr);
 
 	//Get results
-
-	//Copy results
-
 }

@@ -20,15 +20,12 @@ __kernel void GenerateShadowRays(int width, int height, float4 lightPos, __globa
 	float4 Normal = read_imagef(normalBuffer, SMPL_PREF, (int2)texCoords);
 	Normal = normalize(Normal);
 	
-    if (texCoords.x < width && texCoords.y < height)
-	{
-		int k = texCoords.y * width + texCoords.x;
-		float4 dir = lightPos - worldPos;
-		rays[k].d = normalize(dir);
-		rays[k].o = worldPos + Normal * EPSILON;
-		rays[k].o.w = length(dir);
-		
-		rays[k].extra.x = 0xFFFFFFFF;
-		rays[k].extra.y = 0xFFFFFFFF;
-	}
+	int k = texCoords.y * width + texCoords.x;
+	float4 dir = lightPos - worldPos;
+	rays[k].d = normalize(dir);
+	rays[k].o = worldPos + Normal * EPSILON;
+	rays[k].o.w = length(dir);
+	
+	rays[k].extra.x = 0xFFFFFFFF;
+	rays[k].extra.y = 0xFFFFFFFF;
 }
