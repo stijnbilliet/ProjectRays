@@ -32,7 +32,9 @@ void SponzaScene::PreInit(GameContext * pContext)
 		//pMesh->SetTextures();
 
 		auto pMeshDrawComponent = new MeshDrawComponent(pMesh, pShaderProgram);
+		auto pRaytraceComponent = new RayShapeComponent(pMesh);
 		pChildObj->GetTransform()->Scale(1/80.0f, 1/ 80.0f, 1/ 80.0f);
 		pChildObj->AddComponent(pMeshDrawComponent);
+		pChildObj->AddComponent(pRaytraceComponent);
 	}
 }

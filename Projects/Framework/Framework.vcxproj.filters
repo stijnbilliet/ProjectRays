@@ -180,12 +180,6 @@
     <ClInclude Include="Components\RayShapeComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Kernel\Kernel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Kernel\KernelProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scenegraph\GameObject.cpp">
@@ -303,12 +297,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\RayShapeComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Kernel\Kernel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Kernel\KernelProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

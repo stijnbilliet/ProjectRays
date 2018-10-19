@@ -317,7 +317,7 @@ void GL_Renderer::ImGuiOnDraw()
 	ImGui::End();
 
 	ImGui::Begin("Light");
-		ImGui::SliderFloat3("Light Position", (float*)&m_DirectionalPos, -40.0f, 40.0f); // Edit 1 float using a slider from 0.0f to 1.0f    
+		ImGui::SliderFloat3("Light Position", (float*)&m_DirectionalPos, -200.0f, 200.0f); // Edit 1 float using a slider from 0.0f to 1.0f    
 		ImGui::ColorEdit3("Light Color", (float*)&m_DirectionalCol); // Edit 3 floats representing a color
 	ImGui::End();
 }

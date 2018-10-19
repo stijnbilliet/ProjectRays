@@ -20,7 +20,7 @@ private:
 	void InitKernels(GameContext* pGameContext);
 	void GenerateShadowRays(GameContext* pGameContext);
 
-	void InitShadowKernel(GameContext* pGameContext, const char* buildOpts, int* status);
+	void InitShadowKernel(GameContext* pGameContext);
 
 	//Radeon rays context
 	RadeonRays::IntersectionApi* m_pRRContext;

@@ -13,11 +13,6 @@ typedef struct _Ray
 	int padding;
 } Ray;
 
-__kernel void SimpleKernel(int i, __global int* k)
-{
-	k += i;
-}
-
 __kernel void GenerateShadowRays(int width, int height, float4 lightPos, __global Ray* rays, __read_only image2d_t worldPosBuffer, __read_only image2d_t normalBuffer)
 {
 	const int2 texCoords = {get_global_id(0), get_global_id(1)};

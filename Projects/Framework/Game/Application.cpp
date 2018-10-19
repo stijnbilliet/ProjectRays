@@ -97,6 +97,7 @@ void Application::Render()
 
 	pGLRenderer->Begin();
 	pGameMode->Draw(m_pGameContext);
+	glFinish();
 	pCLRenderer->RaytracedShadows(m_pGameContext);
 	pGLRenderer->LightPass();
 	pGLRenderer->End();
