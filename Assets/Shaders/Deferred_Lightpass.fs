@@ -32,6 +32,6 @@ void main()
     vec3 specular = dLightCol * spec;
 	LightAcc += specular;
 
-	Diffuse = diffuse * LightAcc;
+	Diffuse = diffuse * LightAcc.r;
     FragColor = vec4(Diffuse, 1.0f);
 }

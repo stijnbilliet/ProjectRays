@@ -10,6 +10,7 @@ public:
 
 	virtual void OnUpdate(GameContext* pContext) override;
 	virtual void PreInit(GameContext* pContext) override;
+	virtual void PostInit(GameContext* pContext) override;
 private:
 	GameObject * m_pTestObject;
 	Model* m_pModel;

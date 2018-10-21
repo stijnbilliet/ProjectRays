@@ -21,5 +21,5 @@ void main()
     // and the diffuse per-fragment color
     gAlbedo.rgb = texture(texture_diffuse1, TexCoords).rgb;
 	//gLightAcc
-	gLightAcc = texture(texture_ambient1, TexCoords);
+	gLightAcc.r = texture(texture_ambient1, TexCoords).r;
 }

@@ -26,7 +26,7 @@ void RenderTestScene::OnUpdate(GameContext* pContext)
 
 void RenderTestScene::PreInit(GameContext* pContext)
 {
-	Super::OnInit(pContext);
+	Super::PreInit(pContext);
 
 	//Create object
 	m_pTestObject = new GameObject();
@@ -52,8 +52,14 @@ void RenderTestScene::PreInit(GameContext* pContext)
 	m_pTestObject->AddComponent(pRayShapeComponent);
 
 	//Translate object and add to scene
-	m_pTestObject->GetTransform()->Translate(0.0f, -7.5f, -25.0f);
+	m_pTestObject->GetTransform()->Translate(10.0f, 0.0f, -25.0f);
 	m_pTestObject->GetTransform()->Scale(1/20.0f, 1/20.0f, 1/ 20.0f);
-
 	Add(m_pTestObject);
+}
+
+void RenderTestScene::PostInit(GameContext * pContext)
+{
+	Super::PostInit(pContext);
+
+	pContext->m_pActiveCamera->GetGameObject()->GetTransform()->Translate(10.0f, 7.5f, 0.0f);
 }

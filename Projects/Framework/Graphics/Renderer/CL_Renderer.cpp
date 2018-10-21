@@ -44,6 +44,8 @@ void CL_Renderer::OnInit(GameContext* pGameContext)
 	PropertyManager::GetInstance().GetInt("renderer_viewheight", m_ScreenHeight);
 	PropertyManager::GetInstance().GetString("assetpath", m_AssetPath);
 
+	m_OcclusionData.reserve(m_ScreenWidth*m_ScreenHeight);
+
 	InitCL(pGameContext);
 	InitRadeonRays(pGameContext);
 	InitKernels(pGameContext);
@@ -51,7 +53,7 @@ void CL_Renderer::OnInit(GameContext* pGameContext)
 
 void CL_Renderer::OnUpdate(GameContext * pContext)
 {
-	RaytracedShadows(pContext);
+	UNREFERENCED_PARAMETER(pContext);
 }
 
 IntersectionApi* CL_Renderer::GetRaysAPI() const
@@ -108,6 +110,9 @@ void CL_Renderer::InitRadeonRays(GameContext* pGameContext)
 	cl_command_queue queue = m_CLContext.GetCommandQueue(0);
 
 	m_pRRContext = RadeonRays::CreateFromOpenClContext(m_CLContext, id, queue);
+	m_pRRContext->SetOption("bvh.force2level", 1.0f);
+	m_pRRContext->SetOption("bvh.type", "hlbvh");
+	m_pRRContext->SetOption("bvh.builder", "median");
 }
 
 void CL_Renderer::InitKernels(GameContext* pGameContext)
@@ -155,6 +160,10 @@ void CL_Renderer::InitShadowKernel(GameContext * pGameContext)
 	auto gWorldPosBuffer = pGLRenderer->GetWorldPosBuffer();
 	auto gNormalBuffer = pGLRenderer->GetNormalBuffer();
 
+	cl_image_format imgFmt;
+	imgFmt.image_channel_order = CL_RGB;
+	imgFmt.image_channel_data_type = CL_FLOAT;
+
 	//Init Buffers
 	int status = 0;
 	m_CLGLWorldPosBuffer = clCreateFromGLTexture(m_CLContext, CL_MEM_READ_ONLY, GL_TEXTURE_2D, 0, gWorldPosBuffer, &status);
@@ -165,10 +174,12 @@ void CL_Renderer::InitShadowKernel(GameContext * pGameContext)
 	if (status != 0) Logger::GetInstance().Logf(ELogLevel::ERR0R, "Texture sharing failed (gNormal buffer) %i", status);
 
 	status = 0;
-	m_CLGLRaysBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(RadeonRays::ray), nullptr, &status);
+	m_RayData.reserve(m_ScreenWidth*m_ScreenHeight);
+	m_CLGLRaysBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(RadeonRays::ray), m_RayData.data(), &status);
 	if (status != 0) Logger::GetInstance().Logf(ELogLevel::ERR0R, "Buffer creation failed (rays buffer) %i", status);
 
-	m_OcclusionBuffer = m_pRRContext->CreateBuffer(m_ScreenWidth*m_ScreenHeight*sizeof(int), nullptr);
+	m_OcclusionData.reserve(m_ScreenWidth*m_ScreenHeight);
+	m_OcclusionBuffer = m_pRRContext->CreateBuffer(m_ScreenWidth*m_ScreenHeight*sizeof(int), m_OcclusionData.data());
 
 	auto dirLightPos = pGameContext->m_pGLRenderer->GetDirectionalLightPos();
 	cl_float4 light_cl = { dirLightPos.x, dirLightPos.y, dirLightPos.z, 1.0f };
@@ -187,17 +198,45 @@ void CL_Renderer::RaytracedShadows(GameContext* pGameContext)
 {
 	//Prepare rays
 	auto commandQueue = m_CLContext.GetCommandQueue(0);
-	clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLWorldPosBuffer, 0, nullptr, nullptr);
-	clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLNormalBuffer, 0, nullptr, nullptr);
-	{
-		GenerateShadowRays(pGameContext);
-	}
-	clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLWorldPosBuffer, 0, nullptr, nullptr);
-	clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLNormalBuffer, 0, nullptr, nullptr);
-	clFinish(m_CLContext.GetCommandQueue(0));
+	cl_int status = CL_SUCCESS;
+
+	status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLWorldPosBuffer, 0, nullptr, nullptr);
+	if (status != 0) Logger::GetInstance().Logf(ELogLevel::ERR0R, "clEnqueueAcquireGLObjects failed (m_CLGLWorldPosBuffer) %i", status);
+	
+	status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLNormalBuffer, 0, nullptr, nullptr);
+	if (status != 0) Logger::GetInstance().Logf(ELogLevel::ERR0R, "clEnqueueAcquireGLObjects failed (m_CLGLNormalBuffer) %i", status);
+
+	//Generate shadow rays
+	GenerateShadowRays(pGameContext);
+
+	status = clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLWorldPosBuffer, 0, nullptr, nullptr);
+	if (status != 0) Logger::GetInstance().Logf(ELogLevel::ERR0R, "clEnqueueReleaseGLObjects failed (m_CLGLWorldPosBuffer) %i", status);
+
+	//TODO: WONT RELEASE NORMALBUFFER IN DEBUG
+	status = clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLNormalBuffer, 0, nullptr, nullptr);
+	if (status != 0) Logger::GetInstance().Logf(ELogLevel::ERR0R, "clEnqueueReleaseGLObjects failed (m_CLGLNormalBuffer) %i", status);
+
+	//NO LONGER NEEDED SEEING KHR EVENT EXTENSION IS SUPPORTED
+	//clFinish(m_CLContext.GetCommandQueue(0));
 
 	//Query occlusion
 	m_pRRContext->QueryOcclusion(m_RRaysBuffer, m_ScreenWidth*m_ScreenHeight, m_OcclusionBuffer, nullptr, nullptr);
 
 	//Get results
+	//TODO: RESULTS ARE NOT AS EXPECTED
+	RadeonRays::Event* e = nullptr;
+	int* pTemp;
+	m_pRRContext->MapBuffer(m_OcclusionBuffer, kMapRead, 0, m_ScreenWidth*m_ScreenHeight * sizeof(int), (void**)&pTemp, &e);
+	e->Wait();
+
+	for (int i = 0; i < m_ScreenWidth*m_ScreenHeight; ++i)
+	{
+		m_OcclusionData.push_back(pTemp[i]);
+	}
+
+	m_pRRContext->UnmapBuffer(m_OcclusionBuffer, pTemp, &e);
+	m_pRRContext->DeleteEvent(e);
+	e = nullptr;
+
+	m_OcclusionData.clear();
 }

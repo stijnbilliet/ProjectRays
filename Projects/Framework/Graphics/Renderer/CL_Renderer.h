@@ -42,6 +42,9 @@ private:
 	RadeonRays::Buffer* m_RRaysBuffer;
 	RadeonRays::Buffer* m_OcclusionBuffer;
 
+	std::vector<int> m_OcclusionData;
+	std::vector<RadeonRays::ray> m_RayData;
+
 	int m_ScreenWidth;
 	int m_ScreenHeight;
 	std::string m_AssetPath;
