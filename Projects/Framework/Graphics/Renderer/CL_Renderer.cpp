@@ -101,10 +101,8 @@ void CL_Renderer::InitCL(GameContext* pGameContext)
 	Logger::GetInstance().LogInfo(clInfo.str());
 }
 
-void CL_Renderer::InitRadeonRays(GameContext* pGameContext)
+void CL_Renderer::InitRadeonRays(GameContext*)
 {
-	UNREFERENCED_PARAMETER(pGameContext);
-
 	//Init RadeonRays from previously created openCL context
 	cl_device_id id = m_CLDevice.GetID();
 	cl_command_queue queue = m_CLContext.GetCommandQueue(0);
@@ -125,10 +123,8 @@ void CL_Renderer::InitKernels(GameContext* pGameContext)
 	InitShadowKernel(pGameContext);
 }
 
-void CL_Renderer::GenerateShadowRays(GameContext * pGameContext)
+void CL_Renderer::GenerateShadowRays(GameContext* pGameContext)
 {
-	UNREFERENCED_PARAMETER(pGameContext);
-
 	//Fetch new light position
 	auto dirLightPos = pGameContext->m_pGLRenderer->GetDirectionalLightPos();
 	cl_float4 light_cl = { dirLightPos.x, dirLightPos.y, dirLightPos.z, 1.0f };
@@ -150,7 +146,7 @@ void CL_Renderer::GenerateShadowRays(GameContext * pGameContext)
 	m_CLContext.Flush(0);
 
 	//Fetch results
-	m_RRaysBuffer = CreateFromOpenClBuffer(m_pRRContext, m_CLGLRaysBuffer);
+	m_RaysBuffer = CreateFromOpenClBuffer(m_pRRContext, m_CLRRRaysBuffer);
 }
 
 void CL_Renderer::InitShadowKernel(GameContext * pGameContext)
@@ -175,11 +171,16 @@ void CL_Renderer::InitShadowKernel(GameContext * pGameContext)
 
 	status = 0;
 	m_RayData.reserve(m_ScreenWidth*m_ScreenHeight);
-	m_CLGLRaysBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(RadeonRays::ray), m_RayData.data(), &status);
+	std::fill(m_RayData.begin(), m_RayData.end(), RadeonRays::ray{});
+	m_CLRRRaysBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(RadeonRays::ray), m_RayData.data(), &status);
 	if (status != 0) Logger::GetInstance().Logf(ELogLevel::ERR0R, "Buffer creation failed (rays buffer) %i", status);
 
+	status = 0;
 	m_OcclusionData.reserve(m_ScreenWidth*m_ScreenHeight);
-	m_OcclusionBuffer = m_pRRContext->CreateBuffer(m_ScreenWidth*m_ScreenHeight*sizeof(int), m_OcclusionData.data());
+	std::fill(m_OcclusionData.begin(), m_OcclusionData.end(), -1);
+	m_CLRROcclusionBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(int), m_OcclusionData.data(), &status);
+	m_OcclusionBuffer = CreateFromOpenClBuffer(m_pRRContext, m_CLRROcclusionBuffer);
+	if (status != 0) Logger::GetInstance().Logf(ELogLevel::ERR0R, "Buffer creation failed (rays buffer) %i", status);
 
 	auto dirLightPos = pGameContext->m_pGLRenderer->GetDirectionalLightPos();
 	cl_float4 light_cl = { dirLightPos.x, dirLightPos.y, dirLightPos.z, 1.0f };
@@ -189,7 +190,7 @@ void CL_Renderer::InitShadowKernel(GameContext * pGameContext)
 	m_ShadowRayGenerator.SetArg(0, m_ScreenWidth);
 	m_ShadowRayGenerator.SetArg(1, m_ScreenHeight);
 	m_ShadowRayGenerator.SetArg(2, light_cl);
-	m_ShadowRayGenerator.SetArg(3, sizeof(cl_mem), &m_CLGLRaysBuffer);
+	m_ShadowRayGenerator.SetArg(3, sizeof(cl_mem), &m_CLRRRaysBuffer);
 	m_ShadowRayGenerator.SetArg(4, sizeof(cl_mem), &m_CLGLWorldPosBuffer);
 	m_ShadowRayGenerator.SetArg(5, sizeof(cl_mem), &m_CLGLNormalBuffer);
 }
@@ -220,7 +221,7 @@ void CL_Renderer::RaytracedShadows(GameContext* pGameContext)
 	//clFinish(m_CLContext.GetCommandQueue(0));
 
 	//Query occlusion
-	m_pRRContext->QueryOcclusion(m_RRaysBuffer, m_ScreenWidth*m_ScreenHeight, m_OcclusionBuffer, nullptr, nullptr);
+	m_pRRContext->QueryOcclusion(m_RaysBuffer, m_ScreenWidth*m_ScreenHeight, m_OcclusionBuffer, nullptr, nullptr);
 
 	//Get results
 	//TODO: RESULTS ARE NOT AS EXPECTED

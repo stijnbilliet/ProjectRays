@@ -36,12 +36,12 @@ private:
 	//KernelData
 	cl_mem m_CLGLWorldPosBuffer;
 	cl_mem m_CLGLNormalBuffer;
-	cl_mem m_CLGLRaysBuffer;
+	cl_mem m_CLRRRaysBuffer;
+	cl_mem m_CLRROcclusionBuffer;
 
 	//Radeon rays data
-	RadeonRays::Buffer* m_RRaysBuffer;
+	RadeonRays::Buffer* m_RaysBuffer;
 	RadeonRays::Buffer* m_OcclusionBuffer;
-
 	std::vector<int> m_OcclusionData;
 	std::vector<RadeonRays::ray> m_RayData;
 
