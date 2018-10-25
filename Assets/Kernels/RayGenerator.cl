@@ -24,13 +24,13 @@ __kernel void GenerateLightingMask(__global int* occlusions, __write_only image2
 	
 	//Get 1D global index
 	int k = imgCoord.y * dimensions.x + imgCoord.x;
-	float4 fragmentColor = (0.0f, 0.0f, 0.0f, 1.0f);
+	float4 fragmentColor = (float4)(1.0f, 1.0f, 1.0f, 1.0f);
 	
 	//Check if ray did occlude (-1 no hit; 1 hit)
 	//Shade respectively (-1 light; 1 dark)
 	if(occlusions[k] == 1)
 	{
-		fragmentColor = (0.0f, 0.0f, 0.0f, 0.0f);
+		fragmentColor = (float4)(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 	
 	//Write info to lightmask
@@ -60,10 +60,9 @@ __read_only image2d_t worldPosBuffer, __read_only image2d_t normalBuffer)
 	
 	//Create rays
 	__global Ray* my_ray = rays + k;
-	
 	my_ray->o = worldPos + Normal * 0.005f;
 	my_ray->d = normalize(dir);
-	my_ray->o.w = length(dir.xyz);	
+	my_ray->o.w = 1000.0f;
 	my_ray->extra.x = 0xFFFFFFFF;
 	my_ray->extra.y = 0xFFFFFFFF;
 }

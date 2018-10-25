@@ -23,7 +23,7 @@ void Scene::OnInit(GameContext* pGameContext)
 	pGameContext->m_pActiveCamera = m_pActiveCamera;
 
 	pCamera->AddComponent(m_pActiveCamera);
-	pCamera->GetTransform()->Translate(0.0f, 0.0f, 0.0f);
+	pCamera->GetTransform()->Translate(0.0f, 10.0f, 20.0f);
 	Add(pCamera);
 
 	for (auto gameObject : m_pObjects)

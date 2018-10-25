@@ -131,7 +131,7 @@ void CL_Renderer::GenerateShadowRays(GameContext* pGameContext)
 	CL_ERROR_CHECK(status, "clEnqueueAcquireGLObjects failed (m_CLGLNormalBuffer)");
 
 	//Send new information to shader
-	m_ShadowRayGenerator.SetArg(0, light_cl);
+	m_ShadowRayGenerator.SetArg(0, sizeof(cl_float4), &light_cl);
 	m_ShadowRayGenerator.SetArg(1, sizeof(cl_mem), &m_CLRRRaysBuffer);
 	m_ShadowRayGenerator.SetArg(2, sizeof(cl_mem), &m_CLGLWorldPosBuffer);
 	m_ShadowRayGenerator.SetArg(3, sizeof(cl_mem), &m_CLGLNormalBuffer);

@@ -4,6 +4,7 @@
 #include "Gamemode/InputActions.h"
 #include "Components/CameraComponent.h"
 #include "Scenes/SponzaScene.h"
+#include "Scenes/ShadowTestScene.h"
 
 using Super = BaseGamemode;
 
@@ -29,10 +30,13 @@ void GMSandbox::PreInit(GameContext* pContext)
 	//Level
 	auto pRenderTest = new RenderTestScene();
 	auto pSponzaScene = new SponzaScene();
+	auto pShadowTestScene = new ShadowTestScene();
+
 	pContext->m_pSceneManager->Add(pRenderTest);
 	pContext->m_pSceneManager->Add(pSponzaScene);
+	pContext->m_pSceneManager->Add(pShadowTestScene);
 
-	pContext->m_pSceneManager->SetActive("RenderTestScene");
+	pContext->m_pSceneManager->SetActive("ShadowTestScene");
 
 	//Input
 	auto pForward = new Forward(pContext);
