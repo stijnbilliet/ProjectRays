@@ -12,15 +12,18 @@ public:
 	virtual void OnInit(GameContext* pGameContext) override;
 	virtual void OnUpdate(GameContext* pContext) override;
 
-	void RaytracedShadows(GameContext* pGameContext);
-	RadeonRays::IntersectionApi* GetRaysAPI() const;
-private:
 	void InitCL(GameContext* pGameContext);
 	void InitRadeonRays(GameContext* pGameContext);
 	void InitKernels(GameContext* pGameContext);
-	void GenerateShadowRays(GameContext* pGameContext);
 
-	void InitShadowKernel(GameContext* pGameContext);
+	void RaytracedShadows(GameContext* pGameContext);
+	RadeonRays::IntersectionApi* GetRaysAPI() const;
+private:
+	void GenerateShadowRays(GameContext* pGameContext);
+	void GenerateLightingMask(GameContext* pGameContext);
+
+	void InitShadowRaysKernel(GameContext* pGameContext);
+	void InitLightMaskKernel(GameContext* pGameContext);
 
 	//Radeon rays context
 	RadeonRays::IntersectionApi* m_pRRContext;
@@ -32,18 +35,21 @@ private:
 	//Kernels
 	CLWProgram m_RayGenerator; //one or more kernels bundled in one
 	CLWKernel m_ShadowRayGenerator;
+	CLWKernel m_LightMaskGenerator;
 
 	//KernelData
 	cl_mem m_CLGLWorldPosBuffer;
 	cl_mem m_CLGLNormalBuffer;
+	cl_mem m_CLGLLightBuffer;
 	cl_mem m_CLRRRaysBuffer;
 	cl_mem m_CLRROcclusionBuffer;
 
 	//Radeon rays data
 	RadeonRays::Buffer* m_RaysBuffer;
 	RadeonRays::Buffer* m_OcclusionBuffer;
-	std::vector<int> m_OcclusionData;
-	std::vector<RadeonRays::ray> m_RayData;
+
+	RadeonRays::ray* m_RayData;
+	int* m_OcclusionData;
 
 	int m_ScreenWidth;
 	int m_ScreenHeight;

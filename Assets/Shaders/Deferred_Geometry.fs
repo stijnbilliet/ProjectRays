@@ -17,9 +17,10 @@ void main()
 	// store the fragment position vector in the first gbuffer texture
     gPosition = FragPos;
     // also store the per-fragment normals into the gbuffer
-    gNormal.rgb = normalize(Normal);
+    gNormal = normalize(Normal);
     // and the diffuse per-fragment color
-    gAlbedo.rgb = texture(texture_diffuse1, TexCoords).rgb;
+    gAlbedo = texture(texture_diffuse1, TexCoords);
 	//gLightAcc
-	gLightAcc.r = texture(texture_ambient1, TexCoords).r;
+	gLightAcc = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	//gLightAcc.r = texture(texture_ambient1, TexCoords).r;
 }

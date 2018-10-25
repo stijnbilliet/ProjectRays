@@ -24,14 +24,15 @@ void main()
     vec3 lightDir = normalize(dLightPos - FragPos);
 	
 	// diffuse
-    vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * dLightCol;
+    vec3 diffuse = max(dot(Normal, lightDir), 0.0f) * Diffuse * dLightCol;
 	
     // specular
     vec3 halfwayDir = normalize(lightDir + viewDir);  
-    float spec = pow(max(dot(Normal, halfwayDir), 0.0), 16.0);
+    float spec = pow(max(dot(Normal, halfwayDir), 0.0f), 16.0);
     vec3 specular = dLightCol * spec;
-	LightAcc += specular;
-
-	Diffuse = diffuse * LightAcc.r;
+	
+	Diffuse = (diffuse * LightAcc)+ specular;
+	clamp(Diffuse, 0.0f, 1.0f);
+	
     FragColor = vec4(Diffuse, 1.0f);
 }

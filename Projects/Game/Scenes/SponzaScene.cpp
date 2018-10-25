@@ -28,8 +28,7 @@ void SponzaScene::PreInit(GameContext * pContext)
 		auto pChildObj = new GameObject();
 		pSceneObj->Add(pChildObj);
 
-		auto pMesh = &m_Meshes[i];
-		//pMesh->SetTextures();
+		Mesh* pMesh = &m_Meshes[i];
 
 		auto pMeshDrawComponent = new MeshDrawComponent(pMesh, pShaderProgram);
 		auto pRaytraceComponent = new RayShapeComponent(pMesh);

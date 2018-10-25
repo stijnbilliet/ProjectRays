@@ -2,7 +2,7 @@
 #include "GL_Renderer.h"
 
 GL_Renderer::GL_Renderer()
-	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false), m_ScrWidth(), m_ScrHeight(), m_gBuffer(), m_WindowTitle(), m_DirectionalPos(glm::vec3(0.0f, 40.0f, 40.0f)), m_DirectionalCol(glm::vec3(1.0f, 1.0f, 1.0f))
+	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false), m_ScrWidth(), m_ScrHeight(), m_gBuffer(), m_WindowTitle(), m_DirectionalPos(glm::vec3(-200.0f, 200.0f, 200.0f)), m_DirectionalCol(glm::vec3(1.0f, 0.9f, 0.8f))
 {
 }
 
@@ -136,6 +136,11 @@ unsigned int GL_Renderer::GetNormalBuffer() const
 	return gNormal;
 }
 
+unsigned int GL_Renderer::GetLightBuffer() const
+{
+	return gLightAcc;
+}
+
 const glm::vec3 & GL_Renderer::GetDirectionalLightPos() const
 {
 	return m_DirectionalPos;
@@ -241,7 +246,7 @@ void GL_Renderer::PostInit(GameContext* pGameContext)
 	//gLightAcc
 	glGenTextures(1, &gLightAcc);
 	glBindTexture(GL_TEXTURE_2D, gLightAcc);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_ScrWidth, m_ScrHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_ScrWidth, m_ScrHeight, 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, gLightAcc, 0);

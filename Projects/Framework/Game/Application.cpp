@@ -60,15 +60,19 @@ void Application::ParseCmdLineArgs()
 
 void Application::FillPropertyManager()
 {
-	PropertyManager::GetInstance().Add("renderer_viewwidth", "1920");
-	PropertyManager::GetInstance().Add("renderer_viewheight", "1080");
+	PropertyManager::GetInstance().Add("renderer_viewwidth", "1280");
+	PropertyManager::GetInstance().Add("renderer_viewheight", "720");
 	PropertyManager::GetInstance().Add("windowtitle", "ProjectRays(OpenGL+RadeonRays)");
 }
 
 void Application::OnInit(GameContext* pGameContext)
 {
-	m_pGameContext->m_pGLRenderer->Init(pGameContext);
+	m_pGameContext->m_pGLRenderer->OnInit(pGameContext);
 	m_pGameContext->m_pCLRenderer->Init(pGameContext);
+	m_pGameContext->m_pCLRenderer->InitCL(pGameContext);
+	m_pGameContext->m_pGLRenderer->PostInit(pGameContext);
+	m_pGameContext->m_pCLRenderer->InitRadeonRays(pGameContext);
+	m_pGameContext->m_pCLRenderer->InitKernels(pGameContext);
 	m_pGameContext->m_pGamemode->Init(pGameContext);
 }
 
@@ -97,7 +101,6 @@ void Application::Render()
 
 	pGLRenderer->Begin();
 	pGameMode->Draw(m_pGameContext);
-	//glFinish();
 	pCLRenderer->RaytracedShadows(m_pGameContext);
 	pGLRenderer->LightPass();
 	pGLRenderer->End();

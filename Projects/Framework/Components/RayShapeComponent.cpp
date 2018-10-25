@@ -45,7 +45,7 @@ void RayShapeComponent::OnInit(GameContext* pContext)
 
 	if (indicesVect.size() == 0)
 	{
-		Logger::GetInstance().LogInfo("No vertices found while trying to create Rayshapecomponent\n");
+		Logger::GetInstance().LogInfo("No indices found while trying to create Rayshapecomponent\n");
 		return;
 	}
 
