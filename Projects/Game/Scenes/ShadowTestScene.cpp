@@ -39,3 +39,9 @@ void ShadowTestScene::PreInit(GameContext * pContext)
 		pChildObj->AddComponent(pRaytraceComponent);
 	}
 }
+
+void ShadowTestScene::PostInit(GameContext * pContext)
+{
+	Super::PostInit(pContext);
+	pContext->m_pActiveCamera->GetGameObject()->GetTransform()->Translate(10.0f, 10.0f, 20.0f);
+}

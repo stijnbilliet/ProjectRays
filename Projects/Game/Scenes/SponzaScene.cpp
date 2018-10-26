@@ -32,8 +32,13 @@ void SponzaScene::PreInit(GameContext * pContext)
 
 		auto pMeshDrawComponent = new MeshDrawComponent(pMesh, pShaderProgram);
 		auto pRaytraceComponent = new RayShapeComponent(pMesh);
-		pChildObj->GetTransform()->Scale(1/80.0f, 1/ 80.0f, 1/ 80.0f);
 		pChildObj->AddComponent(pMeshDrawComponent);
 		pChildObj->AddComponent(pRaytraceComponent);
 	}
+}
+
+void SponzaScene::PostInit(GameContext * pContext)
+{
+	Super::PostInit(pContext);
+	pContext->m_pActiveCamera->GetGameObject()->GetTransform()->Translate(0.0f, 0.0f, 0.0f);
 }

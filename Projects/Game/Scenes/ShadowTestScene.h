@@ -6,6 +6,7 @@ public:
 	virtual ~ShadowTestScene();
 
 	virtual void PreInit(GameContext* pContext) override;
+	virtual void PostInit(GameContext* pContext) override;
 private:
 	Model* m_pModel;
 };

@@ -36,7 +36,7 @@ void GMSandbox::PreInit(GameContext* pContext)
 	pContext->m_pSceneManager->Add(pSponzaScene);
 	pContext->m_pSceneManager->Add(pShadowTestScene);
 
-	pContext->m_pSceneManager->SetActive("ShadowTestScene");
+	pContext->m_pSceneManager->SetActive("RenderTestScene");
 
 	//Input
 	auto pForward = new Forward(pContext);
