@@ -33,7 +33,7 @@ void RenderTestScene::PreInit(GameContext* pContext)
 	Add(m_pTestObject);
 
 	//Load model and fetch meshes
-	m_pModel = new Model("Models/Suicune.obj");
+	m_pModel = new Model("Models/Suicune/Suicune.obj");
 	auto pSuicuneMesh = &(m_pModel->GetMeshes()[0]);
 	auto pPlatformMesh = &(m_pModel->GetMeshes()[1]);
 

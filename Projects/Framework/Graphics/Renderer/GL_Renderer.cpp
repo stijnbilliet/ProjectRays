@@ -2,7 +2,7 @@
 #include "GL_Renderer.h"
 
 GL_Renderer::GL_Renderer()
-	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false), m_ScrWidth(), m_ScrHeight(), m_gBuffer(), m_WindowTitle(), m_DirectionalPos(glm::vec3(-200.0f, 200.0f, 200.0f)), m_DirectionalCol(glm::vec3(1.0f, 0.9f, 0.8f))
+	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false), m_ScrWidth(), m_ScrHeight(), m_gBuffer(), m_WindowTitle(), m_DirectionalPos(glm::vec3(0.0f, 80.0f, 5.0f)), m_DirectionalCol(glm::vec3(1.0f, 0.9f, 0.8f))
 {
 }
 
@@ -321,7 +321,7 @@ void GL_Renderer::ImGuiOnDraw()
 	ImGui::End();
 
 	ImGui::Begin("Light");
-		ImGui::SliderFloat3("Light Position", (float*)&m_DirectionalPos, -2000.0f, 2000.0f); // Edit 1 float using a slider from 0.0f to 1.0f    
+		ImGui::SliderFloat3("Light Position", (float*)&m_DirectionalPos, -20.0f, 20.0f); // Edit 1 float using a slider from 0.0f to 1.0f    
 		ImGui::ColorEdit3("Light Color", (float*)&m_DirectionalCol); // Edit 3 floats representing a color
 	ImGui::End();
 }

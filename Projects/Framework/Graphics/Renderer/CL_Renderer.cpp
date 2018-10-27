@@ -168,7 +168,7 @@ void CL_Renderer::GenerateLightingMask(GameContext*)
 	m_LightMaskGenerator.SetArg(1, sizeof(cl_mem), &m_CLGLLightBuffer);
 
 	//Launch kernels on cuda cores
-	status = clEnqueueNDRangeKernel(m_CLContext.GetCommandQueue(0), m_LightMaskGenerator, 2, NULL, gs, NULL, 0, nullptr, nullptr);
+	status = clEnqueueNDRangeKernel(commandQueue, m_LightMaskGenerator, 2, NULL, gs, NULL, 0, nullptr, nullptr);
 	CL_ERROR_CHECK(status, "clEnqueueNDRangeKernel failed (m_LightMaskGenerator)");
 
 	status = clFlush(commandQueue);
@@ -213,7 +213,7 @@ void CL_Renderer::InitLightMaskKernel(GameContext* pGameContext)
 	cl_int status = CL_SUCCESS;
 	
 	//Init buffers
-	m_CLGLLightBuffer = clCreateFromGLTexture(m_CLContext, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, gLightBuffer, &status);
+	m_CLGLLightBuffer = clCreateFromGLTexture(m_CLContext, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, gLightBuffer, &status);
 	CL_ERROR_CHECK(status, "Texture sharing failed (gLightBuffer buffer)");
 
 	//Init kernel

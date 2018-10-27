@@ -1,5 +1,5 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 26.10.2018 13:46:11
+# File Created: 26.10.2018 20:15:32
 
 newmtl leaf
 	Ns 10.0000
@@ -12,11 +12,11 @@ newmtl leaf
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_thorn_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_thorn_diff.png
-	map_d D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_thorn_mask.png
-	map_bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_thorn_ddn.png
-	bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_thorn_ddn.png
+	map_Ka Textures\Sponza\sponza_thorn_diff.png
+	map_Kd Textures\Sponza\sponza_thorn_diff.png
+	map_d Textures\Sponza\sponza_thorn_mask.png
+	map_bump Textures\Sponza\sponza_thorn_ddn.png
+	bump Textures\Sponza\sponza_thorn_ddn.png
 
 newmtl VasePlant
 	Ns 10.0000
@@ -29,11 +29,11 @@ newmtl VasePlant
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_plant.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_plant.png
-	map_d D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_plant_mask.png
-	map_bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_plant_NRM.png
-	bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_plant_NRM.png
+	map_Ka Textures\Sponza\vase_plant.png
+	map_Kd Textures\Sponza\vase_plant.png
+	map_d Textures\Sponza\vase_plant_mask.png
+	map_bump Textures\Sponza\vase_plant_NRM.png
+	bump Textures\Sponza\vase_plant_NRM.png
 
 newmtl vase_round
 	Ns 10.0000
@@ -46,10 +46,10 @@ newmtl vase_round
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_round.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_round.png
-	map_bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_round_ddn.png
-	bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_round_ddn.png
+	map_Ka Textures\Sponza\vase_round.png
+	map_Kd Textures\Sponza\vase_round.png
+	map_bump Textures\Sponza\vase_round_ddn.png
+	bump Textures\Sponza\vase_round_ddn.png
 
 newmtl Material__298
 	Ns 10.0000
@@ -62,10 +62,10 @@ newmtl Material__298
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\background.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\background.png
-	map_bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\background_ddn.png
-	bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\background_ddn.png
+	map_Ka Textures\Sponza\background.png
+	map_Kd Textures\Sponza\background.png
+	map_bump Textures\Sponza\background_ddn.png
+	bump Textures\Sponza\background_ddn.png
 
 newmtl bricks
 	Ns 10.0000
@@ -78,10 +78,10 @@ newmtl bricks
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\spnza_bricks_a_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\spnza_bricks_a_diff.png
-	map_bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\spnza_bricks_a_diff.png
-	bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\spnza_bricks_a_diff.png
+	map_Ka Textures\Sponza\spnza_bricks_a_diff.png
+	map_Kd Textures\Sponza\spnza_bricks_a_diff.png
+	map_bump Textures\Sponza\spnza_bricks_a_diff.png
+	bump Textures\Sponza\spnza_bricks_a_diff.png
 
 newmtl arch
 	Ns 10.0000
@@ -94,8 +94,8 @@ newmtl arch
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_arch_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_arch_diff.png
+	map_Ka Textures\Sponza\sponza_arch_diff.png
+	map_Kd Textures\Sponza\sponza_arch_diff.png
 
 newmtl ceiling
 	Ns 10.0000
@@ -108,8 +108,8 @@ newmtl ceiling
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_ceiling_a_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_ceiling_a_diff.png
+	map_Ka Textures\Sponza\sponza_ceiling_a_diff.png
+	map_Kd Textures\Sponza\sponza_ceiling_a_diff.png
 
 newmtl column_a
 	Ns 10.0000
@@ -122,10 +122,10 @@ newmtl column_a
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_column_a_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_column_a_diff.png
-	map_bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_column_a_ddn.png
-	bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_column_a_ddn.png
+	map_Ka Textures\Sponza\sponza_column_a_diff.png
+	map_Kd Textures\Sponza\sponza_column_a_diff.png
+	map_bump Textures\Sponza\sponza_column_a_ddn.png
+	bump Textures\Sponza\sponza_column_a_ddn.png
 
 newmtl floor
 	Ns 10.0000
@@ -138,8 +138,8 @@ newmtl floor
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_floor_a_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_floor_a_diff.png
+	map_Ka Textures\Sponza\sponza_floor_a_diff.png
+	map_Kd Textures\Sponza\sponza_floor_a_diff.png
 
 newmtl column_c
 	Ns 10.0000
@@ -152,10 +152,10 @@ newmtl column_c
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_column_c_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_column_c_diff.png
-	map_bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_column_c_ddn.png
-	bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_column_c_ddn.png
+	map_Ka Textures\Sponza\sponza_column_c_diff.png
+	map_Kd Textures\Sponza\sponza_column_c_diff.png
+	map_bump Textures\Sponza\sponza_column_c_ddn.png
+	bump Textures\Sponza\sponza_column_c_ddn.png
 
 newmtl details
 	Ns 10.0000
@@ -168,8 +168,8 @@ newmtl details
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_details_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_details_diff.png
+	map_Ka Textures\Sponza\sponza_details_diff.png
+	map_Kd Textures\Sponza\sponza_details_diff.png
 
 newmtl column_b
 	Ns 10.0000
@@ -182,10 +182,10 @@ newmtl column_b
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_column_b_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_column_b_diff.png
-	map_bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_column_b_ddn.png
-	bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_column_b_ddn.png
+	map_Ka Textures\Sponza\sponza_column_b_diff.png
+	map_Kd Textures\Sponza\sponza_column_b_diff.png
+	map_bump Textures\Sponza\sponza_column_b_ddn.png
+	bump Textures\Sponza\sponza_column_b_ddn.png
 
 newmtl Material__47
 	Ns 10.0000
@@ -210,8 +210,8 @@ newmtl flagpole
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_flagpole_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_flagpole_diff.png
+	map_Ka Textures\Sponza\sponza_flagpole_diff.png
+	map_Kd Textures\Sponza\sponza_flagpole_diff.png
 
 newmtl fabric_e
 	Ns 10.0000
@@ -224,8 +224,8 @@ newmtl fabric_e
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_fabric_green_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_fabric_green_diff.png
+	map_Ka Textures\Sponza\sponza_fabric_green_diff.png
+	map_Kd Textures\Sponza\sponza_fabric_green_diff.png
 
 newmtl fabric_d
 	Ns 10.0000
@@ -238,8 +238,8 @@ newmtl fabric_d
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_fabric_blue_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_fabric_blue_diff.png
+	map_Ka Textures\Sponza\sponza_fabric_blue_diff.png
+	map_Kd Textures\Sponza\sponza_fabric_blue_diff.png
 
 newmtl fabric_a
 	Ns 10.0000
@@ -252,8 +252,8 @@ newmtl fabric_a
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_fabric_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_fabric_diff.png
+	map_Ka Textures\Sponza\sponza_fabric_diff.png
+	map_Kd Textures\Sponza\sponza_fabric_diff.png
 
 newmtl fabric_g
 	Ns 10.0000
@@ -266,8 +266,8 @@ newmtl fabric_g
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_curtain_blue_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_curtain_blue_diff.png
+	map_Ka Textures\Sponza\sponza_curtain_blue_diff.png
+	map_Kd Textures\Sponza\sponza_curtain_blue_diff.png
 
 newmtl fabric_c
 	Ns 10.0000
@@ -280,8 +280,8 @@ newmtl fabric_c
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_curtain_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_curtain_diff.png
+	map_Ka Textures\Sponza\sponza_curtain_diff.png
+	map_Kd Textures\Sponza\sponza_curtain_diff.png
 
 newmtl fabric_f
 	Ns 10.0000
@@ -294,8 +294,8 @@ newmtl fabric_f
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_curtain_green_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_curtain_green_diff.png
+	map_Ka Textures\Sponza\sponza_curtain_green_diff.png
+	map_Kd Textures\Sponza\sponza_curtain_green_diff.png
 
 newmtl chain
 	Ns 10.0000
@@ -308,11 +308,11 @@ newmtl chain
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\chain_texture.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\chain_texture.png
-	map_d D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\chain_texture_mask.png
-	map_bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\chain_texture_ddn.png
-	bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\chain_texture_ddn.png
+	map_Ka Textures\Sponza\chain_texture.png
+	map_Kd Textures\Sponza\chain_texture.png
+	map_d Textures\Sponza\chain_texture_mask.png
+	map_bump Textures\Sponza\chain_texture_ddn.png
+	bump Textures\Sponza\chain_texture_ddn.png
 
 newmtl vase_hanging
 	Ns 10.0000
@@ -325,8 +325,8 @@ newmtl vase_hanging
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_hanging.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_hanging.png
+	map_Ka Textures\Sponza\vase_hanging.png
+	map_Kd Textures\Sponza\vase_hanging.png
 
 newmtl vase
 	Ns 10.0000
@@ -339,8 +339,8 @@ newmtl vase
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_dif.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\vase_dif.png
+	map_Ka Textures\Sponza\vase_dif.png
+	map_Kd Textures\Sponza\vase_dif.png
 
 newmtl Material__25
 	Ns 10.0000
@@ -353,10 +353,10 @@ newmtl Material__25
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\lion.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\lion.png
-	map_bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\lion_ddn.png
-	bump D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\lion_ddn.png
+	map_Ka Textures\Sponza\lion.png
+	map_Kd Textures\Sponza\lion.png
+	map_bump Textures\Sponza\lion_ddn.png
+	bump Textures\Sponza\lion_ddn.png
 
 newmtl roof
 	Ns 10.0000
@@ -369,5 +369,5 @@ newmtl roof
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_roof_diff.png
-	map_Kd D:\Documents\Repositories\ProjectRays\Assets\Models\Sponza\textures\sponza_roof_diff.png
+	map_Ka Textures\Sponza\sponza_roof_diff.png
+	map_Kd Textures\Sponza\sponza_roof_diff.png
