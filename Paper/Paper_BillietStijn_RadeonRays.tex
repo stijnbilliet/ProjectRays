@@ -132,13 +132,31 @@ The second stage is the shape assembly which is in charge of creating primitives
 \subsubsection{Geometry shader}
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\textwidth]{geometryshader.jpg}
+	\includegraphics[width=0.5\textwidth]{geometryshader.jpg}
 	\caption{Purpose of geometry shader.}
 \end{figure}
 The third stage is an optional geometry shader, this stage won't be covered in depth, but it is essentially in charge of creating additional geometry (extra vertices) on the fly (at runtime).\newline\par
 
 \subsubsection{Rasterization stage}
-The fourth stage is rasterization, this is where the algorithm gets it's name.\newline\par
+The fourth stage is rasterization, this is where the algorithm gets it's name. The rasterizer is in charge of a not only rasterization, but also homogeneous divide, clipping, culling and viewport transform. \newline\par
+
+\begin{minipage}{0.6\textwidth}
+	The first task of the rasterizer is the homogeneous divide. The previous stages were in charge of transforming the vertices from model space into clipping space, this is done by multiplying the world, view and projection matrix with the vertices this yields a valid projection but does not account for depth information (f.e. objects that are nearby will appear the same as objects from afar) this is where the z-component comes in, seeing the z stores our depth information. Before we apply the projectionmatrix we store the z-component as an additional w component.
+\end{minipage} \hfill
+\begin{minipage}{0.4\textwidth}
+	\includegraphics[width=\textwidth]{frustrum.png}
+\end{minipage}
+\vspace{0.2cm}
+
+The homogeneous divide is just a specific term for converting the homogeneous coordinate back to w=1 meaning we put the vertices in their normalized device coordinates (in the -1 to 1 range) effectively scaling all objects to their rightful dimensions.
+
+\begin{minipage}{0.4\textwidth}
+	\includegraphics[width=\textwidth]{pixelisation.png}
+\end{minipage} \hfill
+\begin{minipage}{0.55\textwidth}
+	Rasterization(pixelisation) is the process of converting continuous primitives into discrete pixel fragments. The rasterizer does so by interpolating between vertex attributes (data that vertex holds) like color, normals, texture coordinates and positions. It then stores that information in the pixel fragments before finally sending it off to the pixel/fragment shader to be shaded.
+\end{minipage}
+\vspace{0.5cm}
 
 *culling
 *clipping
