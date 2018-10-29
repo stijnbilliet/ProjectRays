@@ -80,14 +80,14 @@ Therefore people have come up with ways to more efficiently model the phenomenon
 \pagebreak
 
 \subsection{Raytracing}
-\includegraphics[width=\textwidth]{raytracingtest.png}
+
+\begin{figure}[h]
+	\caption{Illustration of different ray-casting solutions}
+	\centering
+	\includegraphics[width=0.95\textwidth]{raycasting.jpg}
+\end{figure}
 \subsubsection{Definition}
-\begin{minipage}{0.3\textwidth}
-	\includegraphics[width=\textwidth]{raytracing.png}
-\end{minipage}
-\begin{minipage}{0.7\textwidth}
-	In short ray-tracing is a rendering technique that can produce lifelike lighting effects. A ray-tracing algorithm essentially achieves this by sending out rays for every pixel of our framebuffer (camera) towards the corresponding scene geometry. Based on the technique we can send out additional bounces (secondary rays). It then basically backtracks that chain of light-rays to accumulate material/light information to then calculate the final pixel color.
-\end{minipage}
+In short ray-tracing is a rendering technique that can produce lifelike lighting effects. A ray-tracing algorithm essentially achieves this by sending out rays for every pixel of our framebuffer (camera) towards the corresponding scene geometry. Based on the technique we can send out additional bounces (secondary rays). It then basically backtracks that chain of light-rays to accumulate material/light information to then calculate the final pixel color.
 
 \subsubsection{Ray casting}
 
@@ -135,10 +135,10 @@ The second stage is the shape assembly which is in charge of creating primitives
 	\includegraphics[width=0.7\textwidth]{geometryshader.jpg}
 	\caption{Purpose of geometry shader.}
 \end{figure}
-The third stage is an optional geometry shader, this stage won't be covered in depth, but it is essentially in charge of additional geometry creation (extra vertices).\newline\par
+The third stage is an optional geometry shader, this stage won't be covered in depth, but it is essentially in charge of creating additional geometry (extra vertices) on the fly (at runtime).\newline\par
 
 \subsubsection{Rasterization stage}
-The fourth stage is rasterization, which interpolates between vertex information (e.g. vertex color) and subsequently rasterizing the image into pixel fragments. \newline\par
+The fourth stage is rasterization, this is where the algorithm gets it's name.\newline\par
 
 *culling
 *clipping
