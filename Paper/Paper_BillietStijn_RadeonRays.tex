@@ -114,6 +114,7 @@ With rasterization objects on screen are created from meshes. A mesh is a collec
 	\centering
 	\includegraphics[width=0.8\textwidth]{coordinate_systems.png}
 	\caption{Model space to screen space.}
+	\label{fig:coordinates}
 \end{figure}
 The first stage is the vertex shader which essentially transforms the vertices to their correct
 positions, the vertices have to be transformed seeing that they are defined in their own local transform space(vertices positions are defined relative to their own center point). The vertices are defined this way as a means to make it easier for modelers, they quite simply have to define the vertices relative to the modeling software's gizmo.
@@ -132,7 +133,7 @@ The second stage is the shape assembly which is in charge of creating primitives
 \subsubsection{Geometry shader}
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.5\textwidth]{geometryshader.jpg}
+	\includegraphics[width=0.7\textwidth]{geometryshader.jpg}
 	\caption{Purpose of geometry shader.}
 \end{figure}
 The third stage is an optional geometry shader, this stage won't be covered in depth, but it is essentially in charge of creating additional geometry (extra vertices) on the fly (at runtime).\newline\par
@@ -140,40 +141,49 @@ The third stage is an optional geometry shader, this stage won't be covered in d
 \subsubsection{Rasterization stage}
 The fourth stage is rasterization, this is where the algorithm gets it's name. The rasterizer is in charge of a not only rasterization, but also homogeneous divide, clipping, culling and viewport transform. \newline\par
 
-\begin{minipage}{0.59\textwidth}
-	The first task of the rasterizer is the homogeneous divide. The previous stages were in charge of transforming the vertices from model space into clipping space, this is done by multiplying the world, view and projection matrix with the vertices this yields a valid projection but does not account for depth information (f.e. objects that are nearby will appear the same as objects from afar) this is where the z-component comes in, seeing the z stores our depth information. Before we apply the projectionmatrix we store the z-component as an additional w component.
+\begin{minipage}{0.5\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{culling.png}
 \end{minipage} \hfill
-\begin{minipage}{0.4\textwidth}
-	\includegraphics[width=\textwidth]{frustrum.png}
+\begin{minipage}{0.5\textwidth}
+	The first task of the rasterizer is primitive culling. The shapes that made it to the rasterizer are checked based on their normals. The normal of a primitive/vertex tells us if the face is facing away from us or not. This simple operation can be demonstrated using the dotproduct, however this does get handled by the specifications (e.g. DirectX/OpenGL) rasterizer. In it's essence the calculation will translate to if the dotproduct is negative then the face is facing away, if it's positive then it's facing toward us.
 \end{minipage}
-\vspace{0.25cm}
-
-The homogeneous divide is just a specific term for converting the homogeneous coordinate back to w=1 meaning we put the vertices in their normalized device coordinates (in the -1 to 1 range) effectively scaling all objects to their rightful dimensions.
 
 \pagebreak
 
+\begin{minipage}{0.5\textwidth}
+	The second task is the clipping stage, in this stage we clip triangles that lie (partly) outside of the view frustum. This effectively removes those triangles and prevents them from being projected/rendered. 
+\end{minipage} \hfill
+\begin{minipage}{0.5\textwidth}
+	\centering
+	\includegraphics[width=0.8\textwidth]{clipping.png}
+\end{minipage}
+
+\vspace{0.5cm}
+
 \begin{minipage}{0.4\textwidth}
-	\includegraphics[width=0.8\textwidth]{culling.png}
+	\includegraphics[width=\textwidth]{frustrum.png}
 \end{minipage} \hfill
 \begin{minipage}{0.59\textwidth}
-	The second task is the clipping stage, in this stage we clip triangles that lie (partly) outside of the view frustum. This effectively removes those triangles and prevents them from being projected/rendered. 
+	The third task of the rasterizer is the homogeneous divide. The previous stages were in charge of transforming the vertices from model space into clipping space, this is done by multiplying the world, view and projection matrix with the vertices this yields a valid projection but does not account for depth information (f.e. objects that are nearby will appear the same as objects from afar) this is where the z-component comes in, seeing the z stores our depth information. Before we apply the projectionmatrix we store the z-component as an additional w component.
 \end{minipage}
+
+\vspace{0.25cm}
+
+The homogeneous divide is just a specific term for converting the homogeneous coordinate back to w=1 meaning we put the vertices in their normalized device coordinates (in the -1 to 1 range) effectively scaling all objects to their rightful dimensions.\newline\par
+
+The fourth stage is the viewport transform. In the viewport transform we essentially translate all the vertex positions that are now in normalized device coordinates (NDC) and transform them to window space. These are then the coordinates that are being rasterized to the output image. This process is outlined in figure \ref{fig:coordinates} (part with green outline).
 
 \vspace{0.5cm}
 
-\begin{minipage}{0.55\textwidth}
-	Rasterization(pixelisation) is the process of converting continuous primitives into discrete pixel fragments. The rasterizer does so by interpolating between vertex attributes (data that vertex holds) like color, normals, texture coordinates and positions. It then stores that information in the pixel fragments before finally sending it off to the pixel/fragment shader to be shaded.
-\end{minipage} \hfill
 \begin{minipage}{0.4\textwidth}
-	\includegraphics[width=\textwidth]{pixelisation.png}
+	\includegraphics[width=0.95\textwidth]{pixelisation.png}
+\end{minipage} \hfill
+\begin{minipage}{0.59\textwidth}
+	The final task pixelisation (rasterisation) is the process of converting continuous primitives into discrete pixel fragments. The rasterizer does so by interpolating between vertex attributes (data that vertex holds) like color, normals, texture coordinates and positions. It then stores that information in the pixel fragments before finally sending it off to the pixel/fragment shader to be shaded.
 \end{minipage}
-\vspace{0.5cm}
 
-*culling
-*clipping
-*homogenous divide
-*viewport transform
-*rasterization
+\pagebreak
 
 \subsubsection{Fragment shader}
 The fifth stage then applies shading to those pixel fragments.
@@ -192,6 +202,9 @@ The different rendering techniques have been covered, now onto a hybrid solution
 
 \pagebreak
 \subsection{Raytracing in rasterization}
+
+\subsubsection{Forward vs deferred rendering}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
 
 \subsubsection{Deferred shading}
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
