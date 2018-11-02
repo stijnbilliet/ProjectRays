@@ -136,7 +136,7 @@ The second stage is the shape assembly which is in charge of creating primitives
 	\includegraphics[width=0.7\textwidth]{geometryshader.jpg}
 	\caption{Purpose of geometry shader.}
 \end{figure}
-The third stage is an optional geometry shader, this stage won't be covered in depth, but it is essentially in charge of creating additional geometry (extra vertices) on the fly (at runtime).\newline\par
+The third stage is an optional geometry shader, this stage won't be covered in depth, but it is essentially in charge of creating additional geometry (extra vertices) at runtime.\newline\par
 
 \subsubsection{Rasterization stage}
 The fourth stage is rasterization, this is where the algorithm gets it's name. The rasterizer is in charge of a not only rasterization, but also homogeneous divide, clipping, culling and viewport transform. \newline\par
@@ -176,72 +176,193 @@ The fourth stage is the viewport transform. In the viewport transform we essenti
 
 \vspace{0.5cm}
 
+\begin{minipage}{0.55\textwidth}
+	The final task pixelisation (rasterisation) is the process of converting continuous primitives into discrete pixel fragments. The rasterizer does so by interpolating between vertex attributes (data that vertex holds) like color, normals, texture coordinates and positions. It then launches a fragment shader for every pixel fragment with the information just calculated.
+\end{minipage} \hfill
 \begin{minipage}{0.4\textwidth}
 	\includegraphics[width=0.95\textwidth]{pixelisation.png}
-\end{minipage} \hfill
-\begin{minipage}{0.59\textwidth}
-	The final task pixelisation (rasterisation) is the process of converting continuous primitives into discrete pixel fragments. The rasterizer does so by interpolating between vertex attributes (data that vertex holds) like color, normals, texture coordinates and positions. It then stores that information in the pixel fragments before finally sending it off to the pixel/fragment shader to be shaded.
 \end{minipage}
 
 \pagebreak
 
 \subsubsection{Fragment shader}
-The fifth stage then applies shading to those pixel fragments.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.85\textwidth]{Zbuffer.png}
+\end{figure}
+The fifth stage, the fragment stage is a shader stage that will process all pixel fragments processed by the rasterizer. Depending on the technique we collapse all information into a set of colors (color buffer) and a single depth value (depth buffer), additionally we can augment this by writing away a stencil value (stencil buffer).
 
 \subsubsection{Test and blending stage}
-Finally we've got the testing and blending stage.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{alpha.png}
+\end{figure}
+Finally we've got the testing and blending stage. Up until this point "pixels" where addressed as pixel fragments, this is in-fact a clear distinction to make seeing that pixel fragments are not guaranteed to show up on screen, they could be discarded in the shaders or they could be transparent. If there are transparent objects in the scene we have to keep both pixels, those from the object behind it and the transparent object, we can then simply blend those pixels together to receive the final pixel colour. This blending operation is in-fact quite costly seeing we need to make sure the objects appear in the right order and we've got the load of additional pixels on our hands. A more optimized technique can be used for objects that are fully transparent however, here we can employ alpha testing where we simply discard those pixel fragments in the fragment shader.
 
+\pagebreak
+
+\section{API's and tools}
+
+The main API's that have been researched were Radeon Rays, OpenCL and OpenGL. However to speed up the development process tools were employed. The main part of the tools were tailored towards the OpenGL pipeline (e.g. model loading, texture loading, etc.), but some small frameworks were also employed to speed up the raytracer development (e.g. CLW). Keep in mind however that these tools are not necessary seeing it could all be made on your own, but it sure helps to have these around.
+
+\subsection{Raytracing}
+\subsubsection{OpenCL}
+Open Computing Language is a framework for writing programs that execute across compute devices. This includes among other hardware accelerators, the central processing unit (CPU) and the graphics processing unit (GPU). These aforementioned programs are called kernels and are also written on a pseudo c-language. OpenCL provides the programmer of a standard interface to perform parallel computing tasks. The programmer has to set up the OpenCL execution pipeline and write the kernels. Under this section you'll find a quick rundown of aforementioned execution 
+model.\newline
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{openclprogram.png}
+\end{figure}
+
+\pagebreak
+
+\begin{itemize}
+	\item{Platform}\newline
+	The platform that we are running this code on, so which vendor (e.g. Nvidia).
+	\item{Device}\newline
+	What device are we going to run this on could be anything from CPU, GPU to APU.
+	\item{Context}\newline
+	This is the runtime interface between the host program (run on the CPU) and the device (CPU/GPU/etc.). The context is in charge of managing all the OpenCL resources so programs, kernels, command queues and buffers.
+	\item{Program}\newline
+	The entire OpenCL program, this could be one or more kernels/device functions bundled together into a single program file.
+	\item{Kernel}\newline
+	The starting point/building blocks of a OpenCL program. Kernels are called from the CPU, they provide the basic units of executable code that run on a OpenCL device. The kernels are preceded with the keyword "\_\_kernel"
+	\item{Command queue}\newline
+	The command queue allows the kernels execution commands to be sent to the device. This effectively queues them for execution, this en-queuing can be in-order or out-of-order.
+	\item{Memory objects}\newline
+	The memory objects are what is provided to the kernels. Kernels do accept basic types like floats, ints, bools etc. and self defined types like Ray, Intersection etc, but if there is a large buffer of those it's kept in a Memory buffer (e.g. images).
+\end{itemize}
+
+\pagebreak
+
+\begin{minipage}{0.6\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{memorymodel.png}
+\end{minipage} \hfill
+\begin{minipage}{0.4\textwidth}
+	A large part of the parallelization control is in the hands of the programmer. Upon launching a kernel the programmer is in control of how many work items need to be handled per compute unit, this effectively bundles them in a workgroup. Each workgroup gets its own compute unit, a work group can exist out of one or multiple work items. This degree of freedom is further reinforced by the level of control over different memory levels that can be employed to speed up development.
+\end{minipage}
+
+\vspace{0.25cm}
+
+Under this section is a roundup of the OpenCL memory model (GPU memory model).
+
+\begin{itemize}
+	\item{Global memory}\newline
+	Global memory is very similar to RAM, it is the largest memory buffer but also the slowest. Global memory can be written to / read from by all work items (or threads).
+	\item{Constant memory}\newline
+	A small chunk of global memory on the device, can be read from by all work items, but can not be written to. However the host application has full read/write access to this memory pool. Constant memory is a bit faster than 
+	\item{Local memory}\newline
+	The local memory is a shared memory pool among work items in the same work group, similar to cache on the CPU. Local memory allows work items to share their results with work items belonging in the same work group. Local memory is up to 100 times faster than global memory.
+	\item{Private memory}\newline
+	The fastest type of memory, similar to registers on the cpu. Each work item (thread) has a tiny buffer of private memory to store intermediate results in.
+\end{itemize}
+
+\subsubsection{Radeon Rays}
+Radeon-Rays is a GPU intersection library(raytracing framework), was developed by AMD and it is featured in their AMD ProRenderer (raytraced renderer).
+Radeon Rays exposes a well defined C++ API for scene construction and performing asynchronous ray intersection queries. Radeon-Rays employs OpenCL kernels to do all these calculations and to speed up the ray intersection they order their objects in bounding volume hierarchies. Seeing they use OpenCL to speed up their computations by sending it of to the GPU, this library will run on almost any GPU (meaning it will also work on Nvidia/Intel products).
+
+\subsection{Rasterization}
+\subsubsection{OpenGL}
+\begin{itemize}
+	\item{OpenGL}
+	\pagebreak
+	\item{Loading libraries}\newline\par
+	OpenGL is a specification that has many different versions, implementations and features. The hardware manufacturers have to make sure their hardware/drivers provides the graphics programmers of those features. However when working with immensely different target platforms, ranging from old hardware to new and from obscure cards to bleeding edge ones the graphics programmers need some kind of way to determine what's possible on that specific piece of hardware. That is where loading libraries come in, loading libraries essentially provide the programmer with function pointers to OpenGL agnostic functions at runtime, meaning they provide us the memory addresses of those functions seeing they depend from hardware to hardware.\newline\par
+	
+	An additional task of the loading libraries is extension loading where programmers can use this API to ask if a specific extension/feature is supported on the hardware. Loading libraries provide their own OpenGL implementations (e.g. 'gl.h'), but your own implementation can be provided by making sure it is set as the last include in your build order. A word of caution however is that some features might be declared in your specification that the loading library has no knowledge of, but this is an edge case seeing that most people won't thread that route.\newline\par
+	
+	There are numerous libraries out there that do just that, libraries like GLEW, GL3W, Glad, Glee and many more. All libraries that exist out there all deliver on the same promise, meaning that the choice of library really boils down to personal preference.\newline\par
+	\item{GLM}\newline\par
+	When it comes to math libraries that plug in nicely with an OpenGL renderer there's really only one good option namely GLM. OpenGL Mathematics (GLM) is a header only C++ mathematics library for graphics software based on the OpenGL Shading Language (GLSL). GLM exposes a well defined interface for everything from general calculus to quaternion rotations (e.g. vector operations, matrix calculations).
+\end{itemize}
+\subsubsection{Window creation}
+A window allows the rendering specification to offload its framebuffer to the viewport, it also acts as a layer between the operating system and the game when it comes to input etc. The creation of a window is entirely dependent on the operating system it's creating the window for. For example when creating a window on linux the X window system should be addressed, whereas on Windows you would need to hook on to the WinMain function and use the WndProc callback to fetch any input. Therefore it is much smarter to use a library that hides all this operating system agnostic stuff in an abstraction layer.\newline\par
+SDL, SFML and GLFW are all low level libraries that handle multimedia indirection. They all deliver the same features in some shape or form. The choice really boils down to maturity of the library, documentation, usefulness of its features and frequency of the updates (if any).
+\subsubsection{Model loading}
+\subsubsection{Texture loading}
 \pagebreak
 
 \section{Hybrid rendering approach}
-\begin{figure}[h]
-	\includegraphics[width=\textwidth]{hybrid.jpg}
-	\caption{Hybrid rendering empowered by Nvidia RTX}
-\end{figure}
-The different rendering techniques have been covered, now onto a hybrid solution where rasterization and raytracing are combined to achieve a new pipeline. Most hybrid approaches replace the first stage of ray-tracing, which is sending out our primary rays to retrieve surface information, by rasterization. This effectively reduces the amount of rays by half. Ray-tracing comes into play for sending out our reflected rays, which could be anything from sending out new primary rays to secondary (shadow) rays. This introduction of raytracing essentially brings us world information whereas normally you'd only have surface information. To be able to augment rasterization with raytracing we will need to postpone our lighting effects to a later stage. In a forward rendering pipeline the lighting is done per mesh in the fragment shader stage, effectively disabling us from hooking raytracing to that pipeline.
+The different rendering techniques have been covered, now onto a hybrid solution where rasterization and raytracing are combined to achieve a new pipeline. Most hybrid approaches replace the first stage of ray-tracing, which is sending out our primary rays to retrieve surface information, by rasterization. This effectively reduces the amount of rays by half. Ray-tracing comes into play for sending out our reflected rays, which could be anything from sending out new primary rays to secondary (shadow) rays. This introduction of ray-tracing essentially brings us world information whereas normally you'd only have surface information. To be able to augment rasterization with raytracing we will need to postpone our lighting effects to a later stage.
 
-\pagebreak
 \subsection{Raytracing in rasterization}
 
 \subsubsection{Forward vs deferred rendering}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
 
-\subsubsection{Deferred shading}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{fvsdef.png}
+	\caption{Difference between forward and deferred pipeline.}
+\end{figure}
 
-\subsubsection{G-Buffers}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
+In rasterization there are three main lighting pipelines. The default pipeline is forward rendering this is the pipeline that's discussed in the previous chapters. The main difference between both pipelines however is in the way they handle the lighting effects. In forward rendering the lighting is applied per object in the fragment shader, this means that even the transparent objects, whose pixel fragments are not sure to end up in the final image, are also being handled. This pipeline is fine for default drawing, but starts to fall behind when it comes to lighting performance.\newline\par
 
-\subsection{Raytraced shadows}
-\begin{wrapfigure}{r}{0.4\textwidth}
-	\includegraphics[width=0.4\textwidth]{shadows.jpg}
-\end{wrapfigure}
-For example when looking at ray-traced shadows. To determine if a pixel should be shaded or not a primary ray is cast from that pixel into the scene, material information is then gathered and additional secondary rays are being cast towards the relevant lights. If that secondary ray/shadow ray is occluded by another object then that pixel will be shaded using only the material information, if it isn't occluded however we can add the target lights information to to the shaders equation.\newline\par
+\pagebreak
 
-\subsubsection{Soft shadows}
-Test test test
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{fvsdefgraph.png}
+	\caption{Lighting performance comparison between forward and deferred.}
+\end{figure}
 
-\subsection{Optimizations}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam.
+The second pipeline however as the name suggests defers from doing any lighting effects until all the objects are rendered in the off-screen g-buffers. This effectively divides the pipeline into two major parts, the fill pass and the lighting pass. In the fill pass we fill up all the off-screen buffers (or G-Buffers) with our pixel in formation. The light pass as the name suggests is then in charge of applying lighting to those pixels. This ensures that we can postpone our lighting to the lightpass enabling us to do additional effects that encompass the whole scene (e.g. raytracing.)\newline\par
+
+The third rendering pipeline being forward+ although the most performant will not be covered with explicit detail. The reason that this technique is not that applicable has primarily to do with the fact that we have no way of postponing lighting effects. This technique also covers lighting object per object and that is precisely the opposite of what raytracing is trying to overcome.\newline\par
+Forward+ is a rendering technique that improves upon regular forward rendering. Forward+ first determines which lights are overlapping which ares of the screen (screen space). During the shading phase that list is then consulted to only account for the lights that are potentially overlapping the current pixel fragment. The forward+ technique consists primarily of three simple passes.\newline\par
+
+\pagebreak
+
+\subsubsection{Ray construction using g-buffers}
+
+\pagebreak
+
+\subsection{Related work}
+\pagebreak
 
 %%%%%%%%%%%%%%%%
 % NEW CHAPTER! %
 %%%%%%%%%%%%%%%%
 \chapter{Case study}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+In the following chapter an example rendering pipeline will be covered. This pipeline will make use of deferred shading (rasterization) for its main pipeline and raytracing for real-time shadows. The implementation of the shadows acts as an example effect to display that there is gain to be had when replacing that with a raytraced counterpart. The case study will act as a logical guide on how to implement this pipeline yourself, but some situation agnostic details will be left open for interpretation.\newline\par
+
+\section{Getting started}
+\subsection{Building using CMake}
+
+\pagebreak
 
 \section{Implementation rasterization}
 \subsection{Window creation}
+The first main part that needs to be implemented to render is a window. \newline\par
+
 \subsection{Rendering specification}
+\subsubsection{OpenGL function bindings}
+
 \subsection{Shader loading}
+One of the major things that make the graphics pipeline modular is programmable shaders. Shaders are mostly written in a pseudo c-language like GLSL/HLSL. This language is relative to the underlying rendering api that is being used. The rendering api is therefore in charge for the shader compilation. The only obstacle that the host program has to overcome is loading the source from the shader file. In this implementation the default cpp iostream was used, but this can be tailored to the needs of your engine/implementation. Once the shader source has been loaded it needs to be compiled and hooked to an OpenGL object.
+
 \subsection{Coordinate systems}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
+
 \subsection{Model loading}
+Assimp as the name implies is an asset import library that handles about every relevant model export type that exist. The assimp api needs to be built using CMake and can then be linked into our solution. Then it's just a simple case of creating an instance of their importer context and calling the readfile method.
 \subsection{Texture loading}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
 \subsection{Deferred shading}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
 \section{Implementation ray-tracing}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
+\subsection{OpenCL implementation}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
+
 \subsection{Radeon rays implementation}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
 \subsection{Shadow implementation}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
 \subsection{Optimizations}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam. Etiam ullamcorper, nunc a accumsan adipiscing, turpis odio bibendum erat, id convallis magna eros nec metus. Sed vel ligula justo, sit amet vestibulum dolor. Sed vitae augue sit amet magna ullamcorper suscipit. Quisque dictum ipsum a sapien egestas facilisis.
 
 \chapter{Conlusion}
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
