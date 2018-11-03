@@ -397,11 +397,15 @@ Once the window and accompanying context is in place the programmer can move on 
 
 One of the major things that make the graphics pipeline modular is programmable shaders. Shaders are mostly written in a pseudo c-language like GLSL/HLSL. This language is relative to the underlying rendering api that is being used. The rendering api is therefore in charge for the shader compilation. The only obstacle that the host program has to overcome is loading the source from the shader file. In this implementation the default cpp iostream was used, but this can be tailored to the needs of your engine/implementation. Once the shader source has been loaded it needs to be compiled and hooked to an OpenGL object. In this implementation a clear distinction between a shader and a shader program was made, where a shader is seen as the smallest building block and a shader program as a collection of those blocks.\newline\par
 
-\subsection{Coordinate systems}
-
 \subsection{Model loading}
 
 \subsection{Texture loading}
+
+\subsection{Coordinate systems}
+Although you can render without a proper coordinate system in place, the implementation needed world space coordinates rather than screen space. \newline\par
+So for this implementation a transform component was set in place. This transform component stands in relationship with the GameObject. This relationship allows us to add childs to the GameObject while maintaining the correct local transforms in the component. If the position of a said object was changed we go ahead and rebuild our worldmatrix while keeping in check if the object had a parent.\newline\par
+The next part is the camera component, the camera component is in charge of holding the viewprojectionmatrix. Meaning that it is also in charge of holding the camera position and its settings.\newline\par
+The final part to the puzzle is the mesh draw component. To create a meshdrawcomponent the programmer has to provide it with a mesh filter which is loaded by the model loading utilities mentioned prior. Then the final assembly is to build the worldviewprojectionmatrix (by multiplying the world, view and projection matrices with each other) and send it to the shader.
 
 \subsection{Deferred shading}
 
@@ -412,8 +416,6 @@ One of the major things that make the graphics pipeline modular is programmable 
 \subsection{Radeon rays implementation}
 
 \subsection{Shadow implementation}
-
-\subsection{Optimizations}
 
 \chapter{Conclusion}
 
