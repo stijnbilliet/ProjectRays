@@ -256,6 +256,20 @@ Under this section is a roundup of the OpenCL memory model (GPU memory model).\n
 	The fastest type of memory, similar to registers on the cpu. Each work item (thread) has a tiny buffer of private memory to store intermediate results in.
 \end{itemize}
 
+\pagebreak
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{sharegroups.png}
+	\caption{OpenCL/OpenGL interop context}
+\end{figure}
+
+A great thing about this control of memory is that it empowers the developer to make use of interoperation contexts. This can be used to achieve zero-copy architectures where memory objects can be shared by multiple compatible api's. A prime example of this is an OpenCL/OpenGL interop context. Such a context allows the graphics programmers to send screen buffers, textures and openGL objects to the kernels for further processing without the need to copy them, further enabling them to use a kernel in the pipeline everywhere they want.\newline\par
+
+While this is great, there are still some limitations that have to be set in place to enable this kind of behaviour. For one the target device needs to support this sharegroup behaviour and for seconds shared memory can cause issues seeing that both contexts don't know about each others existance. All of this can be alliviated by setting blocking calls (e.g. GPU fences) in place, with these acting as a sort of failsafe that makes sure the object is done reading from/ writing to by the target context. This can account for slowdowns seeing that the CPU is needed to help the 2 parties syncronize, luckily for the programmer there is hope that said GPU supports the ARB\_cl\_event extension.3 The event extension allows the two api's to communicate through event management (e.g. wait for event to begin) ensuring that they don't need to wait a few ticks of CPU-time to synchronize.
+
+\pagebreak
+
 \subsubsection{Radeon Rays}
 Radeon-Rays is a GPU intersection library(raytracing framework), was developed by AMD and it is featured in their AMD ProRenderer (raytraced renderer).
 Radeon Rays exposes a well defined C++ API for scene construction and performing asynchronous ray intersection queries.\newline\par
