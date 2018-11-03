@@ -214,11 +214,9 @@ Open Computing Language is a framework for writing programs that execute across 
 	\centering
 	\includegraphics[width=0.9\textwidth]{openclprogram.png}
 \end{figure}
-
-\pagebreak
-
 Under this section you'll find a quick rundown of aforementioned execution 
-model.\newline\par
+model.
+\pagebreak
 \begin{itemize}
 	\item{\textbf{Platform}}\newline\par
 	The platform that we are running this code on, so which vendor (e.g. Nvidia).
@@ -236,17 +234,16 @@ model.\newline\par
 	The memory objects are what is provided to the kernels. Kernels do accept basic types like floats, ints, bools etc. and self defined types like Ray, Intersection etc, but if there is a large buffer of those it's kept in a Memory buffer (e.g. images).
 \end{itemize}
 
-\begin{minipage}{0.6\textwidth}
+A large part of the parallelization control is in the hands of the programmer. Upon launching a kernel the programmer is in control of how many work items need to be handled per compute unit, this effectively bundles them in a workgroup. Each workgroup gets its own compute unit, a work group can exist out of one or multiple work items. This degree of freedom is further reinforced by the level of control over different memory levels that can be employed to speed up development.\newline\par
+
+\begin{figure}[h]
 	\centering
-	\includegraphics[width=\textwidth]{memorymodel.png}
-\end{minipage} \hfill
-\begin{minipage}{0.4\textwidth}
-	A large part of the parallelization control is in the hands of the programmer. Upon launching a kernel the programmer is in control of how many work items need to be handled per compute unit, this effectively bundles them in a workgroup. Each workgroup gets its own compute unit, a work group can exist out of one or multiple work items. This degree of freedom is further reinforced by the level of control over different memory levels that can be employed to speed up development.
-\end{minipage}
+	\includegraphics[width=0.8\textwidth]{memorymodel.png}
+	\caption{Illustration of the memory execution model.}
+\end{figure}
 
-\vspace{0.25cm}
-
-Under this section is a roundup of the OpenCL memory model (GPU memory model).
+Under this section is a roundup of the OpenCL memory model (GPU memory model).\newline\par
+\pagebreak
 
 \begin{itemize}
 	\item{\textbf{Global memory}}\newline\par
@@ -261,7 +258,8 @@ Under this section is a roundup of the OpenCL memory model (GPU memory model).
 
 \subsubsection{Radeon Rays}
 Radeon-Rays is a GPU intersection library(raytracing framework), was developed by AMD and it is featured in their AMD ProRenderer (raytraced renderer).
-Radeon Rays exposes a well defined C++ API for scene construction and performing asynchronous ray intersection queries. Radeon-Rays employs OpenCL kernels to do all these calculations and to speed up the ray intersection they order their objects in bounding volume hierarchies. Seeing they use OpenCL to speed up their computations by sending it of to the GPU, this library will run on almost any GPU (meaning it will also work on Nvidia/Intel products).
+Radeon Rays exposes a well defined C++ API for scene construction and performing asynchronous ray intersection queries.\newline\par
+Radeon-Rays employs OpenCL kernels to do all these calculations and to speed up the ray intersection they order their objects in bounding volume hierarchies. Seeing they use OpenCL to speed up their computations by sending it of to the GPU, this library will run on almost any GPU (meaning it will also work on Nvidia/Intel products).
 
 \subsection{Rasterization}
 \subsubsection{OpenGL}

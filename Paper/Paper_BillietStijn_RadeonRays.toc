@@ -19,30 +19,30 @@
 \contentsline {subsection}{\numberline {3.2.1}Raytracing}{10}{subsection.3.2.1}
 \contentsline {subsubsection}{OpenCL}{10}{section*.12}
 \contentsline {subsubsection}{Radeon Rays}{13}{section*.13}
-\contentsline {subsection}{\numberline {3.2.2}Rasterization}{13}{subsection.3.2.2}
-\contentsline {subsubsection}{OpenGL}{13}{section*.14}
-\contentsline {subsubsection}{Window creation}{15}{section*.15}
-\contentsline {subsubsection}{Texture loading}{15}{section*.16}
-\contentsline {subsubsection}{Model loading}{16}{section*.17}
-\contentsline {section}{\numberline {3.3}Hybrid rendering approach}{17}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Raytracing in rasterization}{17}{subsection.3.3.1}
-\contentsline {subsubsection}{Forward vs deferred rendering}{17}{section*.18}
-\contentsline {subsubsection}{Raytracing using g-buffers}{19}{section*.19}
-\contentsline {chapter}{\numberline {4}Case study}{20}{chapter.4}
-\contentsline {section}{\numberline {4.1}Getting started}{20}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Building using CMake}{20}{subsection.4.1.1}
-\contentsline {section}{\numberline {4.2}Implementation rasterization}{21}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Window creation}{21}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Rendering specification}{21}{subsection.4.2.2}
-\contentsline {subsubsection}{OpenGL function bindings}{21}{section*.20}
-\contentsline {subsection}{\numberline {4.2.3}Shader loading}{21}{subsection.4.2.3}
-\contentsline {subsection}{\numberline {4.2.4}Coordinate systems}{21}{subsection.4.2.4}
-\contentsline {subsection}{\numberline {4.2.5}Model loading}{21}{subsection.4.2.5}
-\contentsline {subsection}{\numberline {4.2.6}Texture loading}{21}{subsection.4.2.6}
-\contentsline {subsection}{\numberline {4.2.7}Deferred shading}{21}{subsection.4.2.7}
-\contentsline {section}{\numberline {4.3}Implementation ray-tracing}{21}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}OpenCL implementation}{21}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Radeon rays implementation}{21}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Shadow implementation}{21}{subsection.4.3.3}
-\contentsline {subsection}{\numberline {4.3.4}Optimizations}{21}{subsection.4.3.4}
-\contentsline {chapter}{\numberline {5}Conclusion}{22}{chapter.5}
+\contentsline {subsection}{\numberline {3.2.2}Rasterization}{14}{subsection.3.2.2}
+\contentsline {subsubsection}{OpenGL}{14}{section*.14}
+\contentsline {subsubsection}{Window creation}{16}{section*.15}
+\contentsline {subsubsection}{Texture loading}{16}{section*.16}
+\contentsline {subsubsection}{Model loading}{17}{section*.17}
+\contentsline {section}{\numberline {3.3}Hybrid rendering approach}{18}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Raytracing in rasterization}{18}{subsection.3.3.1}
+\contentsline {subsubsection}{Forward vs deferred rendering}{18}{section*.18}
+\contentsline {subsubsection}{Raytracing using g-buffers}{20}{section*.19}
+\contentsline {chapter}{\numberline {4}Case study}{21}{chapter.4}
+\contentsline {section}{\numberline {4.1}Getting started}{21}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Building using CMake}{21}{subsection.4.1.1}
+\contentsline {section}{\numberline {4.2}Implementation rasterization}{22}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Window creation}{22}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Rendering specification}{22}{subsection.4.2.2}
+\contentsline {subsubsection}{OpenGL function bindings}{22}{section*.20}
+\contentsline {subsection}{\numberline {4.2.3}Shader loading}{22}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Coordinate systems}{22}{subsection.4.2.4}
+\contentsline {subsection}{\numberline {4.2.5}Model loading}{22}{subsection.4.2.5}
+\contentsline {subsection}{\numberline {4.2.6}Texture loading}{22}{subsection.4.2.6}
+\contentsline {subsection}{\numberline {4.2.7}Deferred shading}{22}{subsection.4.2.7}
+\contentsline {section}{\numberline {4.3}Implementation ray-tracing}{22}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}OpenCL implementation}{22}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Radeon rays implementation}{22}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Shadow implementation}{22}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.3.4}Optimizations}{22}{subsection.4.3.4}
+\contentsline {chapter}{\numberline {5}Conclusion}{23}{chapter.5}
