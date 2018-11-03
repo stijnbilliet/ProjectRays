@@ -238,7 +238,7 @@ A large part of the parallelization control is in the hands of the programmer. U
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.8\textwidth]{memorymodel.png}
+	\includegraphics[width=0.7\textwidth]{memorymodel.png}
 	\caption{Illustration of the memory execution model.}
 \end{figure}
 
@@ -375,13 +375,27 @@ In the following chapter an example rendering pipeline will be covered. This pip
 
 \section{Implementation rasterization}
 \subsection{Window creation}
-The first main part that needs to be implemented to render is a window. \newline\par
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{window.jpg}
+	\caption{Snippet for window creation}
+\end{figure}
+
+The first main part that needs to be implemented to render is a window. As already outlined in the research part there are a lot of libraries out there. For this implementation SDL was chosen, simply for the reason that creating an SDL windowing context with OpenGL is a breeze. SDL expects the programmer to supply what version of OpenGL will be coupled to this window, what rendering mode will be used (e.g. immediate vs core) and the settings of the window. In our case we'll use OpenGL 3.3 seeing it was the first modern implementation of SDL and consecutively the easiest to comprehend, we'll also be using core mode seeing we need vertex buffer abilities.\newline\par
 
 \subsection{Rendering specification}
 \subsubsection{OpenGL function bindings}
+Once the window and accompanying context is in place the programmer can move on to the OpenGL loading. For this implementation Glad was used. To get glad to work in this solution the respective package has to be created from their website \href{https://glad.dav1d.de/}. For our purpose I selected the GL 3.3 package in core functionality mode. After the package selection has been done you should receive the source files. These can then be compiled into a solution by making use of CMake, to then consecutively build those into lib files. The final step was to link both the includes and libs into my solution. A simple call to gladLoadGLLoader(SDL\_GL\_GetProcAddress) later and it's done.\newline\par
 
+\pagebreak
 \subsection{Shader loading}
-One of the major things that make the graphics pipeline modular is programmable shaders. Shaders are mostly written in a pseudo c-language like GLSL/HLSL. This language is relative to the underlying rendering api that is being used. The rendering api is therefore in charge for the shader compilation. The only obstacle that the host program has to overcome is loading the source from the shader file. In this implementation the default cpp iostream was used, but this can be tailored to the needs of your engine/implementation. Once the shader source has been loaded it needs to be compiled and hooked to an OpenGL object.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{shader.jpg}
+\end{figure}
+
+One of the major things that make the graphics pipeline modular is programmable shaders. Shaders are mostly written in a pseudo c-language like GLSL/HLSL. This language is relative to the underlying rendering api that is being used. The rendering api is therefore in charge for the shader compilation. The only obstacle that the host program has to overcome is loading the source from the shader file. In this implementation the default cpp iostream was used, but this can be tailored to the needs of your engine/implementation. Once the shader source has been loaded it needs to be compiled and hooked to an OpenGL object. In this implementation a clear distinction between a shader and a shader program was made, where a shader is seen as the smallest building block and a shader program as a collection of those blocks.\newline\par
 
 \subsection{Coordinate systems}
 

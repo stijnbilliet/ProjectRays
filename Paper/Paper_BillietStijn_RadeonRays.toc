@@ -35,14 +35,14 @@
 \contentsline {subsection}{\numberline {4.2.1}Window creation}{23}{subsection.4.2.1}
 \contentsline {subsection}{\numberline {4.2.2}Rendering specification}{23}{subsection.4.2.2}
 \contentsline {subsubsection}{OpenGL function bindings}{23}{section*.20}
-\contentsline {subsection}{\numberline {4.2.3}Shader loading}{23}{subsection.4.2.3}
-\contentsline {subsection}{\numberline {4.2.4}Coordinate systems}{23}{subsection.4.2.4}
-\contentsline {subsection}{\numberline {4.2.5}Model loading}{23}{subsection.4.2.5}
-\contentsline {subsection}{\numberline {4.2.6}Texture loading}{23}{subsection.4.2.6}
-\contentsline {subsection}{\numberline {4.2.7}Deferred shading}{23}{subsection.4.2.7}
-\contentsline {section}{\numberline {4.3}Implementation ray-tracing}{23}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}OpenCL implementation}{23}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Radeon rays implementation}{23}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Shadow implementation}{23}{subsection.4.3.3}
-\contentsline {subsection}{\numberline {4.3.4}Optimizations}{23}{subsection.4.3.4}
-\contentsline {chapter}{\numberline {5}Conclusion}{24}{chapter.5}
+\contentsline {subsection}{\numberline {4.2.3}Shader loading}{24}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Coordinate systems}{25}{subsection.4.2.4}
+\contentsline {subsection}{\numberline {4.2.5}Model loading}{25}{subsection.4.2.5}
+\contentsline {subsection}{\numberline {4.2.6}Texture loading}{25}{subsection.4.2.6}
+\contentsline {subsection}{\numberline {4.2.7}Deferred shading}{25}{subsection.4.2.7}
+\contentsline {section}{\numberline {4.3}Implementation ray-tracing}{25}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}OpenCL implementation}{25}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Radeon rays implementation}{25}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Shadow implementation}{25}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.3.4}Optimizations}{25}{subsection.4.3.4}
+\contentsline {chapter}{\numberline {5}Conclusion}{26}{chapter.5}
