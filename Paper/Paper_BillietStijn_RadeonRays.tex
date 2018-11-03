@@ -378,28 +378,43 @@ In the following chapter an example rendering pipeline will be covered. This pip
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{window.jpg}
-	\caption{Snippet for window creation}
 \end{figure}
 
-The first main part that needs to be implemented to render is a window. As already outlined in the research part there are a lot of libraries out there. For this implementation SDL was chosen, simply for the reason that creating an SDL windowing context with OpenGL is a breeze. SDL expects the programmer to supply what version of OpenGL will be coupled to this window, what rendering mode will be used (e.g. immediate vs core) and the settings of the window. In our case we'll use OpenGL 3.3 seeing it was the first modern implementation of SDL and consecutively the easiest to comprehend, we'll also be using core mode seeing we need vertex buffer abilities.\newline\par
+The first main part that needs to be implemented to render is a window. As already outlined in the research part there are a lot of libraries out there. For this implementation SDL was chosen, simply for the reason that creating an SDL windowing context with OpenGL is a breeze. SDL expects the programmer to supply what version of OpenGL will be coupled to this window, what rendering mode will be used (e.g. immediate vs core) and the settings of the window. In our case we'll use OpenGL 3.3 seeing it was the first modern implementation of SDL and consecutively the easiest to comprehend, we'll also be using core mode seeing we need vertex buffer abilities.
 
-\subsection{Rendering specification}
-\subsubsection{OpenGL function bindings}
+\subsection{OpenGL rendering context}
+Once the window is in place the programmer is responsible for querying the accompanying OpenGL context.
+
+\subsection{OpenGL function bindings}
 Once the window and accompanying context is in place the programmer can move on to the OpenGL loading. For this implementation Glad was used. To get glad to work in this solution the respective package has to be created from their website \href{https://glad.dav1d.de/}. For our purpose I selected the GL 3.3 package in core functionality mode. After the package selection has been done you should receive the source files. These can then be compiled into a solution by making use of CMake, to then consecutively build those into lib files. The final step was to link both the includes and libs into my solution. A simple call to gladLoadGLLoader(SDL\_GL\_GetProcAddress) later and it's done.\newline\par
 
 \pagebreak
 \subsection{Shader loading}
 
+One of the major things that make the graphics pipeline modular is programmable shaders. Shaders are mostly written in a pseudo c-language like GLSL/HLSL. This language is relative to the underlying rendering api that is being used. The rendering api is therefore in charge for the shader compilation. The only obstacle that the host program has to overcome is loading the source from the shader file. In this implementation the default cpp iostream was used, but this can be tailored to the needs of your engine/implementation. Once the shader source has been loaded it needs to be compiled and hooked to an OpenGL object. In this implementation a clear distinction between a shader and a shader program was made, where a shader is seen as the smallest building block and a shader program as a collection of those blocks.
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{shader.jpg}
+	\caption{Snippet from shader loader}
 \end{figure}
 
-One of the major things that make the graphics pipeline modular is programmable shaders. Shaders are mostly written in a pseudo c-language like GLSL/HLSL. This language is relative to the underlying rendering api that is being used. The rendering api is therefore in charge for the shader compilation. The only obstacle that the host program has to overcome is loading the source from the shader file. In this implementation the default cpp iostream was used, but this can be tailored to the needs of your engine/implementation. Once the shader source has been loaded it needs to be compiled and hooked to an OpenGL object. In this implementation a clear distinction between a shader and a shader program was made, where a shader is seen as the smallest building block and a shader program as a collection of those blocks.\newline\par
-
 \subsection{Model loading}
+As mentioned prior for this implementation AssImp was used. AssImp provides a very simple interface only requiring us programmers to call the importers read file and to store it into a aiScene object. This object is essentially our top level node that allows us to use this tree as a searchable structure. To keep things easy our implementation does only require us to make 3 functions being: ProcessNode, ProcessMesh and LoadMaterialTextures. Under this section you'll find a quick rundown of what each function does and why.
+
+\begin{itemize}
+	\item{ProcessNode}\newline\par
+	ProcessNode as the name suggest goes over the current node and recursively calls the ProcessMesh on its meshes. Once all the meshes within this node have been handled it goes and calls ProcessNode on its children.
+	\item{ProcessMesh}\newline\par
+	ProcessMesh has three major tasks the first one being fetching all the vertices of the mesh things like: storing position, normal data and texture coordinates. Secondly it makes sure all the indices are being loaded in before finally going over to the materials where it calls the LoadMaterialTextures function on each of its materials.
+	\item{LoadMaterialTextures}\newline\par
+	Finally LoadMaterialTextures then takes in the material and the type of texture that we are trying to fetch, it then checks the 3D object format for that type of format and stores it respectively. As an added optimization it keeps track of double textures, so it won't load the same texture twice.
+\end{itemize}
+
+\pagebreak
 
 \subsection{Texture loading}
+For texture loading stb\_image was used to accelerate this task. stb\_image is a very simple library and is include file only, so there is not need to create a library file. stb\_image provides the programmer with a very simple api for loading textures and it is up to the programmer to link those to openGL objects.
 
 \subsection{Coordinate systems}
 Although you can render without a proper coordinate system in place, the implementation needed world space coordinates rather than screen space. \newline\par
@@ -407,7 +422,11 @@ So for this implementation a transform component was set in place. This transfor
 The next part is the camera component, the camera component is in charge of holding the viewprojectionmatrix. Meaning that it is also in charge of holding the camera position and its settings.\newline\par
 The final part to the puzzle is the mesh draw component. To create a meshdrawcomponent the programmer has to provide it with a mesh filter which is loaded by the model loading utilities mentioned prior. Then the final assembly is to build the worldviewprojectionmatrix (by multiplying the world, view and projection matrices with each other) and send it to the shader.
 
+\pagebreak
+
 \subsection{Deferred shading}
+
+\pagebreak
 
 \section{Implementation ray-tracing}
 

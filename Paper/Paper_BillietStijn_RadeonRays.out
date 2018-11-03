@@ -14,14 +14,15 @@
 \BOOKMARK [2][-]{subsection.4.1.1}{Building using CMake}{section.4.1}% 14
 \BOOKMARK [1][-]{section.4.2}{Implementation rasterization}{chapter.4}% 15
 \BOOKMARK [2][-]{subsection.4.2.1}{Window creation}{section.4.2}% 16
-\BOOKMARK [2][-]{subsection.4.2.2}{Rendering specification}{section.4.2}% 17
-\BOOKMARK [2][-]{subsection.4.2.3}{Shader loading}{section.4.2}% 18
-\BOOKMARK [2][-]{subsection.4.2.4}{Model loading}{section.4.2}% 19
-\BOOKMARK [2][-]{subsection.4.2.5}{Texture loading}{section.4.2}% 20
-\BOOKMARK [2][-]{subsection.4.2.6}{Coordinate systems}{section.4.2}% 21
-\BOOKMARK [2][-]{subsection.4.2.7}{Deferred shading}{section.4.2}% 22
-\BOOKMARK [1][-]{section.4.3}{Implementation ray-tracing}{chapter.4}% 23
-\BOOKMARK [2][-]{subsection.4.3.1}{OpenCL implementation}{section.4.3}% 24
-\BOOKMARK [2][-]{subsection.4.3.2}{Radeon rays implementation}{section.4.3}% 25
-\BOOKMARK [2][-]{subsection.4.3.3}{Shadow implementation}{section.4.3}% 26
-\BOOKMARK [0][-]{chapter.5}{Conclusion}{}% 27
+\BOOKMARK [2][-]{subsection.4.2.2}{OpenGL rendering context}{section.4.2}% 17
+\BOOKMARK [2][-]{subsection.4.2.3}{OpenGL function bindings}{section.4.2}% 18
+\BOOKMARK [2][-]{subsection.4.2.4}{Shader loading}{section.4.2}% 19
+\BOOKMARK [2][-]{subsection.4.2.5}{Model loading}{section.4.2}% 20
+\BOOKMARK [2][-]{subsection.4.2.6}{Texture loading}{section.4.2}% 21
+\BOOKMARK [2][-]{subsection.4.2.7}{Coordinate systems}{section.4.2}% 22
+\BOOKMARK [2][-]{subsection.4.2.8}{Deferred shading}{section.4.2}% 23
+\BOOKMARK [1][-]{section.4.3}{Implementation ray-tracing}{chapter.4}% 24
+\BOOKMARK [2][-]{subsection.4.3.1}{OpenCL implementation}{section.4.3}% 25
+\BOOKMARK [2][-]{subsection.4.3.2}{Radeon rays implementation}{section.4.3}% 26
+\BOOKMARK [2][-]{subsection.4.3.3}{Shadow implementation}{section.4.3}% 27
+\BOOKMARK [0][-]{chapter.5}{Conclusion}{}% 28

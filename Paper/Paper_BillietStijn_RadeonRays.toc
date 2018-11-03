@@ -33,15 +33,15 @@
 \contentsline {subsection}{\numberline {4.1.1}Building using CMake}{22}{subsection.4.1.1}
 \contentsline {section}{\numberline {4.2}Implementation rasterization}{23}{section.4.2}
 \contentsline {subsection}{\numberline {4.2.1}Window creation}{23}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Rendering specification}{23}{subsection.4.2.2}
-\contentsline {subsubsection}{OpenGL function bindings}{23}{section*.20}
-\contentsline {subsection}{\numberline {4.2.3}Shader loading}{24}{subsection.4.2.3}
-\contentsline {subsection}{\numberline {4.2.4}Model loading}{25}{subsection.4.2.4}
-\contentsline {subsection}{\numberline {4.2.5}Texture loading}{25}{subsection.4.2.5}
-\contentsline {subsection}{\numberline {4.2.6}Coordinate systems}{25}{subsection.4.2.6}
-\contentsline {subsection}{\numberline {4.2.7}Deferred shading}{25}{subsection.4.2.7}
-\contentsline {section}{\numberline {4.3}Implementation ray-tracing}{25}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}OpenCL implementation}{25}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Radeon rays implementation}{25}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Shadow implementation}{25}{subsection.4.3.3}
-\contentsline {chapter}{\numberline {5}Conclusion}{26}{chapter.5}
+\contentsline {subsection}{\numberline {4.2.2}OpenGL rendering context}{23}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}OpenGL function bindings}{23}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Shader loading}{24}{subsection.4.2.4}
+\contentsline {subsection}{\numberline {4.2.5}Model loading}{25}{subsection.4.2.5}
+\contentsline {subsection}{\numberline {4.2.6}Texture loading}{26}{subsection.4.2.6}
+\contentsline {subsection}{\numberline {4.2.7}Coordinate systems}{26}{subsection.4.2.7}
+\contentsline {subsection}{\numberline {4.2.8}Deferred shading}{27}{subsection.4.2.8}
+\contentsline {section}{\numberline {4.3}Implementation ray-tracing}{28}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}OpenCL implementation}{28}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Radeon rays implementation}{28}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Shadow implementation}{28}{subsection.4.3.3}
+\contentsline {chapter}{\numberline {5}Conclusion}{29}{chapter.5}
