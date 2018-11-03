@@ -339,7 +339,7 @@ The third rendering pipeline, although the most performant will not be covered w
 	\caption{Illustration of g-buffers}
 \end{figure}
 
-As touched earlier deferred rendering fills the off screen render buffers (g-buffers) with scene information in its first pass. This effectively enables us to do rendering after the fact by then using that information to construct everything we need to apply our lighting.\newline\par
+As touched earlier deferred rendering fills the off screen render buffers (g-buffers) with scene information in its first pass. This effectively enables us to do lighting after the fact by then using that information to construct everything we need to apply our lighting.\newline\par
 
 The information that is stored in the g-buffers is entirely up to the programmer (e.g. position data, normal data, color data etc.). However to be able to use this in conjunction with ray construction the programmer needs atleast the position data and the normal data. Some people would however argue that the position data isn't necessary and that the position can be calculated by the z-buffer and that would be an entirely correct answer, but for simplicity sake people opt for the position data instead.\newline\par
 
