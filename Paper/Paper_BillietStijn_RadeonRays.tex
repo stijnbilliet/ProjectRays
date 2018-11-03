@@ -277,19 +277,17 @@ Radeon-Rays employs OpenCL kernels to do all these calculations and to speed up 
 
 \subsection{Rasterization}
 \subsubsection{OpenGL}
-\begin{itemize}
-	\item{\textbf{OpenGL}}
-	\pagebreak
-	\item{\textbf{Loading libraries}}\newline\par
+\pagebreak
+\subsubsection{Loading libraries}
 	OpenGL is a specification that has many different versions, implementations and features. The hardware manufacturers have to make sure their hardware/drivers provides the graphics programmers of those features. However when working with immensely different target platforms, ranging from old hardware to new and from obscure cards to bleeding edge ones the graphics programmers need some kind of way to determine what's possible on that specific piece of hardware. That is where loading libraries come in, loading libraries essentially provide the programmer with function pointers to OpenGL agnostic functions at runtime, meaning they provide us the memory addresses of those functions seeing they depend from hardware to hardware.\newline\par
 	
 	An additional task of the loading libraries is extension loading where programmers can use this API to ask if a specific extension/feature is supported on the hardware. Loading libraries provide their own OpenGL implementations (e.g. 'gl.h'), but your own implementation can be provided by making sure it is set as the last include in your build order. A word of caution however is that some features might be declared in your specification that the loading library has no knowledge of, but this is an edge case seeing that most people won't thread that route.\newline\par
 	
-	There are numerous libraries out there that do just that, libraries like GLEW, GL3W, Glad, Glee and many more. All libraries that exist out there all deliver on the same promise, meaning that the choice of library really boils down to personal preference.\newline\par
-	\item{\textbf{GLM}}\newline\par
+	There are numerous libraries out there that do just that, libraries like GLEW, GL3W, Glad, Glee and many more. All libraries that exist out there all deliver on the same promise, meaning that the choice of library really boils down to personal preference.
+\subsubsection{GLM}
 	When it comes to math libraries that plug in nicely with an OpenGL renderer there's really only one good option namely GLM. OpenGL Mathematics (GLM) is a header only C++ mathematics library for graphics software based on the OpenGL Shading Language (GLSL). \newline\par
 	GLM exposes a well defined interface for everything from calculus to quaternion rotations (e.g. vector operations, matrix calculations).
-\end{itemize}
+\pagebreak
 \subsubsection{Window creation}
 A window allows the rendering specification to offload its framebuffer to the viewport, it also acts as a layer between the operating system and the game when it comes to input etc. The creation of a window is entirely dependent on the operating system it's creating the window for. For example when creating a window on linux the X window system should be addressed, whereas on Windows you would need to hook on to the WinMain function and use the WndProc callback to fetch any input. Therefore it is much smarter to use a library that hides all this operating system agnostic stuff in an abstraction layer.\newline\par
 SDL, SFML and GLFW are all low level libraries that handle multimedia indirection. They all deliver the same features in some shape or form. The choice really boils down to maturity of the library, documentation, usefulness of its features and frequency of the updates (if any).
@@ -300,10 +298,7 @@ SOIL, GLi, DevIL, FreeImage and stb\_image are all texture loading libraries tha
 \pagebreak
 
 \subsubsection{Model loading}
-\begin{itemize}
-	\item{\textbf{3D file format}}\newline\par
 	A 3D file format is a specification to store information about 3D models in the form of plain text or as binary data. The main purpose of such format is to encode 3D model's geometry, material information and animation data. Seeing there are loads of formats out there, creating your own model loading library has become something of a novelty. Fortunately there are loads of libraries out there that load about any format you throw at it.
-	\item{\textbf{AssImp}}\newline
 	
 	\begin{figure}[h]
 		\centering
@@ -311,7 +306,6 @@ SOIL, GLi, DevIL, FreeImage and stb\_image are all texture loading libraries tha
 	\end{figure}
 	
 	Asset import or AssImp for short is a model loading library designed to load as many formats as possible and to unify them into a searchable structure to be used by the host application. It structures the entire scene into a scene object, which consecutively holds a rootnode and a collection of meshes and materials. That rootnote then has leads to other nodes that all hold the same information namely a list of indices to the corresponding meshes and a next connection. This leads to a clear distinction as to what are seperate objects in the global model file, which can then later be used by the game-engine to ensure perfect relationships between aforementioned meshes.
-\end{itemize}
 
 \pagebreak
 

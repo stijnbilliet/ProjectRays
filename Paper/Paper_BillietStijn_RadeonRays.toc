@@ -21,13 +21,15 @@
 \contentsline {subsubsection}{Radeon Rays}{15}{section*.13}
 \contentsline {subsection}{\numberline {3.2.2}Rasterization}{15}{subsection.3.2.2}
 \contentsline {subsubsection}{OpenGL}{15}{section*.14}
-\contentsline {subsubsection}{Window creation}{17}{section*.15}
-\contentsline {subsubsection}{Texture loading}{17}{section*.16}
-\contentsline {subsubsection}{Model loading}{18}{section*.17}
+\contentsline {subsubsection}{Loading libraries}{16}{section*.15}
+\contentsline {subsubsection}{GLM}{16}{section*.16}
+\contentsline {subsubsection}{Window creation}{17}{section*.17}
+\contentsline {subsubsection}{Texture loading}{17}{section*.18}
+\contentsline {subsubsection}{Model loading}{18}{section*.19}
 \contentsline {section}{\numberline {3.3}Hybrid rendering approach}{19}{section.3.3}
 \contentsline {subsection}{\numberline {3.3.1}Raytracing in rasterization}{19}{subsection.3.3.1}
-\contentsline {subsubsection}{Forward vs deferred rendering}{19}{section*.18}
-\contentsline {subsubsection}{Raytracing using g-buffers}{21}{section*.19}
+\contentsline {subsubsection}{Forward vs deferred rendering}{19}{section*.20}
+\contentsline {subsubsection}{Raytracing using g-buffers}{21}{section*.21}
 \contentsline {chapter}{\numberline {4}Case study}{22}{chapter.4}
 \contentsline {section}{\numberline {4.1}Getting started}{22}{section.4.1}
 \contentsline {subsection}{\numberline {4.1.1}Building using CMake}{22}{subsection.4.1.1}
