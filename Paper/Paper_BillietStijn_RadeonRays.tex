@@ -448,12 +448,43 @@ The final piece of code is in charge of rendering a full screen quad with the co
 \pagebreak
 
 \section{Implementation ray-tracing}
-
 \subsection{OpenCL implementation}
+Setting up OpenCL can be a tedious process seeing there are multiple levels that need to be set up. For this implementation a small toolkit CLW was used. All this toolkit does is hide some of the abstractions behind very simple api calls. Nontheless it does take some freedom away from the programmer, but it does allow the programmer to jerryrig its own implementation to theirs.\newline\par
+
+As outlined in the research part there is a lot of performance to be had by just simply creating the right context through OpenCL. Seeing that our pipeline has three major parts that need communicating with each other (e.g. OpenCL/OpenGL/RadeonRays). To benefit from almost free communication (e.g. zero copy) the programmer first has to make an interop context.\newline\par
+
+The first steps for setting up OpenCL are getting the devices and platforms. Once the devices have been fetched and after verifying that a valid device was found the next logical step would be to create the context. An additional step to the context creation call is to specify context properties, now here is where it gets exponentially more interesting seeing that those properties allow the programmer to set up his interop context.
 
 \subsection{Radeon rays implementation}
+With OpenCL now set in place it is time to move on to Radeon Rays. To build RadeonRays the programmer can simply download it from \url{https://github.com/GPUOpen-LibrariesAndSDKs/RadeonRays_SDK} and build the binaries using CMake. Like addressed in the research portion of this paper Radeon Rays uses a OpenCL context to run its intersection kernels, so when initializing Radeon Rays it automatically creates a new OpenCL context. Luckily though there is an overloaded constructor taking an already existing OpenCL context, further enabling the programmer to share resources between OpenCL and Radeon Rays.
+
+\pagebreak
 
 \subsection{Shadow implementation}
+The shadow implementation will heavily benefit from GPU acceleration seeing that the bulk of these operations are very parallel in nature.
+\subsubsection{Ray creation}
+First the GPU will be used to create a shadow ray buffer, so it will be tasked with creating the 2073600 rays (ray for every pixel in 1920x1080p resolution). As you can probably tell this is an enormous amount of data, but each ray has no knowledge of the other one existing making it perfect for parallel execution.\newline\par
+
+Here the power of OpenCL and deferred rendering are combined to run a kernel for every entry in the position buffer and normal buffer. Effectively creating a ray that travels from the objects world position towards the lights (in this case directional light).
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{GenShadowRays.jpg}
+	\caption{Code snippet from generate shadow rays kernel}
+\end{figure}
+
+\pagebreak
+
+\subsubsection{Light mask}
+Before moving on to the light mask the programmer needs to send the ray buffer of to RadeonRays where its kernels will do the ray intersection. Once the intersection query has taken place the library provides us from an intersection buffer. This buffer is stored in GPU memory and can thus be shared with our own OpenCL kernels, alleviating the need to copy from CPU to GPU.\newline\par
+
+Again for every pixel in the light buffer, which is now white, we run a light mask kernel. The light mask kernel is in charge of fetching the intersection results and checking if they reached the light or not. For hard shadows this is easy, when the pixel gets occluded the light mask gets filled with a zero, if the ray reached the light the value stays one. For lighting calculations this means that pixels that have a one will get lit and pixel that have a zero will not get lit. This isn't totally accurate seeing we'd need to rely on global illumination to account for light bleeding.\newline\par
+
+It gets a little more interesting when looking at soft shadows however. Traditional ray tracing relies on multiple rays per light source to create soft shadow gradients, like covered in the research part this wouldn't be a viable option seeing it would be extremely performance heavy. So for this implementation of the light mask occlusion delta value was written instead of the occlusion value. The occlusion delta value gets calculated by dividing the rays maximum length (distance to lightsource) by the distance to the occluder. This give a bit more of a smooth transition instead of the hard one and zero values. This will suffice for hard shadows, but does still need a lot of extra work for a soft shadow implementation. 
+\pagebreak
+
+\subsubsection{Penumbra sampling}
+
 
 \chapter{Conclusion}
 

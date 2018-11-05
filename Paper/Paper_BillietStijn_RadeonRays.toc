@@ -43,5 +43,8 @@
 \contentsline {section}{\numberline {4.2}Implementation ray-tracing}{29}{section.4.2}
 \contentsline {subsection}{\numberline {4.2.1}OpenCL implementation}{29}{subsection.4.2.1}
 \contentsline {subsection}{\numberline {4.2.2}Radeon rays implementation}{29}{subsection.4.2.2}
-\contentsline {subsection}{\numberline {4.2.3}Shadow implementation}{29}{subsection.4.2.3}
-\contentsline {chapter}{\numberline {5}Conclusion}{30}{chapter.5}
+\contentsline {subsection}{\numberline {4.2.3}Shadow implementation}{30}{subsection.4.2.3}
+\contentsline {subsubsection}{Ray creation}{30}{section*.22}
+\contentsline {subsubsection}{Light mask}{31}{section*.23}
+\contentsline {subsubsection}{Penumbra sampling}{32}{section*.24}
+\contentsline {chapter}{\numberline {5}Conclusion}{33}{chapter.5}
