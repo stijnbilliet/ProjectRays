@@ -30,7 +30,7 @@
 	\Huge \textbf{Hybrid rendering}\\
 	\huge using Radeon Rays
 }
-\titlepic{\includegraphics[width=\textwidth]{radeonrays.jpg}}
+\titlepic{\includegraphics[width=\textwidth]{result.png}}
 % Author
 \author{
 	Stijn Billiet\\\\
@@ -53,10 +53,7 @@
 
 \mainmatter
 \chapter{Abstract}
-This paper was written in an effort to elaborate on hybrid solutions between modern day rasterization engines and powerful ray-tracing ones and to explain rather thoroughly how one could implement this.
-
-TODO methods
-TODO results
+This paper was written in an effort to elaborate on hybrid solutions between modern day rasterization engines and powerful ray-tracing ones and to explain rather thoroughly how one would go about implementing this. For the case study's implementation shadows was used to explain the main principle behind the hybrid approach. The hybrid rendering postpones its lighting effects through the use of deferred rendering, before going into lighting the desired lighting information is probed through the use of the raytracer. A stretch was made to try to improve the shadow attempt into a soft shadow one, but this attempt was feeble and did not return the wanted results. However the hard shadow implementation really shines seeing it performs extremely well and it even supersedes the rasterization method when it comes both speed and memory throughput.
 
 \chapter{Introduction}
 Ray-tracing is usually used in VFX productions to create the most accurate lighting effects, this doesn’t come for free though seeing crisp ray-traced images require countless hours of rendering. With the rise of new ray-tracing capable hardware (e.g. Volta architecture NVIDIA) things are about to change, developers are already putting ray-tracing in some parts of their pipelines, they must however rely on optimization (e.g. De-noising) to keep up with the performance demands. So for the time being we will see a lot of hybrid solutions, but we should see full ray traced engines by the time that our hardware is capable enough.\newline\par
@@ -276,18 +273,16 @@ Radeon Rays exposes a well defined C++ API for scene construction and performing
 Radeon-Rays employs OpenCL kernels to do all these calculations and to speed up the ray intersection they order their objects in bounding volume hierarchies. Seeing they use OpenCL to speed up their computations by sending it of to the GPU, this library will run on almost any GPU (meaning it will also work on Nvidia/Intel products).
 
 \subsection{Rasterization}
-\subsubsection{OpenGL}
-\pagebreak
-\subsubsection{Loading libraries}
+\subsubsection{OpenGL Loading libraries}
 	OpenGL is a specification that has many different versions, implementations and features. The hardware manufacturers have to make sure their hardware/drivers provides the graphics programmers of those features. However when working with immensely different target platforms, ranging from old hardware to new and from obscure cards to bleeding edge ones the graphics programmers need some kind of way to determine what's possible on that specific piece of hardware. That is where loading libraries come in, loading libraries essentially provide the programmer with function pointers to OpenGL agnostic functions at runtime, meaning they provide us the memory addresses of those functions seeing they depend from hardware to hardware.\newline\par
 	
 	An additional task of the loading libraries is extension loading where programmers can use this API to ask if a specific extension/feature is supported on the hardware. Loading libraries provide their own OpenGL implementations (e.g. 'gl.h'), but your own implementation can be provided by making sure it is set as the last include in your build order. A word of caution however is that some features might be declared in your specification that the loading library has no knowledge of, but this is an edge case seeing that most people won't thread that route.\newline\par
 	
 	There are numerous libraries out there that do just that, libraries like GLEW, GL3W, Glad, Glee and many more. All libraries that exist out there all deliver on the same promise, meaning that the choice of library really boils down to personal preference.
+\pagebreak
 \subsubsection{GLM}
 	When it comes to math libraries that plug in nicely with an OpenGL renderer there's really only one good option namely GLM. OpenGL Mathematics (GLM) is a header only C++ mathematics library for graphics software based on the OpenGL Shading Language (GLSL). \newline\par
 	GLM exposes a well defined interface for everything from calculus to quaternion rotations (e.g. vector operations, matrix calculations).
-\pagebreak
 \subsubsection{Window creation}
 A window allows the rendering specification to offload its framebuffer to the viewport, it also acts as a layer between the operating system and the game when it comes to input etc. The creation of a window is entirely dependent on the operating system it's creating the window for. For example when creating a window on linux the X window system should be addressed, whereas on Windows you would need to hook on to the WinMain function and use the WndProc callback to fetch any input. Therefore it is much smarter to use a library that hides all this operating system agnostic stuff in an abstraction layer.\newline\par
 SDL, SFML and GLFW are all low level libraries that handle multimedia indirection. They all deliver the same features in some shape or form. The choice really boils down to maturity of the library, documentation, usefulness of its features and frequency of the updates (if any).
@@ -296,7 +291,6 @@ A texture is a 2D (could be 3D or 1D) image packed with color data that is used 
 
 SOIL, GLi, DevIL, FreeImage and stb\_image are all texture loading libraries that promise on loading the most prevalent of types.
 \pagebreak
-
 \subsubsection{Model loading}
 	A 3D file format is a specification to store information about 3D models in the form of plain text or as binary data. The main purpose of such format is to encode 3D model's geometry, material information and animation data. Seeing there are loads of formats out there, creating your own model loading library has become something of a novelty. Fortunately there are loads of libraries out there that load about any format you throw at it.
 	
@@ -339,12 +333,6 @@ The third rendering pipeline, although the most performant will not be covered w
 \pagebreak
 
 \subsubsection{Raytracing using g-buffers}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{gbuffer.png}
-	\caption{Illustration of g-buffers}
-\end{figure}
 
 As touched earlier deferred rendering fills the off screen render buffers (g-buffers) with scene information in its first pass. This effectively enables us to do lighting after the fact by then using that information to construct everything we need to apply our lighting.\newline\par
 
@@ -437,6 +425,12 @@ As mentioned prior for this implementation AssImp was used. AssImp provides a ve
 \pagebreak
 
 \subsection{Deferred shading}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{gbuffer.png}
+\end{figure}
+
 With a standard rendering pipeline in place it was time to go ahead and turn that pipeline into a deferred one. The steps beforehand did also not cover lighting effects for the simple reason that they would need to be re-written once going deferred.\newline\par
 The major implementation difference now is that the programmer needs to define his/her off screen render buffers (e.g. position buffer, normal buffer, etc.). First the programmer has to define what buffers are stored in the gbuffer object (frame buffer object). With the gbuffer object defined it's time to start moving on to the fill shader.\newline\par
 The fill shader is tasked with filling the gbuffers with all the geometry information respectively, so if the implementation uses four buffers the fill shader will be tasked with filling those four buffers. The fill shader is a shader program consisting of two shaders first a simple vertex shader that passes the information to the next stages and then a fragment shader who does all the heavy lifting and fills all the buffers. Then all the geometry gets rendered using this shader. After the bulk of the rendering is done we unbind the gbuffers (that are now filled with geometry information) and we move on to the lightpass.\newline\par
@@ -483,10 +477,40 @@ Again for every pixel in the light buffer, which is now white, we run a light ma
 It gets a little more interesting when looking at soft shadows however. Traditional ray tracing relies on multiple rays per light source to create soft shadow gradients, like covered in the research part this wouldn't be a viable option seeing it would be extremely performance heavy. So for this implementation of the light mask occlusion delta value was written instead of the occlusion value. The occlusion delta value gets calculated by dividing the rays maximum length (distance to lightsource) by the distance to the occluder. This give a bit more of a smooth transition instead of the hard one and zero values. This will suffice for hard shadows, but does still need a lot of extra work for a soft shadow implementation. 
 \pagebreak
 
-\subsubsection{Penumbra sampling}
+\subsubsection{Soft shadows}
+A naive soft shadow implementation would be to send out countless rays per light, effectively trashing performance. Therefore it is very tempting to try and fake that effect. Fortunately there is already research being done on this matter and multiple individuals\cite{kissner16} have come up with ways to fake this by using screen space sampling. It was only natural to go ahead and try this in our implementation. The first step of this algorithm was to calculate the size of the lightmask sample.
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{formula.png}
+\end{figure}
+
+\begin{minipage}{0.4\textwidth}
+	This sampling was needed to try and find out how large the penumbra (shadow gradient) should be. Here it was a simple case of looking for the nearest non occluded (lit) pixel. This required a grid search to find out where in that sample that nearest pixel was.
+\end{minipage} \hfill
+\begin{minipage}{0.6\textwidth}
+	\centering
+	\includegraphics[width=0.8\textwidth]{sampler.png}
+\end{minipage}
+
+\vspace{0.5cm}
+
+\begin{minipage}{0.4\textwidth}
+	\centering
+	\includegraphics[width=0.9\textwidth]{shadowartifact.png}
+\end{minipage} \hfill
+\begin{minipage}{0.6\textwidth}
+	A large caution when using this approach is to keep in mind that this algorithm is performed in a screen space environment, meaning that the z-value does not get factored in this will bring problems when not looking straight at a surface. The algorithm's author\cite{kissner16} uses a highly simplified model to try and combat this, while it does alleviate some problems it's still not quite there (e.g. peter panning effect).\newline\par
+	The final step however was to use that distance to the nearest sample and divide it by the maximum acquirable distance within the sample area.
+\end{minipage}
+\vspace{0.5cm}
+
+This was not the result that was desired and was therefore not included in the final implementation.
 
 \chapter{Conclusion}
+When it came to rasterization setting up a deferred pipeline was easy, there was quite a lot of groundwork that was done already. Rasterization in its essence is already quite performant so no additional optimization were needed. The raytracing part of this implementation came with some challenges regarding not losing too much performance while still trying to gain from raytracing. The median road that was taken here was to make sure there was a zero copy protocol between the different api's to ensure as little time as possible was wasted towards buss contention. Fortunately for us radeon rays already came with quite a big optimization being the sorting of the meshes in BVH's, so for this implementation no major additional optimization were needed.\newline\par
+
+A hybrid pipeline is definitely the way to go seeing the performance impact of raytracing and the limited amount of dedicated hardware acceleration (e.g. No Nvidia RTX cards). The main upsides of a hybrid pipeline being that the large cost of the primary rays can totally be augmented and that the renderer can now use world information rather than only surface information. This on its own can cause a ray traced effect to be even more effective than a rasterization one (e.g. shadows). The only real downside of a full hybrid approach is the limited amount of scalability seeing that this almost forces the renderer to always use ray tracing for lighting effects, this can be alleviated by implementing a highly modular pipeline, but this would require a lot of work to get right.
 
 \bibliographystyle{}
 \bibliography{}
@@ -527,6 +551,12 @@ It gets a little more interesting when looking at soft shadows however. Traditio
 	2018,
 	Ray-Tracing: Generating Camera Rays,
 	\url{https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays}
+	
+	\bibitem{kissner16}
+	Michael Kissner,
+	2016,
+	Ray traced soft shadows in real time in Spellwrath,
+	\url{https://www.imgtec.com/blog/ray-traced-soft-shadows-in-real-time-spellwrath/}
 \end{thebibliography}
 
 %%%%%%%%%%%%%%%%
