@@ -19,7 +19,10 @@ public:
 	unsigned int GetWorldPosBuffer() const;
 	unsigned int GetNormalBuffer() const;
 	unsigned int GetLightBuffer() const;
+	unsigned int GetDepthBuffer() const;
+
 	const glm::vec3& GetDirectionalLightPos() const;
+	float GetDirectionalSize() const;
 
 	ShaderProgram* GetLightDrawer() const;
 
@@ -32,7 +35,7 @@ private:
 	unsigned int quadVBO;
 
 	unsigned int m_gBuffer;
-	unsigned int gPosition, gAlbedo, gNormal, gLightAcc;
+	unsigned int gPosition, gAlbedo, gNormal, gLightAcc, gDepth;
 
 	int m_ScrWidth;
 	int m_ScrHeight;
@@ -43,6 +46,7 @@ private:
 
 	glm::vec3 m_DirectionalPos;
 	glm::vec3 m_DirectionalCol;
+	float m_DirectionalSize;
 
 	SDL_GLContext m_Context;
 	SDL_Window* m_pWindow;

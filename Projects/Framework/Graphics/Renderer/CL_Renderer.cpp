@@ -51,10 +51,6 @@ void CL_Renderer::OnInit(GameContext*)
 	PropertyManager::GetInstance().GetString("assetpath", m_AssetPath);
 
 	_putenv("GPU_MAX_ALLOC_PERCENT=100");
-
-	//InitCL(pGameContext);
-	//InitRadeonRays(pGameContext);
-	//InitKernels(pGameContext);
 }
 
 void CL_Renderer::OnUpdate(GameContext*)
@@ -112,6 +108,7 @@ void CL_Renderer::InitKernels(GameContext* pGameContext)
 
 	InitShadowRaysKernel(pGameContext);
 	InitLightMaskKernel(pGameContext);
+	InitSoftSampler(pGameContext);
 }
 
 void CL_Renderer::GenerateShadowRays(GameContext* pGameContext)
@@ -159,13 +156,10 @@ void CL_Renderer::GenerateLightingMask(GameContext*)
 	cl_int status = CL_SUCCESS;
 	size_t gs[] = { (size_t)m_ScreenWidth, (size_t)m_ScreenHeight };
 
-	//Acquire lightBuffer
-	status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLLightBuffer, 0, nullptr, nullptr);
-	CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLLightBuffer)");
-
 	//Get kernel from kernelprogram
-	m_LightMaskGenerator.SetArg(0, sizeof(cl_mem), &m_CLRROcclusionBuffer);
-	m_LightMaskGenerator.SetArg(1, sizeof(cl_mem), &m_CLGLLightBuffer);
+	m_LightMaskGenerator.SetArg(0, sizeof(cl_mem), &m_CLRRIntersectionBuffer);
+	m_LightMaskGenerator.SetArg(1, sizeof(cl_mem), &m_CLRRRaysBuffer);
+	m_LightMaskGenerator.SetArg(2, sizeof(cl_mem), &m_CLGLLightBuffer);
 
 	//Launch kernels on cuda cores
 	status = clEnqueueNDRangeKernel(commandQueue, m_LightMaskGenerator, 2, NULL, gs, NULL, 0, nullptr, nullptr);
@@ -173,10 +167,36 @@ void CL_Renderer::GenerateLightingMask(GameContext*)
 
 	status = clFlush(commandQueue);
 	CL_ERROR_CHECK(status, "Flush failed (m_LightMaskGenerator)");
+}
 
-	//Release LightBuffer
-	status = clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLLightBuffer, 0, nullptr, nullptr);
-	CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLLightBuffer)");
+void CL_Renderer::SamplePenumbra(GameContext* pGameContext)
+{
+	auto dirLightSize = pGameContext->m_pGLRenderer->GetDirectionalSize();
+
+	auto commandQueue = m_CLContext.GetCommandQueue(0);
+	cl_int status = CL_SUCCESS;
+	size_t gs[] = { (size_t)m_ScreenWidth, (size_t)m_ScreenHeight };
+
+	//Get Depth buffer
+	status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLDepthBuffer, 0, nullptr, nullptr);
+	CL_ERROR_CHECK(status, "clEnqueueAcquireGLObjects failed (m_CLGLDepthBuffer)");
+
+	//Get kernel from kernelprogram
+	m_PenumbraSampler.SetArg(0, sizeof(float), &dirLightSize);
+	m_PenumbraSampler.SetArg(1, sizeof(cl_mem), &m_CLTempLightBuffer);
+	m_PenumbraSampler.SetArg(2, sizeof(cl_mem), &m_CLGLLightBuffer);
+	m_PenumbraSampler.SetArg(3, sizeof(cl_mem), &m_CLGLDepthBuffer);
+
+	//Launch kernels on cuda cores
+	status = clEnqueueNDRangeKernel(commandQueue, m_PenumbraSampler, 2, NULL, gs, NULL, 0, nullptr, nullptr);
+	CL_ERROR_CHECK(status, "clEnqueueNDRangeKernel failed (m_LightMaskGenerator)");
+
+	status = clFlush(commandQueue);
+	CL_ERROR_CHECK(status, "Flush failed (m_PenumbraSampler)");
+
+	//Release normalBuffer
+	status = clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLDepthBuffer, 0, nullptr, nullptr);
+	CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLDepthBuffer)");
 }
 
 void CL_Renderer::InitShadowRaysKernel(GameContext * pGameContext)
@@ -198,8 +218,8 @@ void CL_Renderer::InitShadowRaysKernel(GameContext * pGameContext)
 	m_CLRRRaysBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(RadeonRays::ray), m_RayData, &status);
 	CL_ERROR_CHECK(status, "Buffer creation failed (rays buffer)");
 
-	m_OcclusionData = new int[m_ScreenWidth*m_ScreenHeight]();
-	m_CLRROcclusionBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(int), m_OcclusionData, &status);
+	m_IntersectionData = new RadeonRays::Intersection[m_ScreenWidth*m_ScreenHeight]();
+	m_CLRRIntersectionBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(RadeonRays::Intersection), m_IntersectionData, &status);
 	CL_ERROR_CHECK(status, "Buffer creation failed (occlusion buffer)");
 
 	//Init kernel
@@ -213,11 +233,26 @@ void CL_Renderer::InitLightMaskKernel(GameContext* pGameContext)
 	cl_int status = CL_SUCCESS;
 	
 	//Init buffers
-	m_CLGLLightBuffer = clCreateFromGLTexture(m_CLContext, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, gLightBuffer, &status);
+	m_CLGLLightBuffer = clCreateFromGLTexture(m_CLContext, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, gLightBuffer, &status);
 	CL_ERROR_CHECK(status, "Texture sharing failed (gLightBuffer buffer)");
 
 	//Init kernel
 	m_LightMaskGenerator = m_RayGenerator.GetKernel("GenerateLightingMask");
+}
+
+void CL_Renderer::InitSoftSampler(GameContext* pGameContext)
+{
+	cl_int status = CL_SUCCESS;
+	unsigned int gDepthBuffer = pGameContext->m_pGLRenderer->GetDepthBuffer();
+
+	//Init buffers
+	m_CLTempLightBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(cl_float4), nullptr, &status);
+	CL_ERROR_CHECK(status, "clCreateImage failed (m_CLTempLightBuffer)");
+
+	m_CLGLDepthBuffer = clCreateFromGLTexture(m_CLContext, CL_MEM_READ_ONLY, GL_TEXTURE_2D, 0, gDepthBuffer, &status);
+	CL_ERROR_CHECK(status, "Texture sharing failed (m_CLGLDepthBuffer)");
+
+	m_PenumbraSampler = m_RayGenerator.GetKernel("SamplePenumbra");
 }
 
 void CL_Renderer::RaytracedShadows(GameContext* pGameContext)
@@ -227,15 +262,33 @@ void CL_Renderer::RaytracedShadows(GameContext* pGameContext)
 	//Generate shadow rays
 	GenerateShadowRays(pGameContext);
 
-	//Fetch rays and occlusion information
+	//Fetch rays and occlusion 
 	m_RaysBuffer = CreateFromOpenClBuffer(m_pRRContext, m_CLRRRaysBuffer);
-	m_OcclusionBuffer = CreateFromOpenClBuffer(m_pRRContext, m_CLRROcclusionBuffer);
+	m_IntersectionBuffer = CreateFromOpenClBuffer(m_pRRContext, m_CLRRIntersectionBuffer);
 
 	//Query occlusion
 	RadeonRays::Event* e = nullptr;
-	m_pRRContext->QueryOcclusion(m_RaysBuffer, m_ScreenWidth*m_ScreenHeight, m_OcclusionBuffer, nullptr, &e);
+	m_pRRContext->QueryIntersection(m_RaysBuffer, m_ScreenWidth*m_ScreenHeight, m_IntersectionBuffer, nullptr, &e);
 	e->Wait();
 	
+	//Acquire lightBuffer
+	cl_int status = CL_SUCCESS;
+	status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLLightBuffer, 0, nullptr, nullptr);
+	CL_ERROR_CHECK(status, "clEnqueueAcquireGLObjects failed (m_CLGLLightBuffer)");
+
 	//Generate lightmap
 	GenerateLightingMask(pGameContext);
+
+	//Blit lightmask
+	size_t origin[] = {0, 0, 0};
+	size_t region[] = {(size_t)m_ScreenWidth, (size_t)m_ScreenHeight, (size_t)1};
+	status = clEnqueueCopyImageToBuffer(commandQueue, m_CLGLLightBuffer, m_CLTempLightBuffer, origin, region, 0, 0, nullptr, nullptr);
+	CL_ERROR_CHECK(status, "clEnqueueCopyBufferToImage failed (m_CLGLLightBuffer | m_CLTempLightBuffer)");
+
+	//Sample lightmask for soft shadows
+	SamplePenumbra(pGameContext);
+
+	//Release LightBuffer
+	status = clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLLightBuffer, 0, nullptr, nullptr);
+	CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLLightBuffer)");
 }

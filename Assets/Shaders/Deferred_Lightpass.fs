@@ -16,6 +16,7 @@ void main()
     // retrieve data from gbuffer
 	vec3 FragPos = texture(gPosition, TexCoords).rgb;
 	vec3 Diffuse = texture(gAlbedo, TexCoords).rgb;
+	float Ambient = texture(gAlbedo, TexCoords).a;
     vec3 Normal = texture(gNormal, TexCoords).rgb;
     vec3 LightAcc = texture(gLightAcc, TexCoords).rgb;
 	
@@ -26,8 +27,8 @@ void main()
 	// diffuse
     vec3 diffuse = max(dot(Normal, lightDir), 0.0f) * Diffuse * dLightCol;
 		
-	LightAcc = LightAcc + 0.4f;
-	clamp(Diffuse, 0.0f, 1.0f);
+	LightAcc += Ambient;
+	clamp(LightAcc, 0.0f, 1.0f);
 	
 	Diffuse = (diffuse * LightAcc);
 	clamp(Diffuse, 0.0f, 1.0f);

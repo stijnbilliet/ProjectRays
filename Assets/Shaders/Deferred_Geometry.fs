@@ -20,7 +20,7 @@ void main()
     gNormal = normalize(Normal);
     // and the diffuse per-fragment color
     gAlbedo = texture(texture_diffuse1, TexCoords);
+	gAlbedo.a = texture(texture_ambient1, TexCoords).r;
 	//gLightAcc
 	gLightAcc = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-	//gLightAcc.r = texture(texture_ambient1, TexCoords).r;
 }

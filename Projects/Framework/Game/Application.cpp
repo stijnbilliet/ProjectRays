@@ -60,8 +60,8 @@ void Application::ParseCmdLineArgs()
 
 void Application::FillPropertyManager()
 {
-	PropertyManager::GetInstance().Add("renderer_viewwidth", "1920");
-	PropertyManager::GetInstance().Add("renderer_viewheight", "1080");
+	PropertyManager::GetInstance().Add("renderer_viewwidth", "1600");
+	PropertyManager::GetInstance().Add("renderer_viewheight", "900");
 	PropertyManager::GetInstance().Add("windowtitle", "ProjectRays(OpenGL+RadeonRays)");
 }
 

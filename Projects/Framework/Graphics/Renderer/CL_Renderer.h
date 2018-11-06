@@ -21,9 +21,11 @@ public:
 private:
 	void GenerateShadowRays(GameContext* pGameContext);
 	void GenerateLightingMask(GameContext* pGameContext);
+	void SamplePenumbra(GameContext* pGameContext);
 
 	void InitShadowRaysKernel(GameContext* pGameContext);
 	void InitLightMaskKernel(GameContext* pGameContext);
+	void InitSoftSampler(GameContext* pGameContext);
 
 	//Radeon rays context
 	RadeonRays::IntersectionApi* m_pRRContext;
@@ -36,20 +38,23 @@ private:
 	CLWProgram m_RayGenerator; //one or more kernels bundled in one
 	CLWKernel m_ShadowRayGenerator;
 	CLWKernel m_LightMaskGenerator;
+	CLWKernel m_PenumbraSampler;
 
 	//KernelData
 	cl_mem m_CLGLWorldPosBuffer;
 	cl_mem m_CLGLNormalBuffer;
 	cl_mem m_CLGLLightBuffer;
+	cl_mem m_CLGLDepthBuffer;
+	cl_mem m_CLTempLightBuffer;
 	cl_mem m_CLRRRaysBuffer;
-	cl_mem m_CLRROcclusionBuffer;
+	cl_mem m_CLRRIntersectionBuffer;
 
 	//Radeon rays data
 	RadeonRays::Buffer* m_RaysBuffer;
-	RadeonRays::Buffer* m_OcclusionBuffer;
+	RadeonRays::Buffer* m_IntersectionBuffer;
 
 	RadeonRays::ray* m_RayData;
-	int* m_OcclusionData;
+	RadeonRays::Intersection* m_IntersectionData;
 
 	int m_ScreenWidth;
 	int m_ScreenHeight;

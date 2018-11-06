@@ -2,7 +2,7 @@
 #include "GL_Renderer.h"
 
 GL_Renderer::GL_Renderer()
-	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false), m_ScrWidth(), m_ScrHeight(), m_gBuffer(), m_WindowTitle(), m_DirectionalPos(glm::vec3(0.0f, 80.0f, 5.0f)), m_DirectionalCol(glm::vec3(1.0f, 0.9f, 0.8f))
+	:SingleInstance(), m_Context{}, m_pWindow{ nullptr }, m_Vsync(false), m_ScrWidth(), m_ScrHeight(), m_gBuffer(), m_WindowTitle(), m_DirectionalPos(glm::vec3(0.0f, 80.0f, 5.0f)), m_DirectionalCol(glm::vec3(1.0f, 0.9f, 0.8f)), m_DirectionalSize(20.0f)
 {
 }
 
@@ -141,9 +141,19 @@ unsigned int GL_Renderer::GetLightBuffer() const
 	return gLightAcc;
 }
 
+unsigned int GL_Renderer::GetDepthBuffer() const
+{
+	return gDepth;
+}
+
 const glm::vec3 & GL_Renderer::GetDirectionalLightPos() const
 {
 	return m_DirectionalPos;
+}
+
+float GL_Renderer::GetDirectionalSize() const
+{
+	return m_DirectionalSize;
 }
 
 ShaderProgram * GL_Renderer::GetLightDrawer() const
@@ -256,11 +266,10 @@ void GL_Renderer::PostInit(GameContext* pGameContext)
 	glDrawBuffers(4, attachments);
 
 	//create and attach depth buffer
-	unsigned int rboDepth;
-	glGenRenderbuffers(1, &rboDepth);
-	glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_ScrWidth, m_ScrHeight);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+	glGenRenderbuffers(1, &gDepth);
+	glBindRenderbuffer(GL_RENDERBUFFER, gDepth);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, m_ScrWidth, m_ScrHeight);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, gDepth);
 
 	// finally check if framebuffer is complete
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -321,7 +330,10 @@ void GL_Renderer::ImGuiOnDraw()
 	ImGui::End();
 
 	ImGui::Begin("Light");
-		ImGui::SliderFloat3("Light Position", (float*)&m_DirectionalPos, -20.0f, 20.0f); // Edit 1 float using a slider from 0.0f to 1.0f    
-		ImGui::ColorEdit3("Light Color", (float*)&m_DirectionalCol); // Edit 3 floats representing a color
+		ImGui::SliderFloat("Light Position x", &m_DirectionalPos.x, -20.0f, 20.0f);
+		ImGui::SliderFloat("Light Position y", &m_DirectionalPos.y, 0.0f, 2000.0f);
+		ImGui::SliderFloat("Light Position z", &m_DirectionalPos.z, -20.0f, 20.0f);
+		ImGui::SliderFloat("Light Radius", &m_DirectionalSize, 0.0f, 200.0f);
+		ImGui::ColorEdit3("Light Color", (float*)&m_DirectionalCol);
 	ImGui::End();
 }
