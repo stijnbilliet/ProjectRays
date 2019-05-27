@@ -1,10 +1,11 @@
 #include "GamePCH.h"
 #include "SponzaScene.h"
+#include "Gamemode/GMSandbox.h"
 
 using Super = Scene;
 
 SponzaScene::SponzaScene()
-	:Scene("SponzaScene")
+	:Scene("SponzaScene"), m_SunAngle()
 {
 }
 
@@ -40,5 +41,35 @@ void SponzaScene::PreInit(GameContext * pContext)
 void SponzaScene::PostInit(GameContext * pContext)
 {
 	Super::PostInit(pContext);
-	pContext->m_pActiveCamera->GetGameObject()->GetTransform()->Translate(0.0f, 0.0f, 0.0f);
+	pContext->m_pActiveCamera->GetGameObject()->GetTransform()->Translate(-55.0f, 15.0f, 0.0f);
+	pContext->m_pActiveCamera->GetGameObject()->GetTransform()->Rotate(0.0f, -90.0f, 0.0f, false);
+}
+
+void SponzaScene::OnUpdate(GameContext* pContext)
+{
+	Super::OnUpdate(pContext);
+
+	if (GMSandbox::_AutoPanCamera)
+	{
+		auto pTransform = pContext->m_pActiveCamera->GetGameObject()->GetTransform();
+		auto prevPostion = pTransform->GetWorldPosition();
+		pTransform->Translate(prevPostion + glm::vec3(0.5f, 0.0f, 0.0f) * pContext->elapsedSec);
+	}
+
+	if (GMSandbox::_RunLightCycle)
+	{
+		m_SunAngle += 5.0f * pContext->elapsedSec;
+		if (m_SunAngle > 360.0f) m_SunAngle = 0;
+
+		//x = r * cos(delta_angle)
+		//y = r * sin(delta_angle)
+
+		auto glRenderer = pContext->m_pGLRenderer;
+		auto prevLightPos = glRenderer->GetDirectionalLightPos();
+
+		float newXCoord = 20.0f * cos(glm::radians(m_SunAngle));
+		float newZCoord = 20.0f * sin(glm::radians(m_SunAngle));
+		auto newLightPos = glm::vec3(newXCoord, prevLightPos.y, newZCoord);
+		glRenderer->SetDirectionalLightPos(newLightPos);
+	}
 }

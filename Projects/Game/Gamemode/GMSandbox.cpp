@@ -8,6 +8,9 @@
 
 using Super = BaseGamemode;
 
+bool GMSandbox::_RunLightCycle = false;
+bool GMSandbox::_AutoPanCamera = false;
+
 GMSandbox::GMSandbox()
 	:BaseGamemode()
 {
@@ -28,13 +31,13 @@ void GMSandbox::PreInit(GameContext* pContext)
 	Super::OnInit(pContext);
 
 	//Level
-	auto pRenderTest = new RenderTestScene();
+	//auto pRenderTest = new RenderTestScene();
 	auto pSponzaScene = new SponzaScene();
-	auto pShadowTestScene = new ShadowTestScene();
+	//auto pShadowTestScene = new ShadowTestScene();
 
-	pContext->m_pSceneManager->Add(pRenderTest);
+	//pContext->m_pSceneManager->Add(pRenderTest);
 	pContext->m_pSceneManager->Add(pSponzaScene);
-	pContext->m_pSceneManager->Add(pShadowTestScene);
+	//pContext->m_pSceneManager->Add(pShadowTestScene);
 
 	pContext->m_pSceneManager->SetActive("SponzaScene");
 
@@ -60,4 +63,10 @@ void GMSandbox::PreInit(GameContext* pContext)
 	auto pLook = new LookAround(pContext);
 	auto output = EventFactory::CreateDesc(SDL_KEYDOWN, SDLK_p);
 	pContext->m_pInputManager->AddInputAction(output, pLook);
+
+	auto pLightCycleToggle = new ToggleLightCycle();
+	pContext->m_pInputManager->AddInputAction(EventFactory::CreateDesc(SDL_KEYUP, SDLK_k), pLightCycleToggle);
+
+	auto pAutoPanCamera = new AutoPanCamera();
+	pContext->m_pInputManager->AddInputAction(EventFactory::CreateDesc(SDL_KEYUP, SDLK_l), pAutoPanCamera);
 }

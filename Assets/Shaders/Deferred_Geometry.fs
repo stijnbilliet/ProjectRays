@@ -10,7 +10,7 @@ in vec3 Normal;
 
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_normal1;
-uniform sampler2D texture_ambient1;
+uniform sampler2D texture_specular1;
 
 void main()
 {   
@@ -19,8 +19,8 @@ void main()
     // also store the per-fragment normals into the gbuffer
     gNormal = normalize(Normal);
     // and the diffuse per-fragment color
-    gAlbedo = texture(texture_diffuse1, TexCoords);
+    gAlbedo.rgb = texture(texture_diffuse1, TexCoords).rgb;
+	gAlbedo.a = texture(texture_specular1, TexCoords).r;
 	//gLightAcc
 	gLightAcc = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-	//gLightAcc.r = texture(texture_ambient1, TexCoords).r;
 }

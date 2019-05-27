@@ -35,6 +35,8 @@ using namespace RadeonRays;
 
 CL_Renderer::CL_Renderer()
 	:SingleInstance<CL_Renderer>()
+    ,m_AngularExtent(2.0f)
+    ,m_TileSize(4)
 {
 }
 
@@ -51,10 +53,6 @@ void CL_Renderer::OnInit(GameContext*)
 	PropertyManager::GetInstance().GetString("assetpath", m_AssetPath);
 
 	_putenv("GPU_MAX_ALLOC_PERCENT=100");
-
-	//InitCL(pGameContext);
-	//InitRadeonRays(pGameContext);
-	//InitKernels(pGameContext);
 }
 
 void CL_Renderer::OnUpdate(GameContext*)
@@ -120,7 +118,7 @@ void CL_Renderer::GenerateShadowRays(GameContext* pGameContext)
 	cl_int status = CL_SUCCESS;
 	auto dirLightPos = pGameContext->m_pGLRenderer->GetDirectionalLightPos();
 	cl_float4 light_cl = { dirLightPos.x, dirLightPos.y, dirLightPos.z, 1.0f };
-	size_t gs[] = { (size_t)m_ScreenWidth, (size_t)m_ScreenHeight };
+    size_t gs[] = { (size_t)m_ScreenWidth, (size_t)m_ScreenHeight };
 
 	//Acquire WorldPosBuffer
 	status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLWorldPosBuffer, 0, nullptr, nullptr);
@@ -131,10 +129,12 @@ void CL_Renderer::GenerateShadowRays(GameContext* pGameContext)
 	CL_ERROR_CHECK(status, "clEnqueueAcquireGLObjects failed (m_CLGLNormalBuffer)");
 
 	//Send new information to shader
-	m_ShadowRayGenerator.SetArg(0, sizeof(cl_float4), &light_cl);
-	m_ShadowRayGenerator.SetArg(1, sizeof(cl_mem), &m_CLRRRaysBuffer);
-	m_ShadowRayGenerator.SetArg(2, sizeof(cl_mem), &m_CLGLWorldPosBuffer);
-	m_ShadowRayGenerator.SetArg(3, sizeof(cl_mem), &m_CLGLNormalBuffer);
+    m_ShadowRayGenerator.SetArg(0, sizeof(cl_float4), &light_cl);
+    m_ShadowRayGenerator.SetArg(1, sizeof(cl_float), &m_AngularExtent);
+    m_ShadowRayGenerator.SetArg(2, sizeof(cl_uint), &m_TileSize);
+	m_ShadowRayGenerator.SetArg(3, sizeof(cl_mem), &m_CLRRRaysBuffer);
+	m_ShadowRayGenerator.SetArg(4, sizeof(cl_mem), &m_CLGLWorldPosBuffer);
+	m_ShadowRayGenerator.SetArg(5, sizeof(cl_mem), &m_CLGLNormalBuffer);
 
 	//Launch kernels on cuda cores
 	status = clEnqueueNDRangeKernel(m_CLContext.GetCommandQueue(0), m_ShadowRayGenerator, 2, NULL, gs, NULL, 0, nullptr, nullptr);
@@ -203,7 +203,7 @@ void CL_Renderer::InitShadowRaysKernel(GameContext * pGameContext)
 	CL_ERROR_CHECK(status, "Buffer creation failed (occlusion buffer)");
 
 	//Init kernel
-	m_ShadowRayGenerator = m_RayGenerator.GetKernel("GenerateShadowRays");
+	m_ShadowRayGenerator = m_RayGenerator.GetKernel("GenerateShadowRay");
 }
 
 void CL_Renderer::InitLightMaskKernel(GameContext* pGameContext)

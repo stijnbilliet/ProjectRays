@@ -111,9 +111,13 @@ Mesh Model::ProcessMesh(aiMesh* pMesh)
 	auto ambientMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT, TextureType::AMBIENT);
 	textures.insert(textures.end(), ambientMaps.begin(), ambientMaps.end());
 
-	// 3. ambient maps
+	// 3. normal maps
 	auto normalMaps = LoadMaterialTextures(material, aiTextureType_NORMALS, TextureType::NORMAL);
 	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+
+	// 4. specular maps
+	auto specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TextureType::SPECULAR);
+	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
 	return Mesh(vertices, indices, textures);
 }

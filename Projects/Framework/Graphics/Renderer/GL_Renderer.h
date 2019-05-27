@@ -10,7 +10,7 @@ public:
 
 	void Begin();
 	void LightPass();
-	void End();
+	void End(GameContext* pGameContext);
 
 	const SDL_GLContext& GetGLContext() const;
 	SDL_Window* GetWindow() const;
@@ -19,6 +19,7 @@ public:
 	unsigned int GetWorldPosBuffer() const;
 	unsigned int GetNormalBuffer() const;
 	unsigned int GetLightBuffer() const;
+	void SetDirectionalLightPos(const glm::vec3& newPos);
 	const glm::vec3& GetDirectionalLightPos() const;
 
 	ShaderProgram* GetLightDrawer() const;
@@ -27,7 +28,7 @@ public:
 	virtual void PostInit(GameContext* pGameContext) override;
 private:
 	void RenderQuad();
-	void ImGuiOnDraw();
+	void ImGuiOnDraw(GameContext* pGameContext);
 	unsigned int quadVAO = 0;
 	unsigned int quadVBO;
 

@@ -16,5 +16,7 @@ public:
 	void OnUpdate(GameContext* pContext) override;
 	void PreInit(GameContext* pContext) override;
 
+	static bool _RunLightCycle;
+	static bool _AutoPanCamera;
 private:
 };

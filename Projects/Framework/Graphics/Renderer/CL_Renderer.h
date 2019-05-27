@@ -18,6 +18,9 @@ public:
 
 	void RaytracedShadows(GameContext* pGameContext);
 	RadeonRays::IntersectionApi* GetRaysAPI() const;
+
+    float* GetAngularExtent() { return &m_AngularExtent; };
+    unsigned int* GetTileSize() { return &m_TileSize; };
 private:
 	void GenerateShadowRays(GameContext* pGameContext);
 	void GenerateLightingMask(GameContext* pGameContext);
@@ -54,4 +57,7 @@ private:
 	int m_ScreenWidth;
 	int m_ScreenHeight;
 	std::string m_AssetPath;
+
+    float m_AngularExtent;
+    unsigned int m_TileSize;
 };

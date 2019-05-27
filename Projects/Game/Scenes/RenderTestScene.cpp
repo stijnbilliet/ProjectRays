@@ -35,17 +35,12 @@ void RenderTestScene::PreInit(GameContext* pContext)
 	//Load model and fetch meshes
 	m_pModel = new Model("Models/Suicune/Suicune.obj");
 	auto pSuicuneMesh = &(m_pModel->GetMeshes()[0]);
-	auto pPlatformMesh = &(m_pModel->GetMeshes()[1]);
 
 	std::vector<Texture> textureVect{};
 	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_A.tga.png", TextureType::DIFFUSE));
 	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_N.tga.png", TextureType::NORMAL));
-	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_AO.tga.png", TextureType::AMBIENT));
+	textureVect.push_back(Texture("Textures/Suicune/SuicuneSaix_M.tga.png", TextureType::SPECULAR));
 	pSuicuneMesh->SetTextures(textureVect);
-
-	std::vector<Texture> otherTextureVect{};
-	otherTextureVect.push_back(Texture("Textures/spnza_bricks_a_diff.png", TextureType::DIFFUSE));
-	pPlatformMesh->SetTextures(otherTextureVect);
 
 	//Load shaders and bundle in shaderprogram
 	auto pShaderProgram = new ShaderProgram("Shaders/Deferred_Geometry.vs", "Shaders/Deferred_Geometry.fs");
@@ -56,20 +51,11 @@ void RenderTestScene::PreInit(GameContext* pContext)
 
 	auto pRayShapeComponent = new RayShapeComponent(pSuicuneMesh);
 	m_pTestObject->AddComponent(pRayShapeComponent);
-
-	//Translate object and add to scene
-	auto pPlatformObject = new GameObject();
-	pMeshDrawComp = new MeshDrawComponent(pPlatformMesh, pShaderProgram);
-	pPlatformObject->AddComponent(pMeshDrawComp);
-
-	pRayShapeComponent = new RayShapeComponent(pPlatformMesh);
-	pPlatformObject->AddComponent(pRayShapeComponent);
-	m_pTestObject->Add(pPlatformObject);
 }
 
 void RenderTestScene::PostInit(GameContext * pContext)
 {
 	Super::PostInit(pContext);
 
-	pContext->m_pActiveCamera->GetGameObject()->GetTransform()->Translate(0.0f, 10.0f, 50.0f);
+	pContext->m_pActiveCamera->GetGameObject()->GetTransform()->Translate(0.0f, 10.0f, 35.0f);
 }

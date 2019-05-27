@@ -79,3 +79,21 @@ private:
 	TransformComponent* m_pTransformComp;
 	glm::vec2 m_PrevMousePos;
 };
+
+class ToggleLightCycle : public Command
+{
+public:
+	ToggleLightCycle();
+
+	virtual void execute() override;
+private:
+};
+
+class AutoPanCamera : public Command
+{
+public:
+	AutoPanCamera();
+
+	virtual void execute() override;
+private:
+};

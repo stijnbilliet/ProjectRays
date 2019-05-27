@@ -81,20 +81,20 @@ void GL_Renderer::LightPass()
 	glUniform3fv(directionalColVar, 1, &m_DirectionalCol[0]);
 }
 
-void GL_Renderer::End()
+void GL_Renderer::End(GameContext* pGameContext)
 {
-	// finally render quad
+	//finally render quad
 	RenderQuad();
 
-	// copy content of geometry's depth buffer to default framebuffer's depth buffer
-	// -----------------------------------------------------------------------------
+	//copy content of geometry's depth buffer to default framebuffer's depth buffer
+	//-----------------------------------------------------------------------------
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_gBuffer);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-	// write to default framebuffer
-	// blit to default framebuffer. Note that this may or may not work as the internal formats of both the FBO and default framebuffer have to match.
-	// the internal formats are implementation defined. This works on all of my systems, but if it doesn't on yours you'll likely have to write to the 		
-	// depth buffer in another shader stage (or somehow see to match the default framebuffer's internal format with the FBO's internal format).
+	//write to default framebuffer
+	//blit to default framebuffer. Note that this may or may not work as the internal formats of both the FBO and default framebuffer have to match.
+	//the internal formats are implementation defined. This works on all of my systems, but if it doesn't on yours you'll likely have to write to the 		
+	//depth buffer in another shader stage (or somehow see to match the default framebuffer's internal format with the FBO's internal format).
 	glBlitFramebuffer(0, 0, m_ScrWidth, m_ScrHeight, 0, 0, m_ScrWidth, m_ScrHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -103,7 +103,7 @@ void GL_Renderer::End()
 	ImGui_ImplSDL2_NewFrame(m_pWindow);
 	ImGui::NewFrame();
 
-	ImGuiOnDraw();
+	ImGuiOnDraw(pGameContext);
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -139,6 +139,11 @@ unsigned int GL_Renderer::GetNormalBuffer() const
 unsigned int GL_Renderer::GetLightBuffer() const
 {
 	return gLightAcc;
+}
+
+void GL_Renderer::SetDirectionalLightPos(const glm::vec3 & newPos)
+{
+	m_DirectionalPos = newPos;
 }
 
 const glm::vec3 & GL_Renderer::GetDirectionalLightPos() const
@@ -314,14 +319,22 @@ void GL_Renderer::RenderQuad()
 	glBindVertexArray(0);
 }
 
-void GL_Renderer::ImGuiOnDraw()
+void GL_Renderer::ImGuiOnDraw(GameContext* pGameContext)
 {
 	ImGui::Begin("Debug");
 		ImGui::Text("Average framerate (%.1f FPS)", ImGui::GetIO().Framerate);
 	ImGui::End();
 
 	ImGui::Begin("Light");
-		ImGui::SliderFloat3("Light Position", (float*)&m_DirectionalPos, -20.0f, 20.0f); // Edit 1 float using a slider from 0.0f to 1.0f    
+		ImGui::SliderFloat("Light Position X", (float*)&m_DirectionalPos.x, -50.0f, 50.0f);
+		ImGui::SliderFloat("Light Position Y", (float*)&m_DirectionalPos.y, 50.0f, 3000.0f);
+		ImGui::SliderFloat("Light Position Z", (float*)&m_DirectionalPos.z, -20.0f, 20.0f);
 		ImGui::ColorEdit3("Light Color", (float*)&m_DirectionalCol); // Edit 3 floats representing a color
+
+        ImGui::SliderFloat("Sun angular extent", (float*)pGameContext->m_pCLRenderer->GetAngularExtent(), 0.0f, 20.0f);
 	ImGui::End();
+
+    ImGui::Begin("Rays");
+        ImGui::SliderInt("TileSize", (int*)pGameContext->m_pCLRenderer->GetTileSize(), 0, 16);
+    ImGui::End();
 }

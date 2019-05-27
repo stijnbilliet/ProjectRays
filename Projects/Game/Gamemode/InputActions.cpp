@@ -1,5 +1,6 @@
 #include "GamePCH.h"
 #include "InputActions.h"
+#include "GMSandbox.h"
 
 Forward::Forward(GameContext* pContext)
 	:m_pGameContext(pContext)
@@ -110,4 +111,24 @@ void LookAround::execute()
 
 	glm::quat rotQuat = qYaw * qPitch;
 	m_pTransformComp->Rotate(rotQuat);
+}
+
+ToggleLightCycle::ToggleLightCycle()
+{
+}
+
+void ToggleLightCycle::execute()
+{
+	Logger::GetInstance().LogInfo("Light cycle started \n");
+	GMSandbox::_RunLightCycle = !GMSandbox::_RunLightCycle;
+}
+
+AutoPanCamera::AutoPanCamera()
+{
+}
+
+void AutoPanCamera::execute()
+{
+	Logger::GetInstance().LogInfo("Camera auto panning on \n");
+	GMSandbox::_AutoPanCamera = !GMSandbox::_AutoPanCamera;
 }
