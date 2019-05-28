@@ -24,7 +24,7 @@ void ShadowTestScene::PreInit(GameContext * pContext)
 	m_pModel = new Model("Models/shadowtestscene.obj");
 
 	std::vector<Texture> textures{};
-	textures.push_back(Texture("Textures/spnza_bricks_a_diff.png", TextureType::DIFFUSE));
+	textures.push_back(Texture("Textures/Sponza/spnza_bricks_a_diff.png", TextureType::DIFFUSE));
 
 	for (Mesh& mesh : m_pModel->GetMeshes())
 	{

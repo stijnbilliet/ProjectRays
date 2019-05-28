@@ -98,6 +98,10 @@ void GL_Renderer::End(GameContext* pGameContext)
 	glBlitFramebuffer(0, 0, m_ScrWidth, m_ScrHeight, 0, 0, m_ScrWidth, m_ScrHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_gBuffer);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	//ImGUI
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(m_pWindow);

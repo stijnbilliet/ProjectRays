@@ -31,13 +31,13 @@ void main()
 	vec3 reflectDir = reflect(-lightDir, Normal);
     float specAngle = max(dot(reflectDir, viewDir), 0.0);
     // note that the exponent is different here
-    vec3 specular = pow(specAngle, 50.0f) * dLightCol;	
+    vec3 specular = pow(specAngle, 50.0f) * dLightCol;
 	specular *= AlbedoSpec.a;
 	
 	diffuse += specular;
 	clamp(diffuse, 0.0f, 1.0f);
 	
-	diffuse *= LightAcc;
+	diffuse *= LightAcc.b;
 	clamp(diffuse, 0.0f, 1.0f);
 	
     FragColor = vec4(diffuse, 1.0f);

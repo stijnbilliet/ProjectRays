@@ -10,7 +10,55 @@ typedef struct _Ray
 	int2 padding;
 } Ray;
 
-__kernel void GenerateLightingMask(__global int* occlusions, __write_only image2d_t lightmask)
+typedef struct _Intersection
+{
+	// Shape ID
+	int shapeid;
+	// Primitve ID
+	int primid;
+
+	int2 padding;
+	
+	// UV parametrization
+	float4 uvwt;
+} Intersection;
+
+__kernel void SoftShadowSample(uint tileSize, __global float4* iLightmask, __write_only image2d_t oLightmask)
+{
+	//Get image dimensions
+	int2 dimensions;
+	dimensions.x = get_image_width(oLightmask);
+	dimensions.y = get_image_height(oLightmask);
+	
+	//Get texture coords
+	int2 imgCoord;
+	imgCoord.x = get_global_id(0);
+	imgCoord.y = get_global_id(1);
+	
+	int halfSampleSize = tileSize/2;
+	int tileSizeSquared = tileSize*tileSize;
+	float shadowValue = 0.0f;
+	
+	int2 sampleCoord = imgCoord;
+	for(int c = -halfSampleSize; c < halfSampleSize; ++c)
+	{
+		sampleCoord.x = imgCoord.x + c;
+		if(sampleCoord.x < 0 || sampleCoord.x >= dimensions.x) break;
+		for(int r = -halfSampleSize; r < halfSampleSize; ++r)
+		{
+			sampleCoord.y = imgCoord.y + r;
+			if(sampleCoord.y < 0 || sampleCoord.y >= dimensions.y) break;
+			int sampleCoord1D = sampleCoord.y * dimensions.x + sampleCoord.x;
+			shadowValue += iLightmask[sampleCoord1D].x;
+		}
+	}
+	
+	shadowValue /= tileSizeSquared;
+	
+	write_imagef(oLightmask, imgCoord, (float4)shadowValue);
+}
+
+__kernel void GenerateLightingMask(__global Intersection* intersections, __write_only image2d_t lightmask)
 {
 	//Get image dimensions
 	int2 dimensions;
@@ -28,9 +76,9 @@ __kernel void GenerateLightingMask(__global int* occlusions, __write_only image2
 	
 	//Check if ray did occlude (-1 no hit; 1 hit)
 	//Shade respectively (-1 light; 1 dark)
-	if(occlusions[k] == 1)
+	if(intersections[k].shapeid != -1)
 	{
-		fragmentColor = (float4)(0.0f, 0.0f, 0.0f, 0.0f);
+		fragmentColor = (float4)(0.0f, intersections[k].uvwt.w, 0.0f, 0.0f);
 	}
 	
 	//Write info to lightmask

@@ -42,6 +42,7 @@ CL_Renderer::CL_Renderer()
 
 CL_Renderer::~CL_Renderer()
 {
+    delete m_TempLightBuffer;
 	m_pRRContext->DetachAll();
 	IntersectionApi::Delete(m_pRRContext);
 }
@@ -104,12 +105,13 @@ void CL_Renderer::InitRadeonRays(GameContext*)
 void CL_Renderer::InitKernels(GameContext* pGameContext)
 {
 	//Build Shadowrays kernel
-	const char* kBuildopts("-Werror -cl-mad-enable -cl-fast-relaxed-math -cl-std=CL1.2 -I . ");
+	const char* kBuildopts("-Werror -cl-mad-enable -cl-fast-relaxed-math -cl-std=CL2.0 -I . ");
 	std::string kernelPath = m_AssetPath + "/" + "Kernels/RayGenerator.cl";
 	m_RayGenerator = CLWProgram::CreateFromFile(kernelPath.c_str(), kBuildopts, m_CLContext);
 
 	InitShadowRaysKernel(pGameContext);
 	InitLightMaskKernel(pGameContext);
+    InitSampleKernel(pGameContext);
 }
 
 void CL_Renderer::GenerateShadowRays(GameContext* pGameContext)
@@ -179,6 +181,40 @@ void CL_Renderer::GenerateLightingMask(GameContext*)
 	CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLLightBuffer)");
 }
 
+void CL_Renderer::SampleShadows(GameContext*)
+{
+    auto commandQueue = m_CLContext.GetCommandQueue(0);
+    cl_int status = CL_SUCCESS;
+    size_t gs[] = { (size_t)m_ScreenWidth, (size_t)m_ScreenHeight };
+    size_t ls[] = { (size_t)m_TileSize, (size_t)m_TileSize };
+
+    //Acquire lightBuffer
+    status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLLightBuffer, 0, nullptr, nullptr);
+    CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLLightBuffer)");
+
+    //Blit lightmask
+    size_t origin[] = { 0, 0, 0 };
+    size_t region[] = { (size_t)m_ScreenWidth, (size_t)m_ScreenHeight, (size_t)1 };
+    status = clEnqueueCopyImageToBuffer(commandQueue, m_CLGLLightBuffer, m_CLTempLightBuffer, origin, region, 0, 0, nullptr, nullptr);
+    CL_ERROR_CHECK(status, "clEnqueueCopyBufferToImage failed (m_CLGLLightBuffer | m_CLTempLightBuffer)");
+
+    //Get kernel from kernelprogram
+    m_SoftSampleKernel.SetArg(0, sizeof(cl_uint), &m_TileSize);
+    m_SoftSampleKernel.SetArg(1, sizeof(cl_mem), &m_CLTempLightBuffer);
+    m_SoftSampleKernel.SetArg(2, sizeof(cl_mem), &m_CLGLLightBuffer);
+
+    //Launch kernels on cuda cores
+    status = clEnqueueNDRangeKernel(commandQueue, m_SoftSampleKernel, 2, NULL, gs, ls, 0, nullptr, nullptr);
+    CL_ERROR_CHECK(status, "clEnqueueNDRangeKernel failed (m_SoftSampleKernel)");
+
+    status = clFlush(commandQueue);
+    CL_ERROR_CHECK(status, "Flush failed (m_SoftSampleKernel)");
+
+    //Release LightBuffer
+    status = clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLLightBuffer, 0, nullptr, nullptr);
+    CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLLightBuffer)");
+}
+
 void CL_Renderer::InitShadowRaysKernel(GameContext * pGameContext)
 {
 	//Fetch buffer id's
@@ -198,8 +234,8 @@ void CL_Renderer::InitShadowRaysKernel(GameContext * pGameContext)
 	m_CLRRRaysBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(RadeonRays::ray), m_RayData, &status);
 	CL_ERROR_CHECK(status, "Buffer creation failed (rays buffer)");
 
-	m_OcclusionData = new int[m_ScreenWidth*m_ScreenHeight]();
-	m_CLRROcclusionBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(int), m_OcclusionData, &status);
+	m_OcclusionData = new RadeonRays::Intersection[m_ScreenWidth*m_ScreenHeight]();
+	m_CLRROcclusionBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(RadeonRays::Intersection), m_OcclusionData, &status);
 	CL_ERROR_CHECK(status, "Buffer creation failed (occlusion buffer)");
 
 	//Init kernel
@@ -220,6 +256,18 @@ void CL_Renderer::InitLightMaskKernel(GameContext* pGameContext)
 	m_LightMaskGenerator = m_RayGenerator.GetKernel("GenerateLightingMask");
 }
 
+void CL_Renderer::InitSampleKernel(GameContext* /*pGameContext*/)
+{
+    //Init buffers
+    cl_int status = CL_SUCCESS;
+    m_TempLightBuffer = new cl_float4[m_ScreenWidth*m_ScreenHeight * sizeof(cl_float4)];
+    m_CLTempLightBuffer = clCreateBuffer(m_CLContext, CL_MEM_WRITE_ONLY, m_ScreenWidth*m_ScreenHeight*sizeof(cl_float4), m_TempLightBuffer, &status);
+    CL_ERROR_CHECK(status, "Temp light buffer creation failed");
+
+    //Init kernel
+    m_SoftSampleKernel = m_RayGenerator.GetKernel("SoftShadowSample");
+}
+
 void CL_Renderer::RaytracedShadows(GameContext* pGameContext)
 {
 	auto commandQueue = m_CLContext.GetCommandQueue(0);
@@ -233,9 +281,12 @@ void CL_Renderer::RaytracedShadows(GameContext* pGameContext)
 
 	//Query occlusion
 	RadeonRays::Event* e = nullptr;
-	m_pRRContext->QueryOcclusion(m_RaysBuffer, m_ScreenWidth*m_ScreenHeight, m_OcclusionBuffer, nullptr, &e);
+	m_pRRContext->QueryIntersection(m_RaysBuffer, m_ScreenWidth*m_ScreenHeight, m_OcclusionBuffer, nullptr, &e);
 	e->Wait();
 	
 	//Generate lightmap
 	GenerateLightingMask(pGameContext);
+
+    //Sample soft shadows
+    SampleShadows(pGameContext);
 }

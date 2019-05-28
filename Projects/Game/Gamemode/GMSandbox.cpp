@@ -31,15 +31,15 @@ void GMSandbox::PreInit(GameContext* pContext)
 	Super::OnInit(pContext);
 
 	//Level
-	//auto pRenderTest = new RenderTestScene();
-	auto pSponzaScene = new SponzaScene();
+	auto pRenderTest = new RenderTestScene();
+	//auto pSponzaScene = new SponzaScene();
 	//auto pShadowTestScene = new ShadowTestScene();
 
-	//pContext->m_pSceneManager->Add(pRenderTest);
-	pContext->m_pSceneManager->Add(pSponzaScene);
+	pContext->m_pSceneManager->Add(pRenderTest);
+	//pContext->m_pSceneManager->Add(pSponzaScene);
 	//pContext->m_pSceneManager->Add(pShadowTestScene);
 
-	pContext->m_pSceneManager->SetActive("SponzaScene");
+	pContext->m_pSceneManager->SetActive("RenderTestScene");
 
 	//Input
 	auto pForward = new Forward(pContext);
