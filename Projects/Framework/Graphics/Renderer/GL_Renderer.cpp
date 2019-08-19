@@ -20,11 +20,10 @@ GL_Renderer::~GL_Renderer()
 void GL_Renderer::Begin()
 {
 	//CLEAR COLOR
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
 
 	//bind gbuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, m_gBuffer);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//render
 	//...
@@ -33,9 +32,6 @@ void GL_Renderer::Begin()
 void GL_Renderer::LightPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	//2. lighting pass etc.
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_pLightPass->Use();
 
@@ -145,6 +141,11 @@ unsigned int GL_Renderer::GetLightBuffer() const
 	return gLightAcc;
 }
 
+unsigned int GL_Renderer::GetDepthBuffer() const
+{
+    return gDepth;
+}
+
 void GL_Renderer::SetDirectionalLightPos(const glm::vec3 & newPos)
 {
 	m_DirectionalPos = newPos;
@@ -186,7 +187,7 @@ void GL_Renderer::OnInit(GameContext* pGameContext)
 		SDL_WINDOWPOS_UNDEFINED,
 		m_ScrWidth,
 		m_ScrHeight,
-		SDL_WINDOW_OPENGL
+		SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN
 	);
 	if (m_pWindow == nullptr) throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 
@@ -265,11 +266,10 @@ void GL_Renderer::PostInit(GameContext* pGameContext)
 	glDrawBuffers(4, attachments);
 
 	//create and attach depth buffer
-	unsigned int rboDepth;
-	glGenRenderbuffers(1, &rboDepth);
-	glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+	glGenRenderbuffers(1, &gDepth);
+	glBindRenderbuffer(GL_RENDERBUFFER, gDepth);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_ScrWidth, m_ScrHeight);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, gDepth);
 
 	// finally check if framebuffer is complete
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -331,14 +331,14 @@ void GL_Renderer::ImGuiOnDraw(GameContext* pGameContext)
 
 	ImGui::Begin("Light");
 		ImGui::SliderFloat("Light Position X", (float*)&m_DirectionalPos.x, -50.0f, 50.0f);
-		ImGui::SliderFloat("Light Position Y", (float*)&m_DirectionalPos.y, 50.0f, 3000.0f);
-		ImGui::SliderFloat("Light Position Z", (float*)&m_DirectionalPos.z, -20.0f, 20.0f);
+		ImGui::SliderFloat("Light Position Y", (float*)&m_DirectionalPos.y, 50.0f, 1000.0f);
+		ImGui::SliderFloat("Light Position Z", (float*)&m_DirectionalPos.z, -50.0f, 50.0f);
 		ImGui::ColorEdit3("Light Color", (float*)&m_DirectionalCol); // Edit 3 floats representing a color
 
         ImGui::SliderFloat("Sun angular extent", (float*)pGameContext->m_pCLRenderer->GetAngularExtent(), 0.0f, 20.0f);
 	ImGui::End();
 
     ImGui::Begin("Rays");
-        ImGui::SliderInt("TileSize", (int*)pGameContext->m_pCLRenderer->GetTileSize(), 0, 16);
+        ImGui::SliderInt("TileSize", (int*)pGameContext->m_pCLRenderer->GetTileSize(), 1, 16);
     ImGui::End();
 }

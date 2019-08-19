@@ -36,7 +36,7 @@ using namespace RadeonRays;
 CL_Renderer::CL_Renderer()
 	:SingleInstance<CL_Renderer>()
     ,m_AngularExtent(2.0f)
-    ,m_TileSize(4)
+    ,m_TileSize(2)
 {
 }
 
@@ -167,7 +167,8 @@ void CL_Renderer::GenerateLightingMask(GameContext*)
 
 	//Get kernel from kernelprogram
 	m_LightMaskGenerator.SetArg(0, sizeof(cl_mem), &m_CLRROcclusionBuffer);
-	m_LightMaskGenerator.SetArg(1, sizeof(cl_mem), &m_CLGLLightBuffer);
+    m_LightMaskGenerator.SetArg(1, sizeof(cl_mem), &m_CLGLLightBuffer);
+    m_LightMaskGenerator.SetArg(2, sizeof(cl_mem), &m_CLRRRaysBuffer);
 
 	//Launch kernels on cuda cores
 	status = clEnqueueNDRangeKernel(commandQueue, m_LightMaskGenerator, 2, NULL, gs, NULL, 0, nullptr, nullptr);
@@ -186,11 +187,21 @@ void CL_Renderer::SampleShadows(GameContext*)
     auto commandQueue = m_CLContext.GetCommandQueue(0);
     cl_int status = CL_SUCCESS;
     size_t gs[] = { (size_t)m_ScreenWidth, (size_t)m_ScreenHeight };
-    size_t ls[] = { (size_t)m_TileSize, (size_t)m_TileSize };
+
+    if (m_ScreenWidth % m_TileSize == 0 && m_ScreenHeight % m_TileSize == 0)
+    {
+        m_PrevSampleLocalSize = m_TileSize;
+    }
+
+    size_t ls[] = { (size_t)m_PrevSampleLocalSize, (size_t)m_PrevSampleLocalSize };
 
     //Acquire lightBuffer
     status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLLightBuffer, 0, nullptr, nullptr);
     CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLLightBuffer)");
+
+    //Acquire depthbuffer
+    status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLDepthBuffer, 0, nullptr, nullptr);
+    CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLDepthBuffer)");
 
     //Blit lightmask
     size_t origin[] = { 0, 0, 0 };
@@ -199,9 +210,9 @@ void CL_Renderer::SampleShadows(GameContext*)
     CL_ERROR_CHECK(status, "clEnqueueCopyBufferToImage failed (m_CLGLLightBuffer | m_CLTempLightBuffer)");
 
     //Get kernel from kernelprogram
-    m_SoftSampleKernel.SetArg(0, sizeof(cl_uint), &m_TileSize);
-    m_SoftSampleKernel.SetArg(1, sizeof(cl_mem), &m_CLTempLightBuffer);
-    m_SoftSampleKernel.SetArg(2, sizeof(cl_mem), &m_CLGLLightBuffer);
+    m_SoftSampleKernel.SetArg(0, sizeof(cl_mem), &m_CLTempLightBuffer);
+    m_SoftSampleKernel.SetArg(1, sizeof(cl_mem), &m_CLGLLightBuffer);
+    m_SoftSampleKernel.SetArg(2, sizeof(cl_mem), &m_CLGLDepthBuffer);
 
     //Launch kernels on cuda cores
     status = clEnqueueNDRangeKernel(commandQueue, m_SoftSampleKernel, 2, NULL, gs, ls, 0, nullptr, nullptr);
@@ -213,6 +224,10 @@ void CL_Renderer::SampleShadows(GameContext*)
     //Release LightBuffer
     status = clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLLightBuffer, 0, nullptr, nullptr);
     CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLLightBuffer)");
+
+    //Release DepthBuffer
+    status = clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLDepthBuffer, 0, nullptr, nullptr);
+    CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLDepthBuffer)");
 }
 
 void CL_Renderer::InitShadowRaysKernel(GameContext * pGameContext)
@@ -256,13 +271,19 @@ void CL_Renderer::InitLightMaskKernel(GameContext* pGameContext)
 	m_LightMaskGenerator = m_RayGenerator.GetKernel("GenerateLightingMask");
 }
 
-void CL_Renderer::InitSampleKernel(GameContext* /*pGameContext*/)
+void CL_Renderer::InitSampleKernel(GameContext* pGameContext)
 {
     //Init buffers
     cl_int status = CL_SUCCESS;
     m_TempLightBuffer = new cl_float4[m_ScreenWidth*m_ScreenHeight * sizeof(cl_float4)];
     m_CLTempLightBuffer = clCreateBuffer(m_CLContext, CL_MEM_WRITE_ONLY, m_ScreenWidth*m_ScreenHeight*sizeof(cl_float4), m_TempLightBuffer, &status);
     CL_ERROR_CHECK(status, "Temp light buffer creation failed");
+
+    auto pGLRenderer = pGameContext->m_pGLRenderer;
+    auto gDepthBuffer = pGLRenderer->GetDepthBuffer();
+
+    m_CLGLDepthBuffer = clCreateFromGLTexture(m_CLContext, CL_MEM_READ_ONLY, GL_TEXTURE_2D, 0, gDepthBuffer, &status);
+    CL_ERROR_CHECK(status, "Texture sharing failed (gLightBuffer buffer)");
 
     //Init kernel
     m_SoftSampleKernel = m_RayGenerator.GetKernel("SoftShadowSample");

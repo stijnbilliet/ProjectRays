@@ -45,7 +45,8 @@ private:
 
 	//KernelData
 	cl_mem m_CLGLWorldPosBuffer;
-	cl_mem m_CLGLNormalBuffer;
+    cl_mem m_CLGLNormalBuffer;
+    cl_mem m_CLGLDepthBuffer;
     cl_mem m_CLGLLightBuffer;
     cl_mem m_CLTempLightBuffer;
 	cl_mem m_CLRRRaysBuffer;
@@ -65,4 +66,5 @@ private:
 
     float m_AngularExtent;
     unsigned int m_TileSize;
+    unsigned int m_PrevSampleLocalSize = 0;
 };

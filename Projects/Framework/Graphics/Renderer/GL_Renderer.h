@@ -19,6 +19,7 @@ public:
 	unsigned int GetWorldPosBuffer() const;
 	unsigned int GetNormalBuffer() const;
 	unsigned int GetLightBuffer() const;
+    unsigned int GetDepthBuffer() const;
 	void SetDirectionalLightPos(const glm::vec3& newPos);
 	const glm::vec3& GetDirectionalLightPos() const;
 
@@ -33,7 +34,7 @@ private:
 	unsigned int quadVBO;
 
 	unsigned int m_gBuffer;
-	unsigned int gPosition, gAlbedo, gNormal, gLightAcc;
+	unsigned int gPosition, gAlbedo, gNormal, gLightAcc, gDepth;
 
 	int m_ScrWidth;
 	int m_ScrHeight;

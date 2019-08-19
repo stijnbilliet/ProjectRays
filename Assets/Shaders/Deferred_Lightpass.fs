@@ -18,7 +18,7 @@ void main()
 	vec4 AlbedoSpec = texture(gAlbedo, TexCoords).rgba;
     vec3 Normal = texture(gNormal, TexCoords).rgb;
     vec3 LightAcc = texture(gLightAcc, TexCoords).rgb;
-	LightAcc = LightAcc + 0.5f;
+	LightAcc = LightAcc + 0.4f;
 	
 	//lightingvar
 	vec3 viewDir  = normalize(viewPos - FragPos);

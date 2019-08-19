@@ -23,7 +23,7 @@ typedef struct _Intersection
 	float4 uvwt;
 } Intersection;
 
-__kernel void SoftShadowSample(uint tileSize, __global float4* iLightmask, __write_only image2d_t oLightmask)
+__kernel void SoftShadowSample(__global float4* iLightmask, __write_only image2d_t oLightmask, __read_only image2d_t depthBuffer)
 {
 	//Get image dimensions
 	int2 dimensions;
@@ -35,22 +35,36 @@ __kernel void SoftShadowSample(uint tileSize, __global float4* iLightmask, __wri
 	imgCoord.x = get_global_id(0);
 	imgCoord.y = get_global_id(1);
 	
-	int halfSampleSize = tileSize/2;
-	int tileSizeSquared = tileSize*tileSize;
-	float shadowValue = 0.0f;
+	//Get tile size
+	int tileSize;
+	tileSize = get_local_size(0);
 	
-	int2 sampleCoord = imgCoord;
-	for(int c = -halfSampleSize; c < halfSampleSize; ++c)
+	int k = imgCoord.y * dimensions.x + imgCoord.x;
+	float distanceToLight = iLightmask[k].z;
+	float distanceToOccluder = iLightmask[k].y;
+	float occlusionValue = distanceToOccluder / distanceToLight;
+	//float4 depthValue = read_imagef(depthBuffer, imgCoord);
+	float penumbraSize = (occlusionValue * tileSize) / 1.0f;
+	
+	int halfSampleSize = (int)(penumbraSize/2);
+	int tileSizeSquared = (int)(penumbraSize*penumbraSize);
+	float shadowValue = iLightmask[k].x;
+	
+	if(shadowValue != 0.0f)
 	{
-		sampleCoord.x = imgCoord.x + c;
-		if(sampleCoord.x < 0 || sampleCoord.x >= dimensions.x) break;
-		for(int r = -halfSampleSize; r < halfSampleSize; ++r)
+		int2 sampleCoord = imgCoord;
+		for(int c = -halfSampleSize; c < halfSampleSize; ++c)
 		{
-			sampleCoord.y = imgCoord.y + r;
-			if(sampleCoord.y < 0 || sampleCoord.y >= dimensions.y) break;
-			int sampleCoord1D = sampleCoord.y * dimensions.x + sampleCoord.x;
-			shadowValue += iLightmask[sampleCoord1D].x;
-		}
+			sampleCoord.x = imgCoord.x + c;
+			if(sampleCoord.x < 0 || sampleCoord.x >= dimensions.x) break;
+			for(int r = -halfSampleSize; r < halfSampleSize; ++r)
+			{
+				sampleCoord.y = imgCoord.y + r;
+				if(sampleCoord.y < 0 || sampleCoord.y >= dimensions.y) break;
+				int sampleCoord1D = sampleCoord.y * dimensions.x + sampleCoord.x;
+				shadowValue += iLightmask[sampleCoord1D].x;
+			}
+		}	
 	}
 	
 	shadowValue /= tileSizeSquared;
@@ -58,7 +72,7 @@ __kernel void SoftShadowSample(uint tileSize, __global float4* iLightmask, __wri
 	write_imagef(oLightmask, imgCoord, (float4)shadowValue);
 }
 
-__kernel void GenerateLightingMask(__global Intersection* intersections, __write_only image2d_t lightmask)
+__kernel void GenerateLightingMask(__global Intersection* intersections, __write_only image2d_t lightmask, __global Ray* rays)
 {
 	//Get image dimensions
 	int2 dimensions;
@@ -78,7 +92,7 @@ __kernel void GenerateLightingMask(__global Intersection* intersections, __write
 	//Shade respectively (-1 light; 1 dark)
 	if(intersections[k].shapeid != -1)
 	{
-		fragmentColor = (float4)(0.0f, intersections[k].uvwt.w, 0.0f, 0.0f);
+		fragmentColor = (float4)(0.0f, intersections[k].uvwt.w, rays[k].o.w, 0.0f);
 	}
 	
 	//Write info to lightmask
@@ -102,6 +116,7 @@ __read_only image2d_t worldPosBuffer, __read_only image2d_t normalBuffer)
 	float4 worldPos = read_imagef(worldPosBuffer, imgCoord);
 	float4 Normal = normalize(read_imagef(normalBuffer, imgCoord));
 	float4 dir = endPos - worldPos;
+	float maxRayDistance = length(dir)*1.1f;
 	
 	//Generate random direction in angularExtent
 	int2 vectorModulus;
@@ -109,20 +124,22 @@ __read_only image2d_t worldPosBuffer, __read_only image2d_t normalBuffer)
 	vectorModulus.y = imgCoord.y % tileSize;
 	uint rnmb = vectorModulus.x * vectorModulus.y;
 	
-    rnmb ^= (rnmb << 13); //xorshift algorithm
-    rnmb ^= (rnmb >> 17);
-    rnmb ^= (rnmb << 5);
-	
-	float f0 = rnmb * (1.0 / 4294967296.0); //random between 0 and 1
-	f0 *= angularExtent;
-	
-	float r = angularExtent * sqrt(f0); //radius
-	float t = 2 * 3.14 * f0; //theta
-	
-	dir.x += r * cos(t);
-	dir.z += r * sin(t);
-	
-	dir = normalize(dir);
+	{
+		rnmb ^= (rnmb << 13); //xorshift algorithm
+		rnmb ^= (rnmb >> 17);
+		rnmb ^= (rnmb << 5);
+		
+		float f0 = rnmb * (1.0 / 4294967296.0); //random between 0 and 1
+		f0 *= angularExtent;
+		
+		float r = angularExtent * sqrt(f0); //radius
+		float t = 2 * 3.14 * f0; //theta
+		
+		dir.x += r * cos(t);
+		dir.z += r * sin(t);
+		
+		dir = normalize(dir);
+	}
 	
 	//Get 1D global index
 	int k = imgCoord.y * dimensions.x + imgCoord.x;
@@ -131,7 +148,7 @@ __read_only image2d_t worldPosBuffer, __read_only image2d_t normalBuffer)
 	__global Ray* my_ray = rays + k;
 	my_ray->o = worldPos + Normal * 0.005f;
 	my_ray->d = dir;
-	my_ray->o.w = 1000.0f;
+	my_ray->o.w = maxRayDistance;
 	my_ray->extra.x = 0xFFFFFFFF;
 	my_ray->extra.y = ceil(dot(dir, Normal));
 }
