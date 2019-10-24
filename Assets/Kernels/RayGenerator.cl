@@ -35,36 +35,28 @@ __kernel void SoftShadowSample(__global float4* iLightmask, __write_only image2d
 	imgCoord.x = get_global_id(0);
 	imgCoord.y = get_global_id(1);
 	
-	//Get tile size
-	int tileSize;
-	tileSize = get_local_size(0);
+	//Get neighborhood size
+	int neighborhood;
+	neighborhood = get_local_size(0);
 	
 	int k = imgCoord.y * dimensions.x + imgCoord.x;
-	float distanceToLight = iLightmask[k].z;
-	float distanceToOccluder = iLightmask[k].y;
-	float occlusionValue = distanceToOccluder / distanceToLight;
-	//float4 depthValue = read_imagef(depthBuffer, imgCoord);
-	float penumbraSize = (occlusionValue * tileSize) / 1.0f;
-	
-	int halfSampleSize = (int)(penumbraSize/2);
-	int tileSizeSquared = (int)(penumbraSize*penumbraSize);
+
+	int halfSampleSize = (int)(neighborhood/2);
+	int tileSizeSquared = (int)(neighborhood*neighborhood);
 	float shadowValue = iLightmask[k].x;
 	
-	if(shadowValue != 0.0f)
+	int2 sampleCoord = imgCoord;
+	for(int c = -halfSampleSize; c < halfSampleSize; ++c)
 	{
-		int2 sampleCoord = imgCoord;
-		for(int c = -halfSampleSize; c < halfSampleSize; ++c)
+		sampleCoord.x = imgCoord.x + c;
+		if(sampleCoord.x < 0 || sampleCoord.x >= dimensions.x) break;
+		for(int r = -halfSampleSize; r < halfSampleSize; ++r)
 		{
-			sampleCoord.x = imgCoord.x + c;
-			if(sampleCoord.x < 0 || sampleCoord.x >= dimensions.x) break;
-			for(int r = -halfSampleSize; r < halfSampleSize; ++r)
-			{
-				sampleCoord.y = imgCoord.y + r;
-				if(sampleCoord.y < 0 || sampleCoord.y >= dimensions.y) break;
-				int sampleCoord1D = sampleCoord.y * dimensions.x + sampleCoord.x;
-				shadowValue += iLightmask[sampleCoord1D].x;
-			}
-		}	
+			sampleCoord.y = imgCoord.y + r;
+			if(sampleCoord.y < 0 || sampleCoord.y >= dimensions.y) break;
+			int sampleCoord1D = sampleCoord.y * dimensions.x + sampleCoord.x;
+			shadowValue += iLightmask[sampleCoord1D].x;
+		}
 	}
 	
 	shadowValue /= tileSizeSquared;
@@ -90,10 +82,7 @@ __kernel void GenerateLightingMask(__global Intersection* intersections, __write
 	
 	//Check if ray did occlude (-1 no hit; 1 hit)
 	//Shade respectively (-1 light; 1 dark)
-	if(intersections[k].shapeid != -1)
-	{
-		fragmentColor = (float4)(0.0f, intersections[k].uvwt.w, rays[k].o.w, 0.0f);
-	}
+	fragmentColor = (float4)(abs(min(intersections[k].shapeid, 0)), intersections[k].uvwt.w, rays[k].o.w, 0.0f);
 	
 	//Write info to lightmask
 	write_imagef(lightmask, imgCoord, fragmentColor);
@@ -119,27 +108,35 @@ __read_only image2d_t worldPosBuffer, __read_only image2d_t normalBuffer)
 	float maxRayDistance = length(dir)*1.1f;
 	
 	//Generate random direction in angularExtent
-	int2 vectorModulus;
-	vectorModulus.x = imgCoord.x % tileSize;
-	vectorModulus.y = imgCoord.y % tileSize;
-	uint rnmb = vectorModulus.x * vectorModulus.y;
+	uint rndState = (imgCoord.x % tileSize) * (imgCoord.y % tileSize);
 	
-	{
-		rnmb ^= (rnmb << 13); //xorshift algorithm
-		rnmb ^= (rnmb >> 17);
-		rnmb ^= (rnmb << 5);
-		
-		float f0 = rnmb * (1.0 / 4294967296.0); //random between 0 and 1
-		f0 *= angularExtent;
-		
-		float r = angularExtent * sqrt(f0); //radius
-		float t = 2 * 3.14 * f0; //theta
-		
-		dir.x += r * cos(t);
-		dir.z += r * sin(t);
-		
-		dir = normalize(dir);
-	}
+	//Hash our random seed
+	rndState = (rndState ^ 61) ^ (rndState >> 16);
+    rndState *= 9;
+    rndState = rndState ^ (rndState >> 4);
+    rndState *= 0x27d4eb2d;
+    rndState = rndState ^ (rndState >> 15);
+	
+	rndState ^= (rndState << 13); //xorshift algorithm
+	rndState ^= (rndState >> 17);
+	rndState ^= (rndState << 5);
+	
+	float f0 = rndState * (1.0 / 4294967296.0); //random between 0 and 1
+
+	rndState ^= (rndState << 13); //xorshift algorithm
+	rndState ^= (rndState >> 17);
+	rndState ^= (rndState << 5);
+	
+	float f1 = rndState * (1.0 / 4294967296.0); //random between 0 and 1
+	
+	float r = tan(angularExtent * 3.14f/180.0f) * length(dir); //radius from angle
+	float t = 2 * 3.14f * f0; //theta
+	float d = sqrt(f1) * r; //distance from centre
+	
+	dir.x += d * cos(t);
+	dir.z += d * sin(t);
+	
+	dir = normalize(dir);
 	
 	//Get 1D global index
 	int k = imgCoord.y * dimensions.x + imgCoord.x;

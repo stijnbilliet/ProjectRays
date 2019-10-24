@@ -21,10 +21,11 @@ void GL_Renderer::Begin()
 {
 	//CLEAR COLOR
 	glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//bind gbuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, m_gBuffer);
-
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//render
 	//...
 }
@@ -32,6 +33,7 @@ void GL_Renderer::Begin()
 void GL_Renderer::LightPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_pLightPass->Use();
 
@@ -93,10 +95,6 @@ void GL_Renderer::End(GameContext* pGameContext)
 	//depth buffer in another shader stage (or somehow see to match the default framebuffer's internal format with the FBO's internal format).
 	glBlitFramebuffer(0, 0, m_ScrWidth, m_ScrHeight, 0, 0, m_ScrWidth, m_ScrHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_gBuffer);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//ImGUI
 	ImGui_ImplOpenGL3_NewFrame();
@@ -187,7 +185,7 @@ void GL_Renderer::OnInit(GameContext* pGameContext)
 		SDL_WINDOWPOS_UNDEFINED,
 		m_ScrWidth,
 		m_ScrHeight,
-		SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN
+		SDL_WINDOW_OPENGL
 	);
 	if (m_pWindow == nullptr) throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 
@@ -335,10 +333,11 @@ void GL_Renderer::ImGuiOnDraw(GameContext* pGameContext)
 		ImGui::SliderFloat("Light Position Z", (float*)&m_DirectionalPos.z, -50.0f, 50.0f);
 		ImGui::ColorEdit3("Light Color", (float*)&m_DirectionalCol); // Edit 3 floats representing a color
 
-        ImGui::SliderFloat("Sun angular extent", (float*)pGameContext->m_pCLRenderer->GetAngularExtent(), 0.0f, 20.0f);
+        ImGui::SliderFloat("Sun angular extent", (float*)pGameContext->m_pCLRenderer->GetAngularExtent(), 0.0f, 10.0f);
 	ImGui::End();
 
     ImGui::Begin("Rays");
-        ImGui::SliderInt("TileSize", (int*)pGameContext->m_pCLRenderer->GetTileSize(), 1, 16);
+        ImGui::SliderInt("TileSize", (int*)pGameContext->m_pCLRenderer->GetTileSize(), 1, 256);
+        ImGui::SliderInt("SampleNeighborhood", (int*)pGameContext->m_pCLRenderer->GetNeighborhood(), 1, 16);
     ImGui::End();
 }

@@ -37,6 +37,7 @@ CL_Renderer::CL_Renderer()
 	:SingleInstance<CL_Renderer>()
     ,m_AngularExtent(2.0f)
     ,m_TileSize(2)
+    ,m_Neighborhood(8)
 {
 }
 
@@ -188,9 +189,9 @@ void CL_Renderer::SampleShadows(GameContext*)
     cl_int status = CL_SUCCESS;
     size_t gs[] = { (size_t)m_ScreenWidth, (size_t)m_ScreenHeight };
 
-    if (m_ScreenWidth % m_TileSize == 0 && m_ScreenHeight % m_TileSize == 0)
+    if (m_ScreenWidth % m_Neighborhood == 0 && m_ScreenHeight % m_Neighborhood == 0)
     {
-        m_PrevSampleLocalSize = m_TileSize;
+        m_PrevSampleLocalSize = m_Neighborhood;
     }
 
     size_t ls[] = { (size_t)m_PrevSampleLocalSize, (size_t)m_PrevSampleLocalSize };

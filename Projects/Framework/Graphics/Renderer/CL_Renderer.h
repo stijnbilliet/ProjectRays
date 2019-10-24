@@ -21,6 +21,7 @@ public:
 
     float* GetAngularExtent() { return &m_AngularExtent; };
     unsigned int* GetTileSize() { return &m_TileSize; };
+    unsigned int* GetNeighborhood() { return &m_Neighborhood; };
 private:
 	void GenerateShadowRays(GameContext* pGameContext);
 	void GenerateLightingMask(GameContext* pGameContext);
@@ -66,5 +67,6 @@ private:
 
     float m_AngularExtent;
     unsigned int m_TileSize;
+    unsigned int m_Neighborhood;
     unsigned int m_PrevSampleLocalSize = 0;
 };
