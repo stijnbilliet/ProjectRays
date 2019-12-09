@@ -22,6 +22,9 @@ public:
     float* GetAngularExtent() { return &m_AngularExtent; };
     unsigned int* GetTileSize() { return &m_TileSize; };
     unsigned int* GetNeighborhood() { return &m_Neighborhood; };
+    float* GetNormalEpsilon() { return &m_NormalEpsilon; };
+    float* GetDepthEpsilon() { return &m_DepthEpsilon; };
+
 private:
 	void GenerateShadowRays(GameContext* pGameContext);
 	void GenerateLightingMask(GameContext* pGameContext);
@@ -52,6 +55,7 @@ private:
     cl_mem m_CLTempLightBuffer;
 	cl_mem m_CLRRRaysBuffer;
 	cl_mem m_CLRROcclusionBuffer;
+    cl_mem m_CLGLInputNoise;
 
 	//Radeon rays data
 	RadeonRays::Buffer* m_RaysBuffer;
@@ -59,8 +63,8 @@ private:
 
 	RadeonRays::ray* m_RayData;
     RadeonRays::Intersection* m_OcclusionData;
-    cl_float4* m_TempLightBuffer;
-
+    //cl_float4* m_TempLightBuffer;
+   
 	int m_ScreenWidth;
 	int m_ScreenHeight;
 	std::string m_AssetPath;
@@ -69,4 +73,7 @@ private:
     unsigned int m_TileSize;
     unsigned int m_Neighborhood;
     unsigned int m_PrevSampleLocalSize = 0;
+
+    float m_NormalEpsilon;
+    float m_DepthEpsilon;
 };

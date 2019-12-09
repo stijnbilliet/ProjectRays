@@ -23,7 +23,10 @@ typedef struct _Intersection
 	float4 uvwt;
 } Intersection;
 
-__kernel void SoftShadowSample(__global float4* iLightmask, __write_only image2d_t oLightmask, __read_only image2d_t depthBuffer)
+const sampler_t samplerLinearClamped = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP | CLK_FILTER_LINEAR;
+const sampler_t samplerLinearRepeat = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_REPEAT | CLK_FILTER_LINEAR;
+
+__kernel void SoftShadowSample(__read_only image2d_t iLightmask, __write_only image2d_t oLightmask, __read_only image2d_t normalBuffer, __read_only image2d_t depthBuffer, float depthEpsilon, float normalEpsilon, float angularExtent)
 {
 	//Get image dimensions
 	int2 dimensions;
@@ -35,30 +38,32 @@ __kernel void SoftShadowSample(__global float4* iLightmask, __write_only image2d
 	imgCoord.x = get_global_id(0);
 	imgCoord.y = get_global_id(1);
 	
-	//Get neighborhood size
-	int neighborhood;
-	neighborhood = get_local_size(0);
-	
 	int k = imgCoord.y * dimensions.x + imgCoord.x;
-
-	int halfSampleSize = (int)(neighborhood/2);
-	int tileSizeSquared = (int)(neighborhood*neighborhood);
-	float shadowValue = iLightmask[k].x;
+	float4 lightMask = read_imagef(iLightmask, imgCoord);
+	float shadowValue = lightMask.x;
+	float distanceToOccluder = lightMask.y;
+	float distanceToLight = lightMask.z;
+	float occlusionValue = (distanceToLight - distanceToOccluder) / distanceToLight;
+	float lightSize = angularExtent * 2.0f;
+	float penumbraSize = occlusionValue * lightSize;
 	
-	int2 sampleCoord = imgCoord;
+	float sampleSize = 10;
+	int halfSampleSize = (int)(sampleSize/2);
+	int tileSizeSquared = (int)(sampleSize*sampleSize);
+
+	float2 sampleCoord;
+	sampleCoord.x = imgCoord.x * 1.0f;
+	sampleCoord.y = imgCoord.y * 1.0f;
+
 	for(int c = -halfSampleSize; c < halfSampleSize; ++c)
 	{
-		sampleCoord.x = imgCoord.x + c;
-		if(sampleCoord.x < 0 || sampleCoord.x >= dimensions.x) break;
+		sampleCoord.x = imgCoord.x + (c * penumbraSize);
 		for(int r = -halfSampleSize; r < halfSampleSize; ++r)
 		{
-			sampleCoord.y = imgCoord.y + r;
-			if(sampleCoord.y < 0 || sampleCoord.y >= dimensions.y) break;
-			int sampleCoord1D = sampleCoord.y * dimensions.x + sampleCoord.x;
-			shadowValue += iLightmask[sampleCoord1D].x;
+			sampleCoord.y = imgCoord.y + (r * penumbraSize);
+			shadowValue += read_imagef(iLightmask, samplerLinearClamped, sampleCoord).x;
 		}
 	}
-	
 	shadowValue /= tileSizeSquared;
 	
 	write_imagef(oLightmask, imgCoord, (float4)shadowValue);
@@ -80,16 +85,16 @@ __kernel void GenerateLightingMask(__global Intersection* intersections, __write
 	int k = imgCoord.y * dimensions.x + imgCoord.x;
 	float4 fragmentColor = (float4)(1.0f, 1.0f, 1.0f, 1.0f);
 	
-	//Check if ray did occlude (-1 no hit; 1 hit)
-	//Shade respectively (-1 light; 1 dark)
-	fragmentColor = (float4)(abs(min(intersections[k].shapeid, 0)), intersections[k].uvwt.w, rays[k].o.w, 0.0f);
+	//Check if ray did occlude (-1 no hit; anything else = hit)
+	//Shade respectively (-1 should be 1 ; anything else should be 0)	
+	fragmentColor = (float4)(abs(min(intersections[k].shapeid, 0)), intersections[k].uvwt.w, rays[k].o.w, intersections[k].shapeid);
 	
 	//Write info to lightmask
 	write_imagef(lightmask, imgCoord, fragmentColor);
 }
 
 __kernel void GenerateShadowRay(float4 endPos, float angularExtent, uint tileSize, __global Ray* rays,
-__read_only image2d_t worldPosBuffer, __read_only image2d_t normalBuffer)
+__read_only image2d_t worldPosBuffer, __read_only image2d_t normalBuffer, __read_only image2d_t inputNoise)
 {
 	//Get image dimensions
 	int2 dimensions;
@@ -107,31 +112,14 @@ __read_only image2d_t worldPosBuffer, __read_only image2d_t normalBuffer)
 	float4 dir = endPos - worldPos;
 	float maxRayDistance = length(dir)*1.1f;
 	
-	//Generate random direction in angularExtent
-	uint rndState = (imgCoord.x % tileSize) * (imgCoord.y % tileSize);
-	
-	//Hash our random seed
-	rndState = (rndState ^ 61) ^ (rndState >> 16);
-    rndState *= 9;
-    rndState = rndState ^ (rndState >> 4);
-    rndState *= 0x27d4eb2d;
-    rndState = rndState ^ (rndState >> 15);
-	
-	rndState ^= (rndState << 13); //xorshift algorithm
-	rndState ^= (rndState >> 17);
-	rndState ^= (rndState << 5);
-	
-	float f0 = rndState * (1.0 / 4294967296.0); //random between 0 and 1
-
-	rndState ^= (rndState << 13); //xorshift algorithm
-	rndState ^= (rndState >> 17);
-	rndState ^= (rndState << 5);
-	
-	float f1 = rndState * (1.0 / 4294967296.0); //random between 0 and 1
+	float2 sampleCoord;
+	sampleCoord.x = imgCoord.x / (float)dimensions.x;
+	sampleCoord.y = imgCoord.y / (float)dimensions.y;
+	float randVal = read_imagef(inputNoise, samplerLinearRepeat, sampleCoord).x;
 	
 	float r = tan(angularExtent * 3.14f/180.0f) * length(dir); //radius from angle
-	float t = 2 * 3.14f * f0; //theta
-	float d = sqrt(f1) * r; //distance from centre
+	float t = 2 * 3.14f * randVal; //theta
+	float d = sqrt(randVal) * r; //distance from centre
 	
 	dir.x += d * cos(t);
 	dir.z += d * sin(t);
@@ -147,5 +135,5 @@ __read_only image2d_t worldPosBuffer, __read_only image2d_t normalBuffer)
 	my_ray->d = dir;
 	my_ray->o.w = maxRayDistance;
 	my_ray->extra.x = 0xFFFFFFFF;
-	my_ray->extra.y = ceil(dot(dir, Normal));
+	my_ray->extra.y = 0xFFFFFFFF;
 }

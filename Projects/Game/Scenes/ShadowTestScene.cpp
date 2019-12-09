@@ -21,7 +21,7 @@ void ShadowTestScene::PreInit(GameContext * pContext)
 	Add(pSceneObj);
 
 	auto pShaderProgram = new ShaderProgram("Shaders/Deferred_Geometry.vs", "Shaders/Deferred_Geometry.fs");
-	m_pModel = new Model("Models/shadowtestscene.obj");
+	m_pModel = new Model("Models/ShadowTest/shadowtestscene.obj");
 
 	std::vector<Texture> textures{};
 	textures.push_back(Texture("Textures/Sponza/spnza_bricks_a_diff.png", TextureType::DIFFUSE));

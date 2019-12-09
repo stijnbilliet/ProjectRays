@@ -1,5 +1,6 @@
 #include "FrameworkPCH.h"
 #include "CL_Renderer.h"
+#include "stb_image.h"
 
 #if defined(_WIN32)
 #include <windows.h>
@@ -38,12 +39,14 @@ CL_Renderer::CL_Renderer()
     ,m_AngularExtent(2.0f)
     ,m_TileSize(2)
     ,m_Neighborhood(8)
+    ,m_NormalEpsilon(0.9f)
+    ,m_DepthEpsilon(0.1f)
 {
 }
 
 CL_Renderer::~CL_Renderer()
 {
-    delete m_TempLightBuffer;
+    //delete m_TempLightBuffer;
 	m_pRRContext->DetachAll();
 	IntersectionApi::Delete(m_pRRContext);
 }
@@ -131,6 +134,10 @@ void CL_Renderer::GenerateShadowRays(GameContext* pGameContext)
 	status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLNormalBuffer, 0, nullptr, nullptr);
 	CL_ERROR_CHECK(status, "clEnqueueAcquireGLObjects failed (m_CLGLNormalBuffer)");
 
+    //Acquire noisetexture
+    status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLInputNoise, 0, nullptr, nullptr);
+    CL_ERROR_CHECK(status, "clEnqueueAcquireGLObjects failed (m_CLGLInputNoise)");
+
 	//Send new information to shader
     m_ShadowRayGenerator.SetArg(0, sizeof(cl_float4), &light_cl);
     m_ShadowRayGenerator.SetArg(1, sizeof(cl_float), &m_AngularExtent);
@@ -138,6 +145,7 @@ void CL_Renderer::GenerateShadowRays(GameContext* pGameContext)
 	m_ShadowRayGenerator.SetArg(3, sizeof(cl_mem), &m_CLRRRaysBuffer);
 	m_ShadowRayGenerator.SetArg(4, sizeof(cl_mem), &m_CLGLWorldPosBuffer);
 	m_ShadowRayGenerator.SetArg(5, sizeof(cl_mem), &m_CLGLNormalBuffer);
+	m_ShadowRayGenerator.SetArg(6, sizeof(cl_mem), &m_CLGLInputNoise);
 
 	//Launch kernels on cuda cores
 	status = clEnqueueNDRangeKernel(m_CLContext.GetCommandQueue(0), m_ShadowRayGenerator, 2, NULL, gs, NULL, 0, nullptr, nullptr);
@@ -154,6 +162,10 @@ void CL_Renderer::GenerateShadowRays(GameContext* pGameContext)
 	//Release normalBuffer
 	status = clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLNormalBuffer, 0, nullptr, nullptr);
 	CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLNormalBuffer)");
+
+    //Release noisetexture
+    status = clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLInputNoise, 0, nullptr, nullptr);
+    CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLInputNoise)");
 }
 
 void CL_Renderer::GenerateLightingMask(GameContext*)
@@ -188,13 +200,7 @@ void CL_Renderer::SampleShadows(GameContext*)
     auto commandQueue = m_CLContext.GetCommandQueue(0);
     cl_int status = CL_SUCCESS;
     size_t gs[] = { (size_t)m_ScreenWidth, (size_t)m_ScreenHeight };
-
-    if (m_ScreenWidth % m_Neighborhood == 0 && m_ScreenHeight % m_Neighborhood == 0)
-    {
-        m_PrevSampleLocalSize = m_Neighborhood;
-    }
-
-    size_t ls[] = { (size_t)m_PrevSampleLocalSize, (size_t)m_PrevSampleLocalSize };
+    size_t ls[] = { (size_t)10, (size_t)10 };
 
     //Acquire lightBuffer
     status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLLightBuffer, 0, nullptr, nullptr);
@@ -204,16 +210,28 @@ void CL_Renderer::SampleShadows(GameContext*)
     status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLDepthBuffer, 0, nullptr, nullptr);
     CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLDepthBuffer)");
 
+    //Acquire normalbuffer
+    status = clEnqueueAcquireGLObjects(commandQueue, 1, &m_CLGLNormalBuffer, 0, nullptr, nullptr);
+    CL_ERROR_CHECK(status, "clEnqueueAcquireGLObjects failed (m_CLGLNormalBuffer)");
+
     //Blit lightmask
     size_t origin[] = { 0, 0, 0 };
     size_t region[] = { (size_t)m_ScreenWidth, (size_t)m_ScreenHeight, (size_t)1 };
-    status = clEnqueueCopyImageToBuffer(commandQueue, m_CLGLLightBuffer, m_CLTempLightBuffer, origin, region, 0, 0, nullptr, nullptr);
+
+    //status = clEnqueueCopyImageToBuffer(commandQueue, m_CLGLLightBuffer, m_CLTempLightBuffer, origin, region, 0, 0, nullptr, nullptr);
+    //CL_ERROR_CHECK(status, "clEnqueueCopyBufferToImage failed (m_CLGLLightBuffer | m_CLTempLightBuffer)");
+
+    status = clEnqueueCopyImage(commandQueue, m_CLGLLightBuffer, m_CLTempLightBuffer, origin, origin, region, 0, nullptr, nullptr);
     CL_ERROR_CHECK(status, "clEnqueueCopyBufferToImage failed (m_CLGLLightBuffer | m_CLTempLightBuffer)");
 
     //Get kernel from kernelprogram
     m_SoftSampleKernel.SetArg(0, sizeof(cl_mem), &m_CLTempLightBuffer);
     m_SoftSampleKernel.SetArg(1, sizeof(cl_mem), &m_CLGLLightBuffer);
-    m_SoftSampleKernel.SetArg(2, sizeof(cl_mem), &m_CLGLDepthBuffer);
+    m_SoftSampleKernel.SetArg(2, sizeof(cl_mem), &m_CLGLNormalBuffer);
+    m_SoftSampleKernel.SetArg(3, sizeof(cl_mem), &m_CLGLDepthBuffer);
+    m_SoftSampleKernel.SetArg(4, sizeof(cl_float), &m_DepthEpsilon);
+    m_SoftSampleKernel.SetArg(5, sizeof(cl_float), &m_NormalEpsilon);
+    m_SoftSampleKernel.SetArg(6, sizeof(cl_float), &m_AngularExtent);
 
     //Launch kernels on cuda cores
     status = clEnqueueNDRangeKernel(commandQueue, m_SoftSampleKernel, 2, NULL, gs, ls, 0, nullptr, nullptr);
@@ -229,6 +247,10 @@ void CL_Renderer::SampleShadows(GameContext*)
     //Release DepthBuffer
     status = clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLDepthBuffer, 0, nullptr, nullptr);
     CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLDepthBuffer)");
+
+    //Release NormalBuffer
+    status = clEnqueueReleaseGLObjects(commandQueue, 1, &m_CLGLNormalBuffer, 0, nullptr, nullptr);
+    CL_ERROR_CHECK(status, "clEnqueueReleaseGLObjects failed (m_CLGLNormalBuffer)");
 }
 
 void CL_Renderer::InitShadowRaysKernel(GameContext * pGameContext)
@@ -245,6 +267,10 @@ void CL_Renderer::InitShadowRaysKernel(GameContext * pGameContext)
 
 	m_CLGLNormalBuffer = clCreateFromGLTexture(m_CLContext, CL_MEM_READ_ONLY, GL_TEXTURE_2D, 0, gNormalBuffer, &status);
 	CL_ERROR_CHECK(status, "Texture sharing failed (gNormal buffer)");
+
+    Texture* noiseLut = new Texture("Textures/Noise/bluenoise.png", TextureType::DIFFUSE);
+    m_CLGLInputNoise = clCreateFromGLTexture(m_CLContext, CL_MEM_READ_ONLY, GL_TEXTURE_2D, 0, noiseLut->id, &status);
+    CL_ERROR_CHECK(status, "Texture sharing failed (gl_NoiseLut buffer)");
 
 	m_RayData = new RadeonRays::ray[m_ScreenWidth*m_ScreenHeight]();
 	m_CLRRRaysBuffer = clCreateBuffer(m_CLContext, CL_MEM_READ_WRITE, m_ScreenWidth*m_ScreenHeight * sizeof(RadeonRays::ray), m_RayData, &status);
@@ -276,8 +302,20 @@ void CL_Renderer::InitSampleKernel(GameContext* pGameContext)
 {
     //Init buffers
     cl_int status = CL_SUCCESS;
-    m_TempLightBuffer = new cl_float4[m_ScreenWidth*m_ScreenHeight * sizeof(cl_float4)];
-    m_CLTempLightBuffer = clCreateBuffer(m_CLContext, CL_MEM_WRITE_ONLY, m_ScreenWidth*m_ScreenHeight*sizeof(cl_float4), m_TempLightBuffer, &status);
+    //m_TempLightBuffer = new cl_float4[m_ScreenWidth*m_ScreenHeight * sizeof(cl_float4)];
+    //m_CLTempLightBuffer = clCreateBuffer(m_CLContext, CL_MEM_WRITE_ONLY, m_ScreenWidth*m_ScreenHeight*sizeof(cl_float4), m_TempLightBuffer, &status);
+
+    cl_image_format format;
+    format.image_channel_order = CL_RGBA;
+    format.image_channel_data_type = CL_FLOAT;
+
+    cl_image_desc desc;
+    memset(&desc, '\0', sizeof(cl_image_desc));
+    desc.image_type = CL_MEM_OBJECT_IMAGE2D;
+    desc.image_width = m_ScreenWidth;
+    desc.image_height = m_ScreenHeight;
+
+    m_CLTempLightBuffer = clCreateImage(m_CLContext, CL_MEM_READ_ONLY, &format, &desc, nullptr, &status);
     CL_ERROR_CHECK(status, "Temp light buffer creation failed");
 
     auto pGLRenderer = pGameContext->m_pGLRenderer;

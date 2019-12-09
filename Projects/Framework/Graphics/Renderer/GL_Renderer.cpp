@@ -21,7 +21,6 @@ void GL_Renderer::Begin()
 {
 	//CLEAR COLOR
 	glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//bind gbuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, m_gBuffer);
@@ -332,12 +331,16 @@ void GL_Renderer::ImGuiOnDraw(GameContext* pGameContext)
 		ImGui::SliderFloat("Light Position Y", (float*)&m_DirectionalPos.y, 50.0f, 1000.0f);
 		ImGui::SliderFloat("Light Position Z", (float*)&m_DirectionalPos.z, -50.0f, 50.0f);
 		ImGui::ColorEdit3("Light Color", (float*)&m_DirectionalCol); // Edit 3 floats representing a color
-
-        ImGui::SliderFloat("Sun angular extent", (float*)pGameContext->m_pCLRenderer->GetAngularExtent(), 0.0f, 10.0f);
 	ImGui::End();
 
-    ImGui::Begin("Rays");
-        ImGui::SliderInt("TileSize", (int*)pGameContext->m_pCLRenderer->GetTileSize(), 1, 256);
-        ImGui::SliderInt("SampleNeighborhood", (int*)pGameContext->m_pCLRenderer->GetNeighborhood(), 1, 16);
+    ImGui::Begin("Sampling");
+        ImGui::SliderInt("SampleNeighborhood", (int*)pGameContext->m_pCLRenderer->GetNeighborhood(), 1, 32);
+        ImGui::SliderFloat("NormalEpsilon", (float*)pGameContext->m_pCLRenderer->GetNormalEpsilon(), 0.0f, 1.0f);
+        ImGui::SliderFloat("DepthEpsilon", (float*)pGameContext->m_pCLRenderer->GetDepthEpsilon(), 0.0f, 1.0f);
+    ImGui::End();
+
+    ImGui::Begin("Ray generation");
+        ImGui::SliderFloat("Sun angular extent", (float*)pGameContext->m_pCLRenderer->GetAngularExtent(), 0.0f, 10.0f);
+        ImGui::SliderInt("TileSize", (int*)pGameContext->m_pCLRenderer->GetTileSize(), 1, 2160);
     ImGui::End();
 }

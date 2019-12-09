@@ -18,7 +18,6 @@ void main()
 	vec4 AlbedoSpec = texture(gAlbedo, TexCoords).rgba;
     vec3 Normal = texture(gNormal, TexCoords).rgb;
     vec3 LightAcc = texture(gLightAcc, TexCoords).rgb;
-	LightAcc = LightAcc + 0.4f;
 	
 	//lightingvar
 	vec3 viewDir  = normalize(viewPos - FragPos);
@@ -31,7 +30,7 @@ void main()
 	vec3 reflectDir = reflect(-lightDir, Normal);
     float specAngle = max(dot(reflectDir, viewDir), 0.0);
     // note that the exponent is different here
-    vec3 specular = pow(specAngle, 50.0f) * dLightCol;
+    vec3 specular = pow(specAngle, 4.0f) * dLightCol;
 	specular *= AlbedoSpec.a;
 	
 	diffuse += specular;
