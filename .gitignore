@@ -2,3 +2,5 @@
 Binaries/
 Projects/Game/_Build/
 Projects/Framework/_Build/
+.idea
+cmake-build-debug
